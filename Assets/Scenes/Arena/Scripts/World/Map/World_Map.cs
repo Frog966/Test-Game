@@ -7,19 +7,26 @@ using Game.Map;
 
 // In charge of storing/display the map as well as instantiate encounters
 public class World_Map : MonoBehaviour {
+    // Handlers
     private World world;
     private World_EnemyLibrary enemyLibrary;
+
+    // Stats
+    [SerializeField] private int currLayer = 0;
+    [SerializeField] private World_MapNode currMapNode;
+    [SerializeField] private MapLocale currLocale = MapLocale.TEST;
+    
+    [Header("Important Stuff")]
+    [SerializeField] private GameObject mapNodePrefab; // Sprite holder and clickable object
+    [SerializeField] private GameObject mapNodeParent;
+    [SerializeField] private Transform nodePool, nodeParent;
 
     // A 2D array that represents an array of "layers" each containing an array of map nodes the player can traverse
     // Each player can only go to MapNodes on the next layer from where they are currently on but only certain nodes are valid
     private List<List<World_MapNode>> map;
 
-    public MapLocale currLocale;
-    public Transform nodePool, nodeParent;
-    public GameObject mapNodePrefab; // Sprite holder and clickable object
-
     // Getters
-    public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
+    // public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
 
     // Generates a tree that will be used as the map
     private void GenerateMap() {
@@ -66,7 +73,7 @@ public class World_Map : MonoBehaviour {
                 );
                 //-----------------------------------------------------------------------------------------------------------------------
 
-                // Registering a World_MapNode script as an element in map as well as setting up the script
+                // Registering a World_MapNode script as an element in map as well as setting said script up
                 //-----------------------------------------------------------------------------------------------------------------------
                 List<World_MapNode> newNextNodes = GenerateNextNodesList(x, y);
                 NodeType newNodeType = RandomizeNodeType(x, newNextNodes);
@@ -77,11 +84,17 @@ public class World_Map : MonoBehaviour {
                 map[x][y].Setup(
                     newNodeType,
                     newNextNodes,
-                    enemyLibrary.ReturnRandomEncounter(currLocale, newNodeType)
+                    enemyLibrary.ReturnRandomEncounter(currLocale, newNodeType),
+                    MoveToNode
+
                 );
                 //-----------------------------------------------------------------------------------------------------------------------
+
+                // Add ProgressButton
             }
         }
+
+        UpdateMapUI();
 
         // Returns a random node type
         NodeType RandomizeNodeType(int currX, List<World_MapNode> nextNodes) {
@@ -167,12 +180,40 @@ public class World_Map : MonoBehaviour {
             }
         }
     }
+    
+    private void UpdateMapUI() {
+        for (int x = 0; x < map.Count; x++) {
+            for (int y = 0; y < map[x].Count; y++) {
+                World_MapNode currNode = map[x][y];
+
+                // Allow only specific map nodes to be moved onto
+                // Unless it's the first layer where the player has not selected a node before, only the current node and it's next nodes can be moved onto
+                if ((x == currLayer && (currMapNode == null || currNode == currMapNode)) || (x == currLayer + 1 && currMapNode != null && currMapNode.GetNextNodes().Contains(currNode))) {
+                    currNode.EnableNode();
+                }
+                else {
+                    currNode.DisableNode();
+                }
+            }
+        }
+    }
+    
+    // Button function
+    void MoveToNode(World_MapNode newNode) {
+        Debug.Log("Moving to node" + newNode.gameObject.name);
+
+        currMapNode = newNode;
+        currLayer++;
+
+        mapNodeParent.SetActive(false);
+    }
 
     void Awake() {
         // Sanity checks
         world = this.gameObject.GetComponent<World>();
         if (enemyLibrary == null) enemyLibrary = this.gameObject.GetComponent<World_EnemyLibrary>();
 
+        mapNodeParent.SetActive(true);
         nodePool.gameObject.SetActive(false);
         nodeParent.gameObject.SetActive(true);
 

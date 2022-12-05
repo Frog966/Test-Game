@@ -17,7 +17,7 @@ public class World_EnemyLibrary : MonoBehaviour {
         if (enemyLibrary.ContainsKey(mapLocale) && enemyLibrary[mapLocale].ContainsKey(nodeType)) {
             List<List<EnemyDetails>> encounterList = enemyLibrary[mapLocale][nodeType];
 
-            return encounterList[UnityEngine.Random.Range(0, encounterList.Count - 1)];
+            return encounterList[UnityEngine.Random.Range(0, encounterList.Count > 0 ? encounterList.Count - 1 : 0)];
         }
         else {
             return Enumerable.Empty<EnemyDetails>().ToList(); // Return an immutable empty list
@@ -31,6 +31,7 @@ public class World_EnemyLibrary : MonoBehaviour {
     void Awake() {
         enemies = Resources.FindObjectsOfTypeAll(typeof(Enemy)) as Enemy[];
         
+        // A huge declaration of enemyLibrary
         enemyLibrary = new Dictionary<MapLocale, Dictionary<NodeType, List<List<EnemyDetails>>>>() {
             // All enemies, minibosses and bosses of MapLocale.TEST
             {
@@ -58,14 +59,14 @@ public class World_EnemyLibrary : MonoBehaviour {
                     {
                         NodeType.MINI_BOSS,
                         new List<List<EnemyDetails>>() {
-                            
+                            new List<EnemyDetails>() {}
                         }
                     },
                     // All bosses of MapLocale.TEST
                     {
                         NodeType.BOSS,
                         new List<List<EnemyDetails>>() {
-                            
+                            new List<EnemyDetails>() {}
                         }
                     }
                 }

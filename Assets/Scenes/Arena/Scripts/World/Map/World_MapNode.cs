@@ -1,10 +1,13 @@
-// using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Map;
 
 public class World_MapNode : MonoBehaviour {
-    [SerializeField] private float lineWidth = 5; // It's actually line height but it looks fine
+    [Header("Stats")]
+    [SerializeField] private float lineWidth = 5; // It's actually line height
+
+    [Header("Important Stuff")]
     [SerializeField] private Transform lineParent;
     [SerializeField] private UnityEngine.UI.Image icon;
 
@@ -14,30 +17,41 @@ public class World_MapNode : MonoBehaviour {
     [SerializeField] private Sprite icon_Boss;
     [SerializeField] private Sprite icon_Shop;
 
-    private NodeType nodeType;
     [SerializeField] private List<EnemyDetails> encounter = new List<EnemyDetails>(); // A dictionary containing enemies and where they're located on the grid
+    
+    private NodeType nodeType;
     private List<World_MapNode> nextNodes = new List<World_MapNode>(); // A list containing map nodes that this node can move to
     private List<World_MapNode> prevNodes = new List<World_MapNode>(); // A list containing map nodes that is connected to this node. Is simply a record to make sure all map nodes will lead to the end
 
-    public void Reset() {
-        encounter.Clear();
-        nextNodes.Clear();
-        prevNodes.Clear();
+    [SerializeField] private UnityEngine.UI.Button buttonScript;
 
-        // Reset lines
-        foreach (Transform line in lineParent) {
-            line.localRotation = Quaternion.Euler(0, 0, 0);
-            line.GetComponent<RectTransform>().sizeDelta = new Vector2(lineWidth, lineWidth);
-        }
+    // Getters
+    public NodeType GetNodeType() { return nodeType; }
+    public List<EnemyDetails> GetEncounter() { return encounter; }
+    public List<World_MapNode> GetPrevNodes() { return prevNodes; }
+    public List<World_MapNode> GetNextNodes() { return prevNodes; }
+
+    // Enable this node to be moved onto
+    public void EnableNode() {
+        buttonScript.enabled = true;
+        icon.color = Color.white; 
+    }
+
+    // Disable this node from being moved onto
+    public void DisableNode() {
+        buttonScript.enabled = false;
+        icon.color = Color.gray; 
     }
 
     // Constructor
-    public void Setup(NodeType _nodeType, List<World_MapNode> _nextNodes, List<EnemyDetails> _encounter) {
+    public void Setup(NodeType _nodeType, List<World_MapNode> _nextNodes, List<EnemyDetails> _encounter, Action<World_MapNode> _onClick) {
         Reset();
 
         nodeType = _nodeType;
         nextNodes = _nextNodes;
         encounter = _encounter;
+        buttonScript.onClick.AddListener(() => _onClick(this));
+        
 
         // Instantiate new lines if not enough for each next node
         while (lineParent.childCount < nextNodes.Count) {
@@ -90,13 +104,31 @@ public class World_MapNode : MonoBehaviour {
         }
     }
 
+    public void Reset() {
+        encounter.Clear();
+        nextNodes.Clear();
+        prevNodes.Clear();
+
+        // Reset lines
+        foreach (Transform line in lineParent) {
+            line.localRotation = Quaternion.Euler(0, 0, 0);
+            line.GetComponent<RectTransform>().sizeDelta = new Vector2(lineWidth, lineWidth);
+        }
+    }
+
     public void AddPrevNode(World_MapNode prevNode) {
         // Only add to prevNodes list if prevNode is not in the list to avoid duplicates
         if (!prevNodes.Contains(prevNode)) { prevNodes.Add(prevNode); }
     }
-
-    // Getters
-    public NodeType GetNodeType() { return nodeType; }
-    public List<EnemyDetails> GetEncounter() { return encounter; }
-    public List<World_MapNode> GetPrevNodes() { return prevNodes; }
+    
+    void Awake() {
+        // Sanity checks
+        if (buttonScript == null) {
+            buttonScript = this.gameObject.GetComponent<UnityEngine.UI.Button>() as UnityEngine.UI.Button;
+            
+            if (buttonScript == null) {
+                buttonScript = this.gameObject.AddComponent<UnityEngine.UI.Button>() as UnityEngine.UI.Button;
+            }
+        }
+    }
 }
