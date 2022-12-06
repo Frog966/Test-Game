@@ -1,15 +1,10 @@
-//using System.Collections;
-//using System.Collections.Generic;
-
 using UnityEngine;
-using TMPro;
-//using Player;
+using UnityEngine.UI;
 
 public class Player_Energy : MonoBehaviour {
     private Player player;
 
-    public TMP_Text energyText;
-    public TMP_Text energyMaxText;
+    public Text energyText, energyMaxText;
     public UnityEngine.UI.Image fill;
 
     // Start is called before the first frame update

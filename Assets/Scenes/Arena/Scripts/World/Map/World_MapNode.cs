@@ -10,6 +10,7 @@ public class World_MapNode : MonoBehaviour {
     [Header("Important Stuff")]
     [SerializeField] private Transform lineParent;
     [SerializeField] private UnityEngine.UI.Image icon;
+    [SerializeField] private UnityEngine.UI.Button buttonScript;
 
     [Header("Icon Sprites")]
     [SerializeField] private Sprite icon_Fight;
@@ -22,8 +23,6 @@ public class World_MapNode : MonoBehaviour {
     private NodeType nodeType;
     private List<World_MapNode> nextNodes = new List<World_MapNode>(); // A list containing map nodes that this node can move to
     private List<World_MapNode> prevNodes = new List<World_MapNode>(); // A list containing map nodes that is connected to this node. Is simply a record to make sure all map nodes will lead to the end
-
-    [SerializeField] private UnityEngine.UI.Button buttonScript;
 
     // Getters
     public NodeType GetNodeType() { return nodeType; }
@@ -52,7 +51,6 @@ public class World_MapNode : MonoBehaviour {
         encounter = _encounter;
         buttonScript.onClick.AddListener(() => _onClick(this));
         
-
         // Instantiate new lines if not enough for each next node
         while (lineParent.childCount < nextNodes.Count) {
             Transform newLine = GameObject.Instantiate(lineParent.GetChild(0), lineParent).transform; // Clone a line

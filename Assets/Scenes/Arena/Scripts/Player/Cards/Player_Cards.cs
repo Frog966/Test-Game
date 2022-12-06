@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 // Contains the player's card-related functionality such as deck, hand, graveyard and exile
 public class Player_Cards : MonoBehaviour {
@@ -16,7 +16,7 @@ public class Player_Cards : MonoBehaviour {
 
     public GameObject cardPrefab;
     public Transform cardParent_Deck, cardParent_Hand, cardParent_GY;
-    public TMP_Text textDeck, textHand, textGY;
+    public Text textDeck, textHand, textGY;
 
     //! Adding these lists together should be the every card belonging to the player
     public List<Player_Card> deck = new List<Player_Card>(); // Lists all card prefabs in deck

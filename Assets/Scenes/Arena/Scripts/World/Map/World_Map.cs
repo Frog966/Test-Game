@@ -9,16 +9,16 @@ using Game.Map;
 public class World_Map : MonoBehaviour {
     // Handlers
     private World world;
+    private World_MapNode currMapNode;
     private World_EnemyLibrary enemyLibrary;
 
     // Stats
     [SerializeField] private int currLayer = 0;
-    [SerializeField] private World_MapNode currMapNode;
     [SerializeField] private MapLocale currLocale = MapLocale.TEST;
     
     [Header("Important Stuff")]
+    [SerializeField] private GameObject mapParent;
     [SerializeField] private GameObject mapNodePrefab; // Sprite holder and clickable object
-    [SerializeField] private GameObject mapNodeParent;
     [SerializeField] private Transform nodePool, nodeParent;
 
     // A 2D array that represents an array of "layers" each containing an array of map nodes the player can traverse
@@ -205,7 +205,7 @@ public class World_Map : MonoBehaviour {
         currMapNode = newNode;
         currLayer++;
 
-        mapNodeParent.SetActive(false);
+        mapParent.SetActive(false);
     }
 
     void Awake() {
@@ -213,7 +213,7 @@ public class World_Map : MonoBehaviour {
         world = this.gameObject.GetComponent<World>();
         if (enemyLibrary == null) enemyLibrary = this.gameObject.GetComponent<World_EnemyLibrary>();
 
-        mapNodeParent.SetActive(true);
+        mapParent.SetActive(true);
         nodePool.gameObject.SetActive(false);
         nodeParent.gameObject.SetActive(true);
 
