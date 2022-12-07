@@ -18,7 +18,7 @@ public class World_MapNode : MonoBehaviour {
     [SerializeField] private Sprite icon_Boss;
     [SerializeField] private Sprite icon_Shop;
 
-    [SerializeField] private List<EnemyDetails> encounter = new List<EnemyDetails>(); // A dictionary containing enemies and where they're located on the grid
+    [SerializeField] private List<EncounterEnemyDetails> encounter = new List<EncounterEnemyDetails>(); // A dictionary containing enemies and where they're located on the grid
     
     private NodeType nodeType;
     private List<World_MapNode> nextNodes = new List<World_MapNode>(); // A list containing map nodes that this node can move to
@@ -26,7 +26,7 @@ public class World_MapNode : MonoBehaviour {
 
     // Getters
     public NodeType GetNodeType() { return nodeType; }
-    public List<EnemyDetails> GetEncounter() { return encounter; }
+    public List<EncounterEnemyDetails> GetEncounter() { return encounter; }
     public List<World_MapNode> GetPrevNodes() { return prevNodes; }
     public List<World_MapNode> GetNextNodes() { return prevNodes; }
 
@@ -43,7 +43,7 @@ public class World_MapNode : MonoBehaviour {
     }
 
     // Constructor
-    public void Setup(NodeType _nodeType, List<World_MapNode> _nextNodes, List<EnemyDetails> _encounter, Action<World_MapNode> _onClick) {
+    public void Setup(NodeType _nodeType, List<World_MapNode> _nextNodes, List<EncounterEnemyDetails> _encounter, Action<World_MapNode> _onClick) {
         Reset();
 
         nodeType = _nodeType;

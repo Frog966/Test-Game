@@ -22,13 +22,13 @@ namespace Game {
         }
 
         [System.Serializable]
-        public struct EnemyDetails {
+        public struct EncounterEnemyDetails {
             public Enemy enemy;
-            public Vector2 enemyPos;
+            public Vector2Int gridPos;
 
-            public EnemyDetails(Enemy _enemy, Vector2 _enemyPos) {
+            public EncounterEnemyDetails(Enemy _enemy, Vector2Int _gridPos) {
                 enemy = _enemy;
-                enemyPos = _enemyPos;
+                gridPos = _gridPos;
             }
         }
     }

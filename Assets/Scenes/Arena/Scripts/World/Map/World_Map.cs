@@ -89,8 +89,6 @@ public class World_Map : MonoBehaviour {
 
                 );
                 //-----------------------------------------------------------------------------------------------------------------------
-
-                // Add ProgressButton
             }
         }
 
@@ -200,10 +198,19 @@ public class World_Map : MonoBehaviour {
     
     // Button function
     void MoveToNode(World_MapNode newNode) {
-        Debug.Log("Moving to node" + newNode.gameObject.name);
+        Debug.Log("Moving to map node " + newNode.gameObject.name);
 
         currMapNode = newNode;
         currLayer++;
+
+        // Reset player pos
+        world.GridHandler().SetGridPos(world.Player().playerObj, Vector2Int.one);
+
+        // Instantiate and set enemies' pos
+        foreach (EncounterEnemyDetails details in newNode.GetEncounter()) {
+            GameObject newCardObj = GameObject.Instantiate(details.enemy.gameObject, world.EnemyParent());
+            world.GridHandler().SetGridPos(newCardObj, details.gridPos);
+        }
 
         mapParent.SetActive(false);
     }

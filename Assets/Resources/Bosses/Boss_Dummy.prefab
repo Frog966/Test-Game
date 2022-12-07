@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 147467170921115980}
   - component: {fileID: 78582624980362022}
   m_Layer: 0
-  m_Name: Enemy_Dummy
+  m_Name: Boss_Dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b50fa611e8485146a1295397a6f8060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Test Enemy
-  enemyName: Test Enemy
+  id: Test Boss
+  enemyName: Test Boss
 --- !u!1 &888048299790044968
 GameObject:
   m_ObjectHideFlags: 0

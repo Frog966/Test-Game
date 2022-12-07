@@ -4,52 +4,18 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour {
     private Player player;
-    private Transform playerTrans; // A reference to player transform since we'll be primarily using this
 
-    public World_Grid grid;
+    [SerializeField] private World_Grid grid;
 
-    // Start is called before the first frame update
-    void Start() {
-        //! Sanity Checks
-        player = this.gameObject.GetComponent<Player>();
-        
-        playerTrans = player.playerObj.gameObject.transform;
+    public void ResetCost() { player.moveCost = player.moveCostTrue; }
 
-        ResetCost();
-        SetGridPos(Vector2Int.one);
-    }
-
-    public void ResetCost() {
-        player.moveCost = player.moveCostTrue;
-    }
-
-    // Set player grid position
-    public void SetGridPos(Vector2Int vec2) {
-        World_GridNode node = grid.GetNode(vec2);
-
-        // Sanity check in case node is out of bounds or does not have a World_GridNode component attached
-        if (node) {
-            // Move player object to new position
-            Vector3 newPos = node.gameObject.transform.position;
-            playerTrans.position = newPos;
-
-            // Update playerCoor
-            player.playerCoor = vec2;
-
-            // Debug.Log("New Player Pos: " + newPos);
-        }
-        // else {
-        //     Debug.Log("Node is out of bounds or does not have component attached!");
-        // }
-    }
-
-    // Similar to SetGridPos() but has restrictions
+    // World_Grid.SetGridPos() but with restrictions
     public void MoveTo(Vector2Int vec2) {
         World_GridNode node = grid.GetNode(vec2);
 
         // Player must have enough energy to move and can only move onto player-controlled nodes 
         if (player.energy - player.moveCost >= 0 && node && node.isPlayerControlled) {
-            SetGridPos(vec2);
+            grid.SetGridPos(player.gameObject, vec2);
             player.EnergyHandler().DecreaseEnergy(player.moveCost); // Each move lowers energy
         }
         // else {
@@ -71,4 +37,12 @@ public class Player_Movement : MonoBehaviour {
     public void MoveLeft() { MoveTo(player.playerCoor + Vector2Int.left); }
     public void MoveDown() { MoveTo(player.playerCoor + Vector2Int.up); }
     public void MoveRight() { MoveTo(player.playerCoor + Vector2Int.right); }
+
+    // Start is called before the first frame update
+    void Start() {
+        //! Sanity Checks
+        player = this.gameObject.GetComponent<Player>();
+
+        ResetCost();
+    }
 }

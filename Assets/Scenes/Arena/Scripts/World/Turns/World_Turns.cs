@@ -66,10 +66,10 @@ public class World_Turns : MonoBehaviour {
     public void SetupTurns() {
         // Set up first turn for player and enemy
         // Player always first
-        CreateTurn(world.player);
+        CreateTurn(world.Player());
         
         // Create turns for enemies
-        foreach (Transform child in world.enemyParent) {
+        foreach (Transform child in world.EnemyParent()) {
 
         }
     }
@@ -90,7 +90,7 @@ public class World_Turns : MonoBehaviour {
         }
         else {
             // Best to use a function like this instead of just calling all the functions inside this function
-            world.player.StartTurn();
+            world.Player().StartTurn();
         }
     }
 
