@@ -28,9 +28,25 @@ public class World_EnemyLibrary : MonoBehaviour {
     }
 
     public Enemy ReturnEnemyById(string id) {
-        Enemy enemy = Array.Find(enemies, (enemyScript) => enemyScript.GetComponent<Enemy>().id == id);
+        Enemy enemy = Array.Find(enemies, (enemyScript) => enemyScript.GetComponent<Enemy>().GetID() == id);
 
         if (!enemy) { Debug.LogWarning("ReturnEnemyById ID not found: '" + id + "'"); }
+
+        return enemy;
+    }
+
+    public Enemy ReturnMiniBossById(string id) {
+        Enemy enemy = Array.Find(minibosses, (enemyScript) => enemyScript.GetComponent<Enemy>().GetID() == id);
+
+        if (!enemy) { Debug.LogWarning("ReturnMiniBossById ID not found: '" + id + "'"); }
+
+        return enemy;
+    }
+
+    public Enemy ReturnBossById(string id) {
+        Enemy enemy = Array.Find(bosses, (enemyScript) => enemyScript.GetComponent<Enemy>().GetID() == id);
+
+        if (!enemy) { Debug.LogWarning("ReturnBossById ID not found: '" + id + "'"); }
 
         return enemy;
     }
@@ -39,8 +55,6 @@ public class World_EnemyLibrary : MonoBehaviour {
         enemies = Resources.LoadAll("Enemies", typeof(Enemy)).Cast<Enemy>().ToArray();
         minibosses = Resources.LoadAll("MiniBosses", typeof(Enemy)).Cast<Enemy>().ToArray();
         bosses = Resources.LoadAll("Bosses", typeof(Enemy)).Cast<Enemy>().ToArray();
-        
-        abc //! TODO: Consider using an enum in Enemy script to determine if enemy is enemy/miniboss/boss to avoid using 3 lists + search functions
 
         // A huge declaration of enemyLibrary
         enemyLibrary = new Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>>() {

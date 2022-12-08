@@ -2,8 +2,8 @@ using UnityEngine;
 
 // C# does not allow multiple inheritance so we're attaching an Entity interface to Enemy script so that we can use a single type to handle turns
 public class Enemy : MonoBehaviour, Entity {
-    public string id; // Used by World_EnemyLibrary
-    public string enemyName;
+    [SerializeField] private string id; // Used by World_EnemyLibrary
+    [SerializeField] private string enemyName;
 
     // Properties
     private int _health, _healthMax;
@@ -15,6 +15,10 @@ public class Enemy : MonoBehaviour, Entity {
         get => _healthMax;
         set => _healthMax = value;
     }
+
+    // Getters
+    public string GetID() { return id; }
+    public string GetEnemyName() { return enemyName; }
 
     void Awake() {
         _healthMax = _health = 500; // Setting up enemy's health properties
