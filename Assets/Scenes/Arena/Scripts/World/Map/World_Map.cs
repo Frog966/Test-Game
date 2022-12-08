@@ -203,15 +203,7 @@ public class World_Map : MonoBehaviour {
         currMapNode = newNode;
         currLayer++;
 
-        // Reset player pos
-        world.GridHandler().SetGridPos(world.Player().playerObj, Vector2Int.one);
-
-        // Instantiate and set enemies' pos
-        foreach (EncounterEnemyDetails details in newNode.GetEncounter()) {
-            GameObject newCardObj = GameObject.Instantiate(details.enemy.gameObject, world.EnemyParent());
-            world.GridHandler().SetGridPos(newCardObj, details.gridPos);
-        }
-
+        world.TurnsHandler().SetupEncounter(newNode); // Setup the encounter first before disabling map UI
         mapParent.SetActive(false);
     }
 

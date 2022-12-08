@@ -1,7 +1,7 @@
 using UnityEngine;
 
-// C# does not allow multiple inheritance so we're attaching an Entity interface to Player script so that we can use a single type to handle turns
-public class Player : MonoBehaviour, Entity {
+// C# does not allow multiple inheritance so we're attaching an IEntity interface to Player script so that we can use a single type to handle turns
+public class Player : MonoBehaviour, IEntity {
     //! Handler scripts
     private Player_Cards _cardsHandler;
     private Player_Energy _energyHandler;

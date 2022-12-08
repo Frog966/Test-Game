@@ -6,11 +6,63 @@ using UnityEngine;
 public class World_Turns : MonoBehaviour {
     private World world;
 
-    public GameObject turnPrefab;
-    public Transform turnParent, turnPool;
-
     private List<World_Turn> turnList = new List<World_Turn>();
     private List<World_Turn> turnListNext = new List<World_Turn>();
+
+    [SerializeField] private GameObject turnPrefab;
+    [SerializeField] private Transform turnParent, turnPool;
+
+    // Setup the encounter
+    public void SetupEncounter(World_MapNode currMapNode) {
+        // Reset player pos
+        world.GridHandler().SetGridPos(world.Player().playerObj, Vector2Int.one);
+
+        // Instantiate and set enemies' pos
+        foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
+            GameObject newCardObj = GameObject.Instantiate(details.enemy.gameObject, world.EnemyParent());
+            world.GridHandler().SetGridPos(newCardObj, details.gridPos);
+        }
+
+        // Set up first turn for player and enemy
+        // Player always first
+        CreateTurn(world.Player());
+        
+        // Create turns for enemies
+        foreach (Transform child in world.EnemyParent()) {
+            // CreateTurn(child.GetComponent<Enemy>().ReturnCurrentTurn());
+        }
+    }
+
+    // Start current turn
+    // If enemy, perform turn's task list then end the turn. If player, turn will continue until player ends turn manually
+    // Perform certain buff/debuff updates here
+    public void StartTurn() {
+        World_Turn currTurn = turnList[0];
+
+        // Only end the turn if currTurn's owner is not a Player script
+        if (!(currTurn.GetOwner() is Player)) { EndTurn(); }
+        else {
+            world.Player().StartTurn();
+        }
+    }
+
+    // Remove current turn obj from turnParent as well as update turnList
+    public void RemoveTurn(int i = 0) {
+        // Moving selected turn into turnPool then rearrange the turnParent
+        World_Turn selectedTurn = turnList[i];
+        selectedTurn.transform.SetParent(turnPool);
+        ArrangeTurnObjs();
+
+        turnList.RemoveAt(i);
+    }
+
+    // End current turn
+    // Perform certain buff/debuff updates here
+    public void EndTurn() {
+        RemoveTurn();
+        
+        // StartTurn(); // Start the next turn which is the new current 
+    }
 
     // Instantiates a turn prefab to parent and returns the new GO's World_Turn component
     // Default parent is turnPool
@@ -28,7 +80,7 @@ public class World_Turns : MonoBehaviour {
 
     // Recycles a turn prefab from turnPool and passes it to turnParent
     // If no prefabs are available, instantiate a new one in turnPool then passes it to turnParent
-    private void CreateTurn(Entity owner, List<Task> taskList = null) {
+    private void CreateTurn(IEntity owner, List<Task> taskList = null) {
         World_Turn newTurn = null;
 
         if (turnPool.childCount < 1) {
@@ -60,56 +112,6 @@ public class World_Turns : MonoBehaviour {
         turnList.Add(newTurn); // Add newTurn to turnList
         newTurn.transform.SetParent(turnParent); // Place newTurn into turnParent
         ArrangeTurnObjs();
-    }
-
-    // Generate turns first
-    public void SetupTurns() {
-        // Set up first turn for player and enemy
-        // Player always first
-        CreateTurn(world.Player());
-        
-        // Create turns for enemies
-        foreach (Transform child in world.EnemyParent()) {
-
-        }
-    }
-
-    // Start current turn
-    // If enemy, perform turn's task list then end the turn. If player, turn will continue until player ends turn manually
-    // Perform certain buff/debuff updates here
-    public void StartTurn() {
-        World_Turn currTurn = turnList[0];
-        
-        // Debug.Log("StartTurn 1");
-
-        // Only end the turn if currTurn's owner is not a Player script
-        if (!(currTurn.GetOwner() is Player)) {
-            // Debug.Log("StartTurn 2");
-
-            EndTurn();
-        }
-        else {
-            // Best to use a function like this instead of just calling all the functions inside this function
-            world.Player().StartTurn();
-        }
-    }
-
-    // Remove current turn obj from turnParent as well as update turnList
-    public void RemoveTurn(int i = 0) {
-        // Moving selected turn into turnPool then rearrange the turnParent
-        World_Turn selectedTurn = turnList[i];
-        selectedTurn.transform.SetParent(turnPool);
-        ArrangeTurnObjs();
-
-        turnList.RemoveAt(i);
-    }
-
-    // End current turn
-    // Perform certain buff/debuff updates here
-    public void EndTurn() {
-        RemoveTurn();
-        
-        // StartTurn(); // Start the next turn which is the new current 
     }
 
     void Awake() {
@@ -145,8 +147,5 @@ public class World_Turns : MonoBehaviour {
     void Start() {
         // Sanity checks
         world = this.gameObject.GetComponent<World>();
-
-        SetupTurns();
-        StartTurn();
     }
 }

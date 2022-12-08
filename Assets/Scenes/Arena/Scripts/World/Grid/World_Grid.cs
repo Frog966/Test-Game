@@ -13,6 +13,10 @@ public class World_Grid : MonoBehaviour {
     public World_GridNode GetNode(Vector2Int vec2) { return isNodeInBounds(vec2) ? grid[vec2.x, vec2.y] : null; }
     public Vector2Int GetEntityGridPos(GameObject entity) { return entitiesOnGrid.ContainsKey(entity) ? entitiesOnGrid[entity] : new Vector2Int(); }
 
+    // Overloaded functions to check if entity is on speciic grid pos
+    public bool IsEntityHere(GameObject entity, Vector2Int pos) { return entitiesOnGrid[entity] == pos; }
+    public bool IsEntityHere(GameObject entity, List<Vector2Int> posList) { return posList.Contains(entitiesOnGrid[entity]); }
+
     // Set entities' grid position
     // Registers/updates the entitiesOnGrid when an entity moves to a grid position
     // Has no restrictions other than requiring a valid grid pos
