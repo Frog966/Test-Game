@@ -10,7 +10,7 @@ public class World_Turn : MonoBehaviour {
     public List<Task> taskList = new List<Task>();
 
     //! Basically a constructor. Remember to call this when instantiating a Turn prefab
-    // Task list can be empty
+    // Task list can be empty especially for player.cs as it does not have defined tasks
     public void Setup(IEntity newOwner, List<Task> newTaskList = null) {
         owner = newOwner;
         // taskList = newTaskList != null ? newTaskList : new List<Task>(); // If newTaskList = null, reset taskList into empty list with no elements
