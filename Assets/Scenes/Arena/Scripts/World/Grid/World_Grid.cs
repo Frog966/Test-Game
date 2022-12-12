@@ -39,6 +39,11 @@ public class World_Grid : MonoBehaviour {
         // }
     }
 
+    // SetGridPos() with a "entities cannot move to a grid node with another entity on it" restriction
+    public void MoveToPos(GameObject entity, Vector2Int vec2) {
+        if (!entitiesOnGrid.Values.Contains(vec2)) { SetGridPos(entity, vec2); }
+    }
+
     // Removes an entity from the library
     // Usually when an enemy dies
     public void RemoveEntityFromGrid(GameObject entity) { entitiesOnGrid.Remove(entity); }
