@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 147467170921115980}
-  - component: {fileID: 78582624980362022}
+  - component: {fileID: 6606330487923031456}
   m_Layer: 0
   m_Name: Enemy_Dummy
   m_TagString: Untagged
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &78582624980362022
+--- !u!114 &6606330487923031456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,11 +47,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 147467170921115981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b50fa611e8485146a1295397a6f8060, type: 3}
+  m_Script: {fileID: 11500000, guid: a9930d84a534d59489817ea60ed6e3eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: Test Enemy
-  enemyName: Test Enemy
 --- !u!1 &888048299790044968
 GameObject:
   m_ObjectHideFlags: 0

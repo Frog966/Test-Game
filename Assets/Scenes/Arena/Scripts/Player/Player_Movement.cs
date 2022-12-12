@@ -5,17 +5,17 @@ using UnityEngine;
 public class Player_Movement : MonoBehaviour {
     private Player player;
 
-    [SerializeField] private World_Grid grid;
+    [SerializeField] private World_Grid gridHandler;
 
-    public void ResetCost() { player.moveCost = player.moveCostTrue; }
+    public void ResetMoveCost() { player.moveCost = player.moveCostTrue; }
 
     // World_Grid.SetGridPos() but with restrictions
     public void MoveTo(Vector2Int vec2) {
-        World_GridNode node = grid.GetNode(vec2);
+        World_GridNode node = gridHandler.GetNode(vec2);
 
         // Player must have enough energy to move and can only move onto player-controlled nodes 
         if (player.energy - player.moveCost >= 0 && node && node.isPlayerControlled) {
-            grid.MoveToPos(player.gameObject, vec2);
+            gridHandler.MoveToPos(player.playerObj, vec2);
             player.EnergyHandler().DecreaseEnergy(player.moveCost); // Each move lowers energy
         }
         // else {
@@ -32,17 +32,21 @@ public class Player_Movement : MonoBehaviour {
     }
 
     // Shortcuts
-    //! Up and down is reversed because of how we setup the grid
-    public void MoveUp() { MoveTo(player.playerCoor + Vector2Int.down); }
-    public void MoveLeft() { MoveTo(player.playerCoor + Vector2Int.left); }
-    public void MoveDown() { MoveTo(player.playerCoor + Vector2Int.up); }
-    public void MoveRight() { MoveTo(player.playerCoor + Vector2Int.right); }
+    //! Up and down is reversed because of how the grid is setup
+    public void MoveUp() { MoveTo(gridHandler.GetEntityGridPos(player.playerObj) + Vector2Int.down); }
+    public void MoveLeft() { MoveTo(gridHandler.GetEntityGridPos(player.playerObj) + Vector2Int.left); }
+    public void MoveDown() { MoveTo(gridHandler.GetEntityGridPos(player.playerObj) + Vector2Int.up); }
+    public void MoveRight() { MoveTo(gridHandler.GetEntityGridPos(player.playerObj) + Vector2Int.right); }
 
-    // Start is called before the first frame update
+    void Awake() {
+        // Non-player handlers sanity checks
+        if (gridHandler == null) { gridHandler = this.transform.parent.GetComponentInChildren(typeof(World_Grid)) as World_Grid; }
+    }
+
     void Start() {
         //! Sanity Checks
         player = this.gameObject.GetComponent<Player>();
 
-        ResetCost();
+        ResetMoveCost();
     }
 }

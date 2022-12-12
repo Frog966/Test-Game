@@ -6,11 +6,11 @@ using UnityEngine;
 public class World_Turns : MonoBehaviour {
     private World world;
 
-    private List<World_Turn> turnList = new List<World_Turn>();
-    private List<World_Turn> turnListNext = new List<World_Turn>();
-
     [SerializeField] private GameObject turnPrefab;
     [SerializeField] private Transform turnParent, turnPool;
+
+    [SerializeField] private List<World_Turn> turnList = new List<World_Turn>();
+    private List<World_Turn> turnListNext = new List<World_Turn>();
 
     // Setup the encounter
     public void SetupEncounter(World_MapNode currMapNode) {
@@ -19,7 +19,7 @@ public class World_Turns : MonoBehaviour {
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
-            GameObject newCardObj = GameObject.Instantiate(details.enemy.gameObject, world.EnemyParent());
+            GameObject newCardObj = GameObject.Instantiate(details.enemy.GameObj, world.EnemyParent());
             world.GridHandler().SetGridPos(newCardObj, details.gridPos);
         }
 
@@ -29,8 +29,10 @@ public class World_Turns : MonoBehaviour {
         
         // Create turns for enemies
         foreach (Transform child in world.EnemyParent()) {
-            // CreateTurn(child.GetComponent<Enemy>().ReturnCurrentTurn());
+            CreateTurn(child.GetComponent<IEnemy>());
         }
+
+        StartTurn(); // Start 1st turn
     }
 
     // Start current turn
@@ -40,32 +42,33 @@ public class World_Turns : MonoBehaviour {
         World_Turn currTurn = turnList[0];
 
         // Only end the turn if currTurn's owner is not a Player script
-        if (!(currTurn.GetOwner() is Player)) { EndTurn(); }
+        if (!(currTurn.GetOwner() is Player)) { 
+            currTurn.Execute();
+            EndTurn(); 
+        }
         else {
             world.Player().StartTurn();
         }
     }
 
-    // Remove current turn obj from turnParent as well as update turnList
+    // Remove turn obj from turnParent as well as update turnList
     public void RemoveTurn(int i = 0) {
         // Moving selected turn into turnPool then rearrange the turnParent
-        World_Turn selectedTurn = turnList[i];
-        selectedTurn.transform.SetParent(turnPool);
-        ArrangeTurnObjs();
-
+        turnList[i].transform.SetParent(turnPool);
         turnList.RemoveAt(i);
+
+        ArrangeTurnObjs();
     }
 
     // End current turn
     // Perform certain buff/debuff updates here
     public void EndTurn() {
+        CreateTurn(turnList[0].GetOwner()); // Recreate the current turn. If enemy, possibly progress it's pattern
         RemoveTurn();
-        
-        // StartTurn(); // Start the next turn which is the new current 
+        StartTurn(); // Start the next turn which is the new current 
     }
 
-    // Instantiates a turn prefab to parent and returns the new GO's World_Turn component
-    // Default parent is turnPool
+    // Instantiates a turn prefab to turnPool and returns the new GO's World_Turn component
     private World_Turn InstantiateTurn() {
         return Instantiate(turnPrefab, turnPool).GetComponent<World_Turn>();
     }
@@ -80,7 +83,7 @@ public class World_Turns : MonoBehaviour {
 
     // Recycles a turn prefab from turnPool and passes it to turnParent
     // If no prefabs are available, instantiate a new one in turnPool then passes it to turnParent
-    private void CreateTurn(IEntity owner, List<Task> taskList = null) {
+    private void CreateTurn(IEntity owner) {
         World_Turn newTurn = null;
 
         if (turnPool.childCount < 1) {
@@ -108,9 +111,11 @@ public class World_Turns : MonoBehaviour {
             }
         }
 
-        newTurn.Setup(owner, taskList);
-        turnList.Add(newTurn); // Add newTurn to turnList
+        newTurn.Setup(owner, !(owner is Player) ? owner.GameObj.GetComponent<IEnemy>().ReturnCurrentTurn() : null); // If enemy, pass task list. Else, pass null
         newTurn.transform.SetParent(turnParent); // Place newTurn into turnParent
+
+        turnList.Add(newTurn); // Add newTurn to turnList
+
         ArrangeTurnObjs();
     }
 

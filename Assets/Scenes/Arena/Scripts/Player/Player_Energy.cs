@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class Player_Energy : MonoBehaviour {
     private Player player;
 
-    public Text energyText, energyMaxText;
-    public UnityEngine.UI.Image fill;
+    [SerializeField] private Text energyText, energyMaxText;
+    [SerializeField] private UnityEngine.UI.Image fill;
 
     // Start is called before the first frame update
     void Start() {

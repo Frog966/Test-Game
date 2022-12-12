@@ -23,10 +23,10 @@ namespace Game {
 
         [System.Serializable]
         public struct EncounterEnemyDetails {
-            public Enemy enemy;
+            public IEnemy enemy;
             public Vector2Int gridPos;
 
-            public EncounterEnemyDetails(Enemy _enemy, Vector2Int _gridPos) {
+            public EncounterEnemyDetails(IEnemy _enemy, Vector2Int _gridPos) {
                 enemy = _enemy;
                 gridPos = _gridPos;
             }

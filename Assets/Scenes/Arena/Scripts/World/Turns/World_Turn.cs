@@ -6,6 +6,13 @@ using UnityEngine;
 using Game.Unit; // Unique namespace from Game.cs
 
 public class World_Turn : MonoBehaviour {
+    [SerializeField] private UnityEngine.UI.Image bg;
+
+    [Header("Faction Colors")]
+    [SerializeField] private Color color_Ally;
+    [SerializeField] private Color color_Enemy;
+    [SerializeField] private Color color_Neutral;
+
     private IEntity owner; //! Who this turn belongs to
     public List<Task> taskList = new List<Task>();
 
@@ -13,22 +20,28 @@ public class World_Turn : MonoBehaviour {
     // Task list can be empty especially for player.cs as it does not have defined tasks
     public void Setup(IEntity newOwner, List<Task> newTaskList = null) {
         owner = newOwner;
-        // taskList = newTaskList != null ? newTaskList : new List<Task>(); // If newTaskList = null, reset taskList into empty list with no elements
 
         // If newTaskList = null, reset taskList into empty list with no elements
         if (newTaskList != null) { taskList = newTaskList; }
         else { taskList.Clear(); }
+
+        if (newOwner == typeof(Player)) { bg.color = color_Ally; }
+        else if (newOwner == typeof(IEnemy)) { bg.color = color_Enemy; }
+        else { bg.color = color_Neutral; }
     }
 
     // Getters
     public IEntity GetOwner() { return owner; }
     public List<Task> GetTaskList() { return taskList; }
-    public void SetTaskList(List<Task> newTaskList) { taskList = newTaskList; }
 
     public void Execute() {
+        Debug.Log(owner.GameObj.name + " performs turn!");
+
         foreach (Task currTask in taskList) { 
             currTask.Start();
             currTask.Wait();
         }
+
+        Debug.Log(owner.GameObj.name + " ends turn!");
     }
 }

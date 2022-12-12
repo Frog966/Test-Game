@@ -8,9 +8,9 @@ using Game.Map;
 // In charge of recording enemies and their correct positions at start of combat
 public class World_EnemyLibrary : MonoBehaviour {
     // Enemy prefab lists from Resources folders
-    [SerializeField] private Enemy[] enemies; // Contains every single enemy prefab in the Resources/Enemies folder
-    [SerializeField] private Enemy[] minibosses; // Contains every single enemy prefab in the Resources/MiniBosses folder
-    [SerializeField] private Enemy[] bosses; // Contains every single enemy prefab in the Resources/Bosses folder
+    [SerializeField] private IEnemy[] enemies; // Contains every single enemy prefab in the Resources/Enemies folder
+    [SerializeField] private IEnemy[] minibosses; // Contains every single enemy prefab in the Resources/MiniBosses folder
+    [SerializeField] private IEnemy[] bosses; // Contains every single enemy prefab in the Resources/Bosses folder
 
     // A nested dictionary containing the enemies, minibosses and bosses of a locale
     [SerializeField] private Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>> enemyLibrary;
@@ -20,41 +20,41 @@ public class World_EnemyLibrary : MonoBehaviour {
         if (enemyLibrary.ContainsKey(mapLocale) && enemyLibrary[mapLocale].ContainsKey(nodeType)) {
             List<List<EncounterEnemyDetails>> encounterList = enemyLibrary[mapLocale][nodeType];
 
-            return encounterList[UnityEngine.Random.Range(0, encounterList.Count > 0 ? encounterList.Count - 1 : 0)];
+            return encounterList[UnityEngine.Random.Range(0, encounterList.Count)];
         }
         else {
             return Enumerable.Empty<EncounterEnemyDetails>().ToList(); // Return an immutable empty list
         }
     }
 
-    public Enemy ReturnEnemyById(string id) {
-        Enemy enemy = Array.Find(enemies, (enemyScript) => enemyScript.GetComponent<Enemy>().GetID() == id);
+    public IEnemy ReturnEnemyById(string id) {
+        IEnemy enemy = Array.Find(enemies, (enemyScript) => enemyScript.ID == id);
 
-        if (!enemy) { Debug.LogWarning("ReturnEnemyById ID not found: '" + id + "'"); }
-
-        return enemy;
-    }
-
-    public Enemy ReturnMiniBossById(string id) {
-        Enemy enemy = Array.Find(minibosses, (enemyScript) => enemyScript.GetComponent<Enemy>().GetID() == id);
-
-        if (!enemy) { Debug.LogWarning("ReturnMiniBossById ID not found: '" + id + "'"); }
+        if (enemy == null) { Debug.LogWarning("ReturnEnemyById ID not found: '" + id + "'"); }
 
         return enemy;
     }
 
-    public Enemy ReturnBossById(string id) {
-        Enemy enemy = Array.Find(bosses, (enemyScript) => enemyScript.GetComponent<Enemy>().GetID() == id);
+    public IEnemy ReturnMiniBossById(string id) {
+        IEnemy enemy = Array.Find(minibosses, (enemyScript) => enemyScript.ID == id);
 
-        if (!enemy) { Debug.LogWarning("ReturnBossById ID not found: '" + id + "'"); }
+        if (enemy == null) { Debug.LogWarning("ReturnMiniBossById ID not found: '" + id + "'"); }
+
+        return enemy;
+    }
+
+    public IEnemy ReturnBossById(string id) {
+        IEnemy enemy = Array.Find(bosses, (enemyScript) => enemyScript.ID == id);
+
+        if (enemy == null) { Debug.LogWarning("ReturnBossById ID not found: '" + id + "'"); }
 
         return enemy;
     }
 
     void Awake() {
-        enemies = Resources.LoadAll("Enemies", typeof(Enemy)).Cast<Enemy>().ToArray();
-        minibosses = Resources.LoadAll("MiniBosses", typeof(Enemy)).Cast<Enemy>().ToArray();
-        bosses = Resources.LoadAll("Bosses", typeof(Enemy)).Cast<Enemy>().ToArray();
+        enemies = Resources.LoadAll("Enemies", typeof(IEnemy)).Cast<IEnemy>().ToArray();
+        minibosses = Resources.LoadAll("MiniBosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
+        bosses = Resources.LoadAll("Bosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
 
         // A huge declaration of enemyLibrary
         enemyLibrary = new Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>>() {
@@ -66,18 +66,21 @@ public class World_EnemyLibrary : MonoBehaviour {
                     {
                         NodeType.ENEMY,
                         new List<List<EncounterEnemyDetails>>() {
+                            // new List<EncounterEnemyDetails>() {
+                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
+                            // },
+                            // new List<EncounterEnemyDetails>() {
+                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
+                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 1))
+                            // },
+                            // new List<EncounterEnemyDetails>() {
+                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
+                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 1)),
+                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, -1))
+                            // },
                             new List<EncounterEnemyDetails>() {
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
-                            },
-                            new List<EncounterEnemyDetails>() {
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 1))
-                            },
-                            new List<EncounterEnemyDetails>() {
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 1)),
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, -1))
-                            },
+                                new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(4, 1)),
+                            }
                         }
                     },
                     // All minibosses of MapLocale.TEST
