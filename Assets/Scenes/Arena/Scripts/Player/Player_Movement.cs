@@ -14,7 +14,7 @@ public class Player_Movement : MonoBehaviour {
         World_GridNode node = gridHandler.GetNode(vec2);
 
         // Player must have enough energy to move and can only move onto player-controlled nodes 
-        if (player.energy - player.moveCost >= 0 && node && node.isPlayerControlled) {
+        if (player.energy - player.moveCost >= 0 && node && node.IsPlayerControlled()) {
             gridHandler.MoveToPos(player, vec2);
             player.EnergyHandler().DecreaseEnergy(player.moveCost); // Each move lowers energy
         }
