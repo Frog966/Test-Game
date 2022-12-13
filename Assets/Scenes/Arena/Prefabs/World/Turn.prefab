@@ -50,6 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0a06311ba5de84fb61de02dd90da2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bg: {fileID: 9078025076949693519}
+  color_Ally: {r: 1, g: 1, b: 1, a: 1}
+  color_Enemy: {r: 0, g: 0, b: 0, a: 1}
+  color_Neutral: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
 --- !u!1 &963770437607552546
 GameObject:
   m_ObjectHideFlags: 0

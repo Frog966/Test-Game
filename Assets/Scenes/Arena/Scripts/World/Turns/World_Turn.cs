@@ -25,8 +25,9 @@ public class World_Turn : MonoBehaviour {
         if (newTaskList != null) { taskList = newTaskList; }
         else { taskList.Clear(); }
 
-        if (newOwner == typeof(Player)) { bg.color = color_Ally; }
-        else if (newOwner == typeof(IEnemy)) { bg.color = color_Enemy; }
+        // Set image color
+        if (newOwner.GetType().IsAssignableFrom(typeof(Player))) { bg.color = color_Ally; }
+        else if (newOwner.GetType().GetInterface(nameof(IEnemy)) != null) { bg.color = color_Enemy; }
         else { bg.color = color_Neutral; }
     }
 
