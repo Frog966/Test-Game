@@ -21,7 +21,6 @@ namespace Game {
             SHOP,
         }
 
-        [System.Serializable]
         public struct EncounterEnemyDetails {
             public IEnemy enemy;
             public Vector2Int gridPos;

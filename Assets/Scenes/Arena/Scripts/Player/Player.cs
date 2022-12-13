@@ -1,4 +1,5 @@
 using UnityEngine;
+using Game.Unit;
 
 // C# does not allow multiple inheritance so we're attaching an IEntity interface to Player script so that we can use a single type to handle turns
 public class Player : MonoBehaviour, IEntity {
@@ -12,7 +13,7 @@ public class Player : MonoBehaviour, IEntity {
     [SerializeField] private World_Turns turnsHandler;
 
     // The player object
-    public GameObject playerObj;
+    [SerializeField] private GameObject playerObj;
 
     // Player stats
     public int energyMaxTrue = 3, energy, energyMax;  // Energy amounts
@@ -32,7 +33,11 @@ public class Player : MonoBehaviour, IEntity {
         set => healthMax = value;
     }
     
-    public GameObject GameObj { get => this.gameObject; }
+    public Faction Faction { get => Faction.ALLY; }
+    public GameObject GameObj { get => playerObj; }
+
+    public void OnHit() {}
+    public void OnDeath() {}
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Handler Getters
