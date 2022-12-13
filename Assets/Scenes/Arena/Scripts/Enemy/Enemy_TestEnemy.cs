@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
-// C# does not allow multiple inheritance so we're attaching an IEntity interface to Enemy script so that we can use a single type to handle turns
+// C# does not allow multiple inheritance so we're attaching an IEnemy interface (which inherits IEntity) to Enemy script so that we can use a single type to handle turns
 public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
     // Properties
     //--------------------------------------------------------------------------------------------------------------------------------------
