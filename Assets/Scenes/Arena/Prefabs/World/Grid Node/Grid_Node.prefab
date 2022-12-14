@@ -167,8 +167,9 @@ GameObject:
   - component: {fileID: 2901374645005651321}
   - component: {fileID: 827628883109145097}
   - component: {fileID: 4866264362347431518}
+  - component: {fileID: 5360438667388820178}
   m_Layer: 0
-  m_Name: Grid_Node 1
+  m_Name: Grid_Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,10 +217,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerControlled: 1
+  telegraph: {fileID: 4418157573063630503}
   top: {fileID: 4427715048544785992}
   front: {fileID: 1243411890184048391}
   color_Player: {r: 0, g: 0.5058824, b: 1, a: 1}
   color_Enemy: {r: 1, g: 0, b: 0.31764707, a: 1}
+--- !u!95 &5360438667388820178
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060700556529404423}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0f9ac7a420e5bb04493f0aa869bdf14f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3460647415560765945
 GameObject:
   m_ObjectHideFlags: 0
