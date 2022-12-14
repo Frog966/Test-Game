@@ -28,7 +28,19 @@ public class World_Grid : MonoBehaviour {
     public void RemoveEntityFromGrid(IEntity entity) { entitiesPos.Remove(entity); }
 
     public void TelegraphHere(List<Vector2Int> posList) {
+        foreach (Vector2Int pos in posList) { grid[pos[0], pos[1]].PlayAnim_Flicker(); }
+
+        StartCoroutine(World_AnimHandler.Instance.WaitForSeconds(1.0f));
         
+        foreach (Vector2Int pos in posList) { grid[pos[0], pos[1]].StopAnim_Flicker(); }
+    }
+
+    public void FlashHere(List<Vector2Int> posList, float delay = 1.0f) {
+        foreach (Vector2Int pos in posList) { grid[pos[0], pos[1]].PlayAnim_Flash(); }
+
+        StartCoroutine(World_AnimHandler.Instance.WaitForSeconds(delay));
+        
+        foreach (Vector2Int pos in posList) { grid[pos[0], pos[1]].StopAnim_Flash(); }
     }
 
     public void AttackHere(List<Faction> targetFactions, List<Vector2Int> posList, int totalDmg, int noOfHits = 1) {
