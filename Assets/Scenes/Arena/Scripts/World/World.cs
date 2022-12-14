@@ -5,7 +5,7 @@ using UnityEngine;
 public class World : MonoBehaviour {
     // Used as seed for Unity randomizer
     //! Unity's randomizer seed cannot be retrieved after it is set so it's best to generate our own and set it so that we have a record of it
-    [SerializeField] private int randSeed;
+    [SerializeField] private static int randSeed;
 
     [SerializeField] private Player player;
     [SerializeField] private Transform enemyParent;
