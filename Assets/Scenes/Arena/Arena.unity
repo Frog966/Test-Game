@@ -1742,7 +1742,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953125798e717fb4289ae4cdbf1826c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridHandler: {fileID: 0}
 --- !u!114 &652856515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4180,6 +4179,7 @@ GameObject:
   - component: {fileID: 1614269399}
   - component: {fileID: 1614269402}
   - component: {fileID: 1614269403}
+  - component: {fileID: 1614269404}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -4248,7 +4248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c320c38f1caabab429ae1a5427c0f3c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randSeed: 0
   player: {fileID: 652856511}
   enemyParent: {fileID: 855825867}
 --- !u!114 &1614269402
@@ -4279,6 +4278,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77f681de375c4a34e9e66379b28962a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1614269404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614269397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b18e61f4e081194292b543fe530a225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &1615982852 stripped

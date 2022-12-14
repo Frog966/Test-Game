@@ -15,12 +15,12 @@ public class World_Turns : MonoBehaviour {
     // Setup the encounter
     public void SetupEncounter(World_MapNode currMapNode) {
         // Reset player pos
-        world.GridHandler().SetGridPos(world.Player(), Vector2Int.one);
+        World_Grid.instance.SetGridPos(world.Player(), Vector2Int.one);
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
             GameObject newEnemyObj = GameObject.Instantiate(details.enemy.GameObj, world.EnemyParent());
-            world.GridHandler().SetGridPos(newEnemyObj.GetComponent<IEnemy>(), details.gridPos);
+            World_Grid.instance.SetGridPos(newEnemyObj.GetComponent<IEnemy>(), details.gridPos);
         }
 
         // Set up first turn for player and enemy

@@ -49,15 +49,14 @@ public class Card {
 
     public bool isTemp; // In case cards get generated during combat
 
-    private Task effect; // Used to save card functionality assigned by library
+    private Action effect; // Used to save card functionality assigned by library
 
     public Card(string newName, Action newEffect) {
         id = newName;
-        effect = new Task(newEffect);
+        effect = new Action(newEffect);
     }
 
     public void Play() {
-        effect.Start();
-        effect.Wait();
+        effect();
     }
 }

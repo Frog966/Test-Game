@@ -1,5 +1,5 @@
-// using System;
-using System.Threading.Tasks;
+using System;
+// using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,16 +14,16 @@ public class World_Turn : MonoBehaviour {
     [SerializeField] private Color color_Neutral;
 
     private IEntity owner; //! Who this turn belongs to
-    public List<Task> taskList = new List<Task>();
+    public List<Action> actionList = new List<Action>();
 
     //! Basically a constructor. Remember to call this when instantiating a Turn prefab
-    // Task list can be empty especially for player.cs as it does not have defined tasks
-    public void Setup(IEntity newOwner, List<Task> newTaskList = null) {
+    // Action list can be empty especially for player.cs as it does not have defined tasks
+    public void Setup(IEntity newOwner, List<Action> newTaskList = null) {
         owner = newOwner;
 
-        // If newTaskList = null, reset taskList into empty list with no elements
-        if (newTaskList != null) { taskList = newTaskList; }
-        else { taskList.Clear(); }
+        // If newTaskList = null, reset actionList into empty list with no elements
+        if (newTaskList != null) { actionList = newTaskList; }
+        else { actionList.Clear(); }
 
         // Set image color
         if (newOwner.GetType().IsAssignableFrom(typeof(Player))) { bg.color = color_Ally; }
@@ -33,15 +33,12 @@ public class World_Turn : MonoBehaviour {
 
     // Getters
     public IEntity GetOwner() { return owner; }
-    public List<Task> GetTaskList() { return taskList; }
+    public List<Action> GetTaskList() { return actionList; }
 
     public void Execute() {
         Debug.Log(owner.GameObj.name + " performs turn!");
 
-        foreach (Task currTask in taskList) { 
-            currTask.Start();
-            currTask.Wait();
-        }
+        foreach (Action currAct in actionList) { currAct(); }
 
         Debug.Log(owner.GameObj.name + " ends turn!");
     }

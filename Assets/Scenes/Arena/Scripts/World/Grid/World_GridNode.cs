@@ -11,14 +11,14 @@ public class World_GridNode : MonoBehaviour {
     [SerializeField] private Color color_Player, color_Enemy;
 
     // Getters
+    public Animator GetAnimator() { return animator; }
     public bool IsPlayerControlled() { return isPlayerControlled; }
 
     // Animations
     // No waiting here as multiple nodes might be performing animations at the same time
-    public void PlayAnim_Flash() { animator.SetBool("isFlash", true); }
-    public void StopAnim_Flash() { animator.SetBool("isFlash", false); }
-    public void PlayAnim_Flicker() { animator.SetBool("isFlicker", true); }
-    public void StopAnim_Flicker() { animator.SetBool("isFlicker", false); }
+    public void PlayAnim_Flash() { animator.Play("Grid_Node Telegraph Flash On"); }
+    public void StopAnim_Flash() { animator.Play("Grid_Node Telegraph Flash Off"); }
+    public void PlayAnim_Flicker() { animator.Play("Grid_Node Telegraph Flicker"); }
 
     // Set isPlayerControlled + update image color accordingly
     public void SetIsPlayerControlled(bool b) {
@@ -31,6 +31,6 @@ public class World_GridNode : MonoBehaviour {
     void Awake() {
         telegraph.SetActive(false);
 
-        if (animator == null) this.GetComponent<Animator>();
+        if (animator == null) { animator = this.GetComponent<Animator>(); }
     }
 }
