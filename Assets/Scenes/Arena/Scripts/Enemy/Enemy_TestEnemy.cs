@@ -5,6 +5,9 @@ using Game.Unit;
 
 // C# does not allow multiple inheritance so we're attaching an IEnemy interface (which inherits IEntity) to Enemy script so that we can use a single type to handle turns
 public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
+    // This AI has patterns that span multiple turns
+    private Queue<Queue<IEnumerator>> turnQueue = new Queue<Queue<IEnumerator>>();
+
     // Properties
     //--------------------------------------------------------------------------------------------------------------------------------------
     [SerializeField] private string id = "Test Enemy";
@@ -14,9 +17,6 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
     public int Health { get => health; set => health = value; }
     public int HealthMax  { get => healthMax; set => healthMax = value; }
 
-    Queue<Queue<IEnumerator>> turnQueue = new Queue<Queue<IEnumerator>>();
-    public Queue<Queue<IEnumerator>> TurnQueue { get => turnQueue; }
-
     public Faction Faction { get => Faction.ENEMY; }
     public GameObject GameObj { get => this.gameObject; }
 
@@ -25,27 +25,35 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     public Queue<IEnumerator> ReturnCurrentTurn() {
-        // Progress pattern
-        if (TurnQueue.Count > 0) {
-            TurnQueue.Dequeue();
-
-            return TurnQueue.Peek();
-        }
+        if (turnQueue.Count > 0) { return turnQueue.Dequeue(); }
         else {
             Queue<IEnumerator> newTurn = new Queue<IEnumerator>();
 
             // This switch case contains every pattern under this AI
             switch(UnityEngine.Random.Range(0, 1)) {
+                // case 0:
+                //     newTurn.Enqueue(World_Grid.instance.TelegraphHere(new List<Vector2Int>() { new Vector2Int(0, 1) }));
+                //     newTurn.Enqueue(World_Grid.instance.FlashHere(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0) }, 0.25f));
+                //     break;
                 case 0:
-                    newTurn.Enqueue(World_Grid.instance.TelegraphHere(new List<Vector2Int>() { new Vector2Int(0, 1) }));
-                    newTurn.Enqueue(World_Grid.instance.FlashHere(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0) }, 0.25f));
-                    break;
+                    AddToTurnQueue(new IEnumerator[] { World_Grid.instance.TelegraphHere(new List<Vector2Int>() { new Vector2Int(0, 1) }) });
+                    AddToTurnQueue(new IEnumerator[] { World_Grid.instance.FlashHere(new List<Vector2Int>() { new Vector2Int(0, 1) }) });
+                    
+                    return turnQueue.Dequeue();
                 default:
                     Debug.LogError(this.gameObject.name + " pattern randomizer went out of bounds!");
                     break;
             }
 
             return newTurn;
+
+            void AddToTurnQueue(IEnumerator[] actionArr) {
+                Queue<IEnumerator> newTurn = new Queue<IEnumerator>();
+
+                foreach (IEnumerator action in actionArr) { newTurn.Enqueue(action); }
+
+                turnQueue.Enqueue(newTurn);
+            }
         }
     }
 

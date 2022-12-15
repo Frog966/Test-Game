@@ -74,7 +74,7 @@ public class World_Grid : MonoBehaviour {
         World_AnimHandler.Instance.isAnimating = false;
     }
 
-    public IEnumerator FlashHere(List<Vector2Int> posList, float delay = 1.0f) {
+    public IEnumerator FlashHere(List<Vector2Int> posList, float delay = 0.25f) {
         World_AnimHandler.Instance.isAnimating = true;
 
         for (int i = 0; i < posList.Count; i++) { 

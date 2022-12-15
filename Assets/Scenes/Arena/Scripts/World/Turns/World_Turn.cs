@@ -38,11 +38,7 @@ public class World_Turn : MonoBehaviour {
     public IEnumerator Execute() {
         Debug.Log(owner.GameObj.name + " performs turn!");
 
-        while (actionQueue.Count > 0) {
-            yield return actionQueue.Peek();
-            
-            actionQueue.Dequeue();
-        }
+        while (actionQueue.Count > 0) { yield return actionQueue.Dequeue(); }
 
         Debug.Log(owner.GameObj.name + " ends turn!");
     }
