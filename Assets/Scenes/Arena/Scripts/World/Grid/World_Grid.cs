@@ -60,7 +60,7 @@ public class World_Grid : MonoBehaviour {
     public void RemoveEntityFromGrid(IEntity entity) { entitiesPos.Remove(entity); }
 
     public void TelegraphHere(List<Vector2Int> posList) {
-        // World_AnimHandler.Instance.isAnimating = true;
+        World_AnimHandler.Instance.isAnimating = true;
 
         for (int i = 0; i < posList.Count; i++) { 
             World_GridNode currNode = grid[posList[i][0], posList[i][1]];
@@ -71,11 +71,11 @@ public class World_Grid : MonoBehaviour {
             if (i >= posList.Count - 1) StartCoroutine(World_AnimHandler.Instance.WaitForCurrentAnim(currNode.GetAnimator()));
         }
 
-        // World_AnimHandler.Instance.isAnimating = false;
+        World_AnimHandler.Instance.isAnimating = false;
     }
 
     public void FlashHere(List<Vector2Int> posList, float delay = 1.0f) {
-        // World_AnimHandler.Instance.isAnimating = true;
+        World_AnimHandler.Instance.isAnimating = true;
 
         for (int i = 0; i < posList.Count; i++) { 
             World_GridNode currNode = grid[posList[i][0], posList[i][1]];
@@ -92,7 +92,7 @@ public class World_Grid : MonoBehaviour {
             currNode.StopAnim_Flash();
         }
 
-        // World_AnimHandler.Instance.isAnimating = false;
+        World_AnimHandler.Instance.isAnimating = false;
     }
 
     public void AttackHere(List<Faction> targetFactions, List<Vector2Int> posList, int totalDmg, int noOfHits = 1) {
