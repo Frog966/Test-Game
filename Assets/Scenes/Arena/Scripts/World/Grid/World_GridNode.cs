@@ -16,8 +16,8 @@ public class World_GridNode : MonoBehaviour {
 
     // Animations
     // No waiting here as multiple nodes might be performing animations at the same time
-    public void PlayAnim_Flash() { animator.Play("Grid_Node Telegraph Flash On"); }
-    public void StopAnim_Flash() { animator.Play("Grid_Node Telegraph Flash Off"); }
+    public void StopAnim_Flash() { animator.Play("Grid_Node Idle"); }
+    public void PlayAnim_Flash() { animator.Play("Grid_Node Telegraph Flash"); }
     public void PlayAnim_Flicker() { animator.Play("Grid_Node Telegraph Flicker"); }
 
     // Set isPlayerControlled + update image color accordingly
