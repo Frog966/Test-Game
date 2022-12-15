@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ using UnityEngine;
 public interface IEnemy : IEntity {
     // Properties
     string ID { get; }
-    List<List<Action>> TurnList { get; } // Contains a chain of turns in the event the enemy does something that requires specific actions over multiple turns
+    Queue<Queue<IEnumerator>> TurnQueue { get; } // Contains a chain of turns in the event the enemy does something that requires specific actions over multiple turns
 
-    List<Action> ReturnCurrentTurn();  // Returns the current turn's tasks
+    Queue<IEnumerator> ReturnCurrentTurn();  // Returns the current turn's tasks
 }

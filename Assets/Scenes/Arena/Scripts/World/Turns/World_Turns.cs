@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,18 +34,19 @@ public class World_Turns : MonoBehaviour {
 
         ArrangeTurnObjs();
 
-        StartTurn(); // Start 1st turn
+        StartCoroutine(StartTurn()); // Start 1st turn
     }
 
     // Start current turn
     // If enemy, perform turn's task list then end the turn. If player, turn will continue until player ends turn manually
     // Perform certain buff/debuff updates here
-    public void StartTurn() {
+    public IEnumerator StartTurn() {
         World_Turn currTurn = turnList[0];
 
         // Only end the turn if currTurn's owner is not a Player script
         if (!(currTurn.GetOwner() is Player)) { 
-            currTurn.Execute();
+            yield return currTurn.Execute();
+
             EndTurn(); 
         }
         else {
@@ -67,7 +68,8 @@ public class World_Turns : MonoBehaviour {
     public void EndTurn() {
         CreateTurn(turnList[0].GetOwner()); // Recreate the current turn. If enemy, possibly progress it's pattern
         RemoveTurn();
-        StartTurn(); // Start the next turn which is the new current 
+        
+        StartCoroutine(StartTurn()); // Start the next turn which is the new current 
     }
 
     // Instantiates a turn prefab to turnPool and returns the new GO's World_Turn component

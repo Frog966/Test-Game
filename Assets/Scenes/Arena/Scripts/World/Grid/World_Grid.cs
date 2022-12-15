@@ -1,5 +1,5 @@
 using System.Linq;
-using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Unit;
@@ -59,7 +59,7 @@ public class World_Grid : MonoBehaviour {
     // Usually used when an enemy dies
     public void RemoveEntityFromGrid(IEntity entity) { entitiesPos.Remove(entity); }
 
-    public void TelegraphHere(List<Vector2Int> posList) {
+    public IEnumerator TelegraphHere(List<Vector2Int> posList) {
         World_AnimHandler.Instance.isAnimating = true;
 
         for (int i = 0; i < posList.Count; i++) { 
@@ -68,13 +68,13 @@ public class World_Grid : MonoBehaviour {
             currNode.PlayAnim_Flicker(); 
             
             // Begin waiting at the last pos
-            if (i >= posList.Count - 1) StartCoroutine(World_AnimHandler.Instance.WaitForCurrentAnim(currNode.GetAnimator()));
+            if (i >= posList.Count - 1) yield return World_AnimHandler.Instance.WaitForCurrentAnim(currNode.GetAnimator());
         }
 
         World_AnimHandler.Instance.isAnimating = false;
     }
 
-    public void FlashHere(List<Vector2Int> posList, float delay = 1.0f) {
+    public IEnumerator FlashHere(List<Vector2Int> posList, float delay = 1.0f) {
         World_AnimHandler.Instance.isAnimating = true;
 
         for (int i = 0; i < posList.Count; i++) { 
@@ -83,7 +83,7 @@ public class World_Grid : MonoBehaviour {
             currNode.PlayAnim_Flash(); 
             
             // Begin waiting at the last pos
-            if (i >= posList.Count - 1) StartCoroutine(World_AnimHandler.Instance.WaitForSeconds(delay));
+            if (i >= posList.Count - 1) yield return World_AnimHandler.Instance.WaitForSeconds(delay);
         }
 
         for (int i = 0; i < posList.Count; i++) { 

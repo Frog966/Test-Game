@@ -1,5 +1,5 @@
-using System;
-// using System.Threading.Tasks;
+// using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,16 +14,16 @@ public class World_Turn : MonoBehaviour {
     [SerializeField] private Color color_Neutral;
 
     private IEntity owner; //! Who this turn belongs to
-    public List<Action> actionList = new List<Action>();
+    public Queue<IEnumerator> actionQueue = new Queue<IEnumerator>();
 
     //! Basically a constructor. Remember to call this when instantiating a Turn prefab
-    // Action list can be empty especially for player.cs as it does not have defined tasks
-    public void Setup(IEntity newOwner, List<Action> newTaskList = null) {
+    // Action queue can be empty especially for player.cs as it does not have defined tasks
+    public void Setup(IEntity newOwner, Queue<IEnumerator> newTaskList = null) {
         owner = newOwner;
 
-        // If newTaskList = null, reset actionList into empty list with no elements
-        if (newTaskList != null) { actionList = newTaskList; }
-        else { actionList.Clear(); }
+        // If newTaskList = null, reset actionQueue into empty list with no elements
+        if (newTaskList != null) { actionQueue = newTaskList; }
+        else { actionQueue.Clear(); }
 
         // Set image color
         if (newOwner.GetType().IsAssignableFrom(typeof(Player))) { bg.color = color_Ally; }
@@ -33,12 +33,16 @@ public class World_Turn : MonoBehaviour {
 
     // Getters
     public IEntity GetOwner() { return owner; }
-    public List<Action> GetTaskList() { return actionList; }
+    public Queue<IEnumerator> GetActionQueue() { return actionQueue; }
 
-    public void Execute() {
+    public IEnumerator Execute() {
         Debug.Log(owner.GameObj.name + " performs turn!");
 
-        foreach (Action currAct in actionList) { currAct(); }
+        while (actionQueue.Count > 0) {
+            yield return actionQueue.Peek();
+            
+            actionQueue.Dequeue();
+        }
 
         Debug.Log(owner.GameObj.name + " ends turn!");
     }
