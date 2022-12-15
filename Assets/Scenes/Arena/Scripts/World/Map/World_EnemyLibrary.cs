@@ -13,12 +13,12 @@ public class World_EnemyLibrary : MonoBehaviour {
     [SerializeField] private IEnemy[] bosses; // Contains every single enemy prefab in the Resources/Bosses folder
 
     // A nested dictionary containing the enemies, minibosses and bosses of a locale
-    [SerializeField] private Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>> enemyLibrary;
+    [SerializeField] private Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>> encounterDict;
 
     // Returns an encounter containing a list of enemies and their positions if the map locale and node type is valid
     public List<EncounterEnemyDetails> ReturnRandomEncounter(MapLocale mapLocale, NodeType nodeType) {
-        if (enemyLibrary.ContainsKey(mapLocale) && enemyLibrary[mapLocale].ContainsKey(nodeType)) {
-            List<List<EncounterEnemyDetails>> encounterList = enemyLibrary[mapLocale][nodeType];
+        if (encounterDict.ContainsKey(mapLocale) && encounterDict[mapLocale].ContainsKey(nodeType)) {
+            List<List<EncounterEnemyDetails>> encounterList = encounterDict[mapLocale][nodeType];
 
             return encounterList[UnityEngine.Random.Range(0, encounterList.Count)];
         }
@@ -56,8 +56,8 @@ public class World_EnemyLibrary : MonoBehaviour {
         minibosses = Resources.LoadAll("MiniBosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
         bosses = Resources.LoadAll("Bosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
 
-        // A huge declaration of enemyLibrary
-        enemyLibrary = new Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>>() {
+        // A huge declaration of encounterDict
+        encounterDict = new Dictionary<MapLocale, Dictionary<NodeType, List<List<EncounterEnemyDetails>>>>() {
             // All enemies, minibosses and bosses of MapLocale.TEST
             {
                 MapLocale.TEST,
@@ -66,18 +66,6 @@ public class World_EnemyLibrary : MonoBehaviour {
                     {
                         NodeType.ENEMY,
                         new List<List<EncounterEnemyDetails>>() {
-                            // new List<EncounterEnemyDetails>() {
-                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
-                            // },
-                            // new List<EncounterEnemyDetails>() {
-                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
-                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 1))
-                            // },
-                            // new List<EncounterEnemyDetails>() {
-                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 0)),
-                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, 1)),
-                            //     new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(3, -1))
-                            // },
                             new List<EncounterEnemyDetails>() {
                                 new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(4, 1)),
                             }
