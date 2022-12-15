@@ -5,7 +5,7 @@ public class Player_Energy : MonoBehaviour {
     private Player player;
 
     [SerializeField] private Text energyText, energyMaxText;
-    [SerializeField] private UnityEngine.UI.Image fill;
+    [SerializeField] private Image fill;
 
     // Start is called before the first frame update
     void Start() {
