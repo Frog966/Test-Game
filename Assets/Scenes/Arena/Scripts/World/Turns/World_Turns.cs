@@ -32,6 +32,8 @@ public class World_Turns : MonoBehaviour {
             CreateTurn(child.GetComponent<IEnemy>());
         }
 
+        ArrangeTurnObjs();
+
         StartTurn(); // Start 1st turn
     }
 
@@ -113,10 +115,9 @@ public class World_Turns : MonoBehaviour {
 
         newTurn.Setup(owner, !(owner is Player) ? owner.GameObj.GetComponent<IEnemy>().ReturnCurrentTurn() : null); // If enemy, pass task list. Else, pass null
         newTurn.transform.SetParent(turnParent); // Place newTurn into turnParent
-
+        // newTurn.transform.SetAsLastSibling();
+        
         turnList.Add(newTurn); // Add newTurn to turnList
-
-        ArrangeTurnObjs();
     }
 
     void Awake() {
