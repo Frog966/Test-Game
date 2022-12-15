@@ -5,7 +5,7 @@ using UnityEngine;
 // Also contains some functions for waiting for animations to finish
 public class World_AnimHandler : MonoBehaviour {
     public static World_AnimHandler Instance { get; private set; }
-    public static bool isAnimating { get; set; }
+    public bool isAnimating { get; set; }
 
     // A simple coroutine that waits for animation to finish playing
     public IEnumerator WaitForCurrentAnim(Animator animator) { 
