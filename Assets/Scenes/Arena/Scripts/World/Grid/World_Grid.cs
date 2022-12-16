@@ -7,6 +7,7 @@ using Game.Unit;
 // Handles movement as well as combat for player/enemy
 public class World_Grid : MonoBehaviour {
     public static World_Grid instance;
+    private World world;
 
     [SerializeField] private static int row = 6, col = 3;
     [SerializeField] private Transform nodeParent;
@@ -55,12 +56,31 @@ public class World_Grid : MonoBehaviour {
     public bool IsEntityHere(IEntity entity, Vector2Int pos) { return entitiesPos[entity] == pos; }
     public bool IsEntityHere(IEntity entity, List<Vector2Int> posList) { return posList.Contains(entitiesPos[entity]); }
 
-    // Removes an entity from the library
-    // Usually used when an enemy dies
-    public void RemoveEntityFromGrid(IEntity entity) { entitiesPos.Remove(entity); }
+    // Returns a valid pos list that is relative to the origin point
+    // relativePosList MUST be values that are relative to origin point
+    // eg. origin: (0, 0), relativePosList: [(-1, 0)] means the post list will be the left of origin
+    // Set includeOrigin to false if you don't want to include the origin point
+    public List<Vector2Int> ReturnRelativePosList(Vector2Int origin, List<Vector2Int> relativePosList, bool includeOrigin = true) {
+        List<Vector2Int> validPosList = new List<Vector2Int>();
+
+        // Calculate and add any pos that are within the grid
+        foreach (Vector2Int v2 in relativePosList) {
+            int newX = v2[0] + origin[0];
+            int newY = v2[1] + origin[1];
+
+            if (newX >= 0 && newX < row && newY >= 0 && newY < col) { validPosList.Add(new Vector2Int(newX, newY)); }
+        }
+
+        if (includeOrigin) { validPosList.Add(origin); }
+        else { validPosList.RemoveAll((v2) => v2 == origin); } // Remove any points that are equal to origin in case someone added it accidentally
+
+        return ReturnDistinctPosList(validPosList); // Remove any duplicates 
+    }
 
     public IEnumerator TelegraphHere(List<Vector2Int> posList) {
         World_AnimHandler.Instance.isAnimating = true;
+        
+        ReturnDistinctPosList(posList); // Remove any duplicates 
 
         for (int i = 0; i < posList.Count; i++) { 
             World_GridNode currNode = grid[posList[i][0], posList[i][1]];
@@ -76,6 +96,8 @@ public class World_Grid : MonoBehaviour {
 
     public IEnumerator FlashHere(List<Vector2Int> posList, float delay = 0.25f) {
         World_AnimHandler.Instance.isAnimating = true;
+        
+        ReturnDistinctPosList(posList); // Remove any duplicates 
 
         for (int i = 0; i < posList.Count; i++) { 
             World_GridNode currNode = grid[posList[i][0], posList[i][1]];
@@ -95,31 +117,37 @@ public class World_Grid : MonoBehaviour {
         World_AnimHandler.Instance.isAnimating = false;
     }
 
-    public void AttackHere(List<Faction> targetFactions, List<Vector2Int> posList, int totalDmg, int noOfHits = 1) {
-        foreach (IEntity entity in GetEntitiesOnMap(targetFactions)) {
-            if (IsEntityHere(entity, posList)) { ResolveHitsOnEntity(entity, totalDmg, noOfHits); }
+    public void HitHere(Faction attackerFaction, List<Vector2Int> posList, int dmg) {
+        ReturnDistinctPosList(posList); // Remove any duplicates 
+
+        foreach (IEntity entity in GetEntitiesOnMap(attackerFaction)) {
+            if (IsEntityHere(entity, posList)) { ResolveHitsOnEntity(entity, dmg); }
         }
     }
 
-    // Returns entities that are under certain factions according to targetFactions param
-    // Param passes every faction as default
-    private List<IEntity> GetEntitiesOnMap(List<Faction> targetFactions) { 
-        if (targetFactions == null) targetFactions = System.Enum.GetValues(typeof(Faction)).Cast<Faction>().ToList();
+    // Returns a pos list without any duplicates
+    private List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
 
-        List<IEntity> targetEntities = entitiesPos.Keys.ToList();
-        targetEntities.RemoveAll((key) => !targetFactions.Contains(key.Faction));
+    // Removes an entity from the library
+    // Usually used when an enemy dies
+    private void RemoveEntityFromGrid(IEntity entity) { entitiesPos.Remove(entity); }
 
-        return targetEntities;
+    // Returns entities that are not the attacker's faction
+    private List<IEntity> GetEntitiesOnMap(Faction attackerFaction) {
+        List<Faction> targetFactions = System.Enum.GetValues(typeof(Faction)).Cast<Faction>().ToList(); // Remove attacker faction from faction list
+        targetFactions.Remove(attackerFaction);
+
+        return entitiesPos.Keys.ToList().Where((entity) => targetFactions.Contains(entity.Faction)).ToList(); // Return entities that belong to the remain factions
     }
 
-    private void ResolveHitsOnEntity(IEntity entity, int totalDmg, int noOfHits = 1) {
-        for (int i = 0; i < noOfHits; i++) { entity.OnHit(); }
+    private void ResolveHitsOnEntity(IEntity entity, int damage) {
+        entity.OnHit(damage); 
 
-        entity.Health -= totalDmg;
-
+        // Entity dies here
         if (entity.Health <= 0) { 
             entity.OnDeath(); 
             RemoveEntityFromGrid(entity);
+            world.TurnsHandler().RemoveAllTurnsByEntity(entity);
         }
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -148,5 +176,10 @@ public class World_Grid : MonoBehaviour {
                 childCounter++;
             }
         }
+    }
+
+    void Start() {
+        // Sanity checks
+        world = this.gameObject.GetComponent<World>();
     }
 }

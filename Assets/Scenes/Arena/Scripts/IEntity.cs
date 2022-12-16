@@ -9,6 +9,6 @@ public interface IEntity {
     int Health { get; set; }
     int HealthMax { get; set; }
 
-    void OnHit();
-    void OnDeath();
+    void OnHit(int damage); // Perform any damage calculations and on-hit effects here
+    void OnDeath(); // Perform any on-death effects here
 }

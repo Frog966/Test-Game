@@ -20,7 +20,7 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
     public Faction Faction { get => Faction.ENEMY; }
     public GameObject GameObj { get => this.gameObject; }
 
-    public void OnHit() {}
+    public void OnHit(int damage) {}
     public void OnDeath() {}
     //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -35,11 +35,30 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
                 //     newTurn.Enqueue(World_Grid.instance.TelegraphHere(new List<Vector2Int>() { new Vector2Int(0, 1) }));
                 //     newTurn.Enqueue(World_Grid.instance.FlashHere(new List<Vector2Int>() { new Vector2Int(0, 0), new Vector2Int(1, 0) }, 0.25f));
                 //     break;
-                case 0:
-                    AddToTurnQueue(new IEnumerator[] { World_Grid.instance.TelegraphHere(new List<Vector2Int>() { new Vector2Int(0, 1) }) });
-                    AddToTurnQueue(new IEnumerator[] { World_Grid.instance.FlashHere(new List<Vector2Int>() { new Vector2Int(0, 1) }) });
+                case 0: {
+                    List<Vector2Int> posList = World_Grid.instance.ReturnRelativePosList(
+                        // new Vector2Int(1, 1),
+                        new Vector2Int(0, 0),
+                        new List<Vector2Int>() { 
+                            new Vector2Int(-1, 0),
+                            new Vector2Int(1, 0),
+                            new Vector2Int(0, -1),
+                            new Vector2Int(0, 1)
+                        },
+                        false
+                    );
+
+                    // AddToTurnQueue(new IEnumerator[] { World_Grid.instance.TelegraphHere(posList) });
+                    AddToTurnQueue(new IEnumerator[] { Attack() });
                     
                     return turnQueue.Dequeue();
+
+                    IEnumerator Attack() {
+                        World_Grid.instance.HitHere(this.Faction, posList, 1000);
+
+                        yield return World_Grid.instance.FlashHere(posList);
+                    }
+                }
                 default:
                     Debug.LogError(this.gameObject.name + " pattern randomizer went out of bounds!");
                     break;

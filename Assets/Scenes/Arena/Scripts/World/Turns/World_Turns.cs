@@ -63,13 +63,24 @@ public class World_Turns : MonoBehaviour {
         ArrangeTurnObjs();
     }
 
+    // Remove all turns that belong to entity param
+    public void RemoveAllTurnsByEntity(IEntity entity) {
+        List<World_Turn> removableTurns = turnList.FindAll((turn) => turn.GetOwner() == entity); // Find all turns owned by entity
+        foreach (World_Turn turn in removableTurns) { turn.transform.SetParent(turnPool); } // Move turn obj back to pool
+
+        turnList.RemoveAll((turn) => removableTurns.Contains(turn)); // Remove said turns from turn list
+    }
+
     // End current turn
     // Perform certain buff/debuff updates here
     public void EndTurn() {
         CreateTurn(turnList[0].GetOwner()); // Recreate the current turn. If enemy, possibly progress it's pattern
         RemoveTurn();
         
-        StartCoroutine(StartTurn()); // Start the next turn which is the new current 
+        // Only start turn if there's a player
+        if (turnList.Find((turn) => turn.GetOwner() is Player)) {
+            StartCoroutine(StartTurn()); // Start the next turn which is the new current
+        }
     }
 
     // Instantiates a turn prefab to turnPool and returns the new GO's World_Turn component

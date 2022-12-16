@@ -15,13 +15,11 @@ public class Player : MonoBehaviour, IEntity {
     // The player object
     [SerializeField] private GameObject playerObj;
 
-    // Player stats
-    public int energyMaxTrue = 3, energy, energyMax;  // Energy amounts
-    public int moveCostTrue = 1, moveCost; // Movement cost
-
+    [Header("Player Stats")]
     // Properties
     //--------------------------------------------------------------------------------------------------------------------------------------
-    private int health, healthMax;
+    [SerializeField] private int healthMax;
+    [SerializeField] private int health;
 
     public int Health {
         get => health;
@@ -36,9 +34,20 @@ public class Player : MonoBehaviour, IEntity {
     public Faction Faction { get => Faction.ALLY; }
     public GameObject GameObj { get => playerObj; }
 
-    public void OnHit() {}
-    public void OnDeath() {}
+    public void OnHit(int damage) {
+        Debug.Log("Player is hit!");
+
+        health -= damage;
+    }
+
+    public void OnDeath() {
+        Debug.Log("Player is dead!");
+    }
     //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Player stats
+    public int energyMaxTrue = 3, energy, energyMax;  // Energy amounts
+    public int moveCostTrue = 1, moveCost; // Movement cost
 
     // Handler Getters
     public Player_Cards CardsHandler() { return _cardsHandler; }
