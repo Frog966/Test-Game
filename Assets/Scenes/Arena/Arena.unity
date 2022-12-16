@@ -1698,6 +1698,8 @@ MonoBehaviour:
   _keyPressHandler: {fileID: 0}
   turnsHandler: {fileID: 0}
   playerObj: {fileID: 1912235233}
+  healthMax: 0
+  health: 0
   energyMaxTrue: 3
   energy: 0
   energyMax: 0
@@ -4176,8 +4178,8 @@ GameObject:
   - component: {fileID: 1614269398}
   - component: {fileID: 1614269401}
   - component: {fileID: 1614269400}
-  - component: {fileID: 1614269399}
   - component: {fileID: 1614269402}
+  - component: {fileID: 1614269399}
   - component: {fileID: 1614269403}
   - component: {fileID: 1614269404}
   m_Layer: 0
