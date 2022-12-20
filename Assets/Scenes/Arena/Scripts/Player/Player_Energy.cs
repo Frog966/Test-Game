@@ -34,6 +34,13 @@ public class Player_Energy : MonoBehaviour {
         UpdateUI();
     }
 
+    // A simple bool to check if player can play the card
+    public bool CanPayEnergyCost(int cost) { return player.energy >= cost; }
+    
+    public void NotEnoughEnergy() { 
+        Debug.Log("Player does not have enough energy to play the card!");
+    }
+
     // Increase energy amount
     public void IncreaseEnergy(int i) {
         // Debug.Log("IncreaseEnergy: " + player.energy + ", " + i);

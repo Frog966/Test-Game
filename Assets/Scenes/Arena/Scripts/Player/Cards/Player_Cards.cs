@@ -1,30 +1,45 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
-// Contains the player's card-related functionality such as deck, hand, graveyard and exile
+// Contains the player's card-related functionality such as deck, hand, graveyard and exile as well as card effects
+//! Card parents are always enabled to allow for animations. The cards themselves will be disabled
 public class Player_Cards : MonoBehaviour {
     // References
     private Player player;
-    private Player_CardLibrary cardLibrary;
+    [SerializeField] private Player_CardLibrary cardLibrary;
 
-    // Holds all of player cards as IDs
-    private List<string> deckBase = new List<string>() {
-        "Test Card",
-        "Test Card"
-    }; 
+    // Holds all of player deck cards as IDs
+    private List<string> deckBase = new List<string>();
 
-    public GameObject cardPrefab;
-    public Transform cardParent_Deck, cardParent_Hand, cardParent_GY;
-    public Text textDeck, textHand, textGY;
+    [SerializeField] private Transform cardParent_Play; // A parent to temporarily hold the played card as well as act as their tween targets
+    [SerializeField] private Transform cardParent_Deck, cardParent_Hand, cardParent_GY;
+    [SerializeField] private Text textDeck, textHand, textGY;
 
     //! Adding these lists together should be the every card belonging to the player
-    public List<Player_Card> deck = new List<Player_Card>(); // Lists all card prefabs in deck
-    public List<Player_Card> hand = new List<Player_Card>(); // Lists all card prefabs in hand
-    public List<Player_Card> gy = new List<Player_Card>(); // Lists all card prefabs in GY
+    [SerializeField] private List<ICard> deck = new List<ICard>(); // Lists all card prefabs in deck
+    [SerializeField] private List<ICard> hand = new List<ICard>(); // Lists all card prefabs in hand
+    [SerializeField] private List<ICard> gy = new List<ICard>(); // Lists all card prefabs in GY
 
-    private void MoveCardTo() {
-        
+    private Queue<IEnumerator> cardQueue = new Queue<IEnumerator>();
+
+    // Getters
+    public Transform GetPlayParent() { return cardParent_Play; }
+
+    // Remove any invalid card IDs from deckBase
+    private void ValidateDeck() {
+        System.Predicate<string> doesLibraryNotHaveID = (id) => { return !cardLibrary.DoesLibraryHaveID(id); };
+        deckBase.RemoveAll(doesLibraryNotHaveID);
+    }
+
+    public List<string> SetDeck(List<string> newDeck) { 
+        deckBase = newDeck; 
+
+        ValidateDeck();
+
+        return deckBase;
     }
 
     public void Shuffle() {
@@ -34,13 +49,16 @@ public class Player_Cards : MonoBehaviour {
         while (n > 1) {  
             n--;  
             int k = rng.Next(n + 1);  
-            Player_Card value = deck[k];  
+            ICard value = deck[k];  
             deck[k] = deck[n];  
             deck[n] = value;
         }
     }
 
-    public void Draw(int num = 1) {
+    public IEnumerator Draw(int num = 1) {
+        float tweenDur = 0.2f;
+        float tweenDelay = 0.1f;
+
         // Debug.Log("Player draws " + num + " card" + (num != 1 ? "s" : "") + "!");
 
         for (int i = 0; i < num; i++) {
@@ -51,37 +69,132 @@ public class Player_Cards : MonoBehaviour {
                 //! Only shuffle GY into deck when the deck is empty which means you have to draw cards 1 by 1 until deck is empty first
                 if (gy.Count > 0) {
                     // Add each card listed in gy to deck then clear gy 
-                    foreach (Player_Card card in gy) {
+                    foreach (ICard card in gy) {
                         deck.Add(card);
-                        card.transform.SetParent(cardParent_Deck);
+                        card.gameObj.transform.SetParent(cardParent_Deck);
+                        card.gameObj.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
                     }
 
                     gy.Clear();
                     
                     Shuffle(); // Shuffle the deck
-                    UpdateNoOfCards_GY(); // Update GY text
+                    UpdateNoOfCards_GY(); // Update GY count
+                    UpdateNoOfCards_Deck(); // Update deck count
                 }
-                else {
-                    break;
-                }
+                else { break; }
             }
 
             // We're updating the deck and hand lists as we move cards between them each time we draw a card
             // Therefore, only the top card of the deck (deck[0]) is accessed
-            Player_Card currCard = deck[0]; 
+            ICard currCard = deck[0]; 
 
             hand.Add(currCard);
-            currCard.transform.SetParent(cardParent_Hand);
-            currCard.transform.localPosition = new Vector2(0 - ((currCard.GetComponent<RectTransform>().rect.width / 2) * (cardParent_Hand.childCount - 1)), 0); // Set card position
-
             deck.RemoveAt(0);
 
+            currCard.gameObj.transform.SetParent(cardParent_Hand);
+            currCard.gameObj.SetActive(true);
+
             // Debug.Log("Draw " + (i + 1));
+
+            currCard.gameObj.transform.DOLocalMove(
+                new Vector2(0.0f - ((currCard.gameObj.GetComponent<RectTransform>().rect.width / 2.0f) * (cardParent_Hand.childCount - 1)), 0.0f), 
+                tweenDur
+            );
+
+            yield return World_AnimHandler.instance.WaitForSeconds(tweenDelay);
         }
 
-        UpdateNoOfCards_Deck();
+        yield return World_AnimHandler.instance.WaitForSeconds(tweenDur - tweenDelay);
+
         UpdateNoOfCards_Hand();
     }
+
+    private void ArrangeCardsInHand() {
+        for (int i = 0; i < cardParent_Hand.childCount; i ++) {
+            Transform card = cardParent_Hand.GetChild(i);
+            Vector2 newPos = new Vector2(0.0f - ((card.GetComponent<RectTransform>().rect.width / 2.0f) * i), 0.0f); // Set card position in hand
+
+            card.GetComponent<Card_Behaviour>().SetStartLocalPos(newPos);
+            card.transform.DOLocalMove(newPos, 0.2f);
+        }
+    }
+
+    public IEnumerator PlayCardToGY(ICard playedCard) {
+        playedCard.gameObj.transform.SetParent(cardParent_Play); // Store the played card here temporarily
+
+        ArrangeCardsInHand(); // Arrange cards in hand after moving played card out of hand
+
+        player.EnergyHandler().DecreaseEnergy(playedCard.cost); // Reduce player's energy based on played card's cost
+
+        yield return playedCard.Effect(); // Play card effect
+        yield return MoveCardToGY(playedCard); // Move card to GY
+
+        // World_AnimHandler.instance.isAnimating = false;
+    }
+
+    private IEnumerator MoveCardToGY(ICard playedCard) {
+        Transform cardTrans = playedCard.gameObj.transform;
+
+        float tweenDur = 0.2f;
+        Vector3 endPoint = cardTrans.InverseTransformPoint(cardParent_GY.position) + cardTrans.localPosition + new Vector3(playedCard.behaviour.GetWidthOffset(), 0.0f, 0.0f);
+
+        // Debug.Log("1: " + cardParent_GY.localPosition);
+        // Debug.Log("2: " + cardTrans.localPosition);
+        // Debug.Log("3: " + new Vector3(playedCard.behaviour.GetWidthOffset(), 0.0f, 0.0f));
+
+        cardTrans.DOLocalMoveX(endPoint.x, tweenDur).SetEase(Ease.OutQuint);
+        cardTrans.DOLocalMoveY(endPoint.y, tweenDur);
+        
+        yield return World_AnimHandler.instance.WaitForSeconds(tweenDur);
+
+        cardTrans.SetParent(cardParent_GY);
+
+        gy.Add(playedCard); // Add to GY list
+        hand.RemoveAt(hand.FindIndex((card) => playedCard == card)); // Remove from hand list
+        
+        cardTrans.gameObject.SetActive(false); // Disable card after card effect
+        cardTrans.localPosition = Vector3.zero; // Set card pos
+        
+        UpdateNoOfCards_GY();
+        UpdateNoOfCards_Hand();
+        UpdateNoOfCards_Deck(); // Also update deck card counter in case played card adds cards to deck
+
+        World_AnimHandler.instance.isAnimating = false;
+    }
+
+    // Adds a card prefab to cardParent_Deck + Registers card to deck card list
+    private void CreateCardObj_Deck(string id) {
+        ICard cardPrefab = cardLibrary.GetCardByID(id);
+
+        if (cardPrefab != null) {
+            GameObject newCard = GameObject.Instantiate(cardPrefab.gameObj, cardParent_Deck);
+            deck.Add(newCard.GetComponent<ICard>());
+            newCard.SetActive(false); // Cards are created disabled
+            newCard.transform.localPosition = Vector3.zero;
+            
+            UpdateNoOfCards_Deck();
+        }
+        else { Debug.LogError("Cannot add card ID '" + id + "' to deck!"); }
+    }
+
+    // Adds a card prefab to cardParent_GY + Registers card to gy card list
+    private void CreateCardObj_GY(string id) {
+        ICard cardPrefab = cardLibrary.GetCardByID(id);
+
+        if (cardPrefab != null) {
+            GameObject newCard = GameObject.Instantiate(cardPrefab.gameObj, cardParent_GY);
+            gy.Add(newCard.GetComponent<ICard>());
+            newCard.SetActive(false); // Cards are created disabled
+            newCard.transform.localPosition = Vector3.zero;
+            
+            UpdateNoOfCards_GY();
+        }
+        else { Debug.LogError("Cannot add card ID '" + id + "' to GY!"); }
+    }
+    
+    private void UpdateNoOfCards_Deck() { textDeck.text = deck.Count.ToString(); }
+    private void UpdateNoOfCards_Hand() { textHand.text = hand.Count.ToString(); }
+    private void UpdateNoOfCards_GY() { textGY.text = gy.Count.ToString(); }
 
     void Awake() {
         //! Sanity Checks
@@ -109,48 +222,21 @@ public class Player_Cards : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        // Disable these gameobjects to prevent cards from rendering
-        cardParent_GY.gameObject.SetActive(false);
-        cardParent_Deck.gameObject.SetActive(false);
+        // Card parents must be set to true
+        cardParent_GY.gameObject.SetActive(true);
+        cardParent_Hand.gameObject.SetActive(true);
+        cardParent_Deck.gameObject.SetActive(true);
 
-        // Remove any invalid card IDs from deckBase
-        System.Predicate<string> doesLibraryNotHaveID = (id) => { return !cardLibrary.DoesLibraryHaveID(id); };
-        deckBase.RemoveAll(doesLibraryNotHaveID);
+        SetDeck(new List<string>() {
+            "Test",
+            "Test",
+            "Test",
+            "Test",
+            "Test",
+            "Test",
+        }); 
 
         // Instantiate card objs into deck
         foreach (string id in deckBase) { CreateCardObj_Deck(id); }
-
-        UpdateNoOfCards_GY();
-        UpdateNoOfCards_Deck();
-    }
-
-    // Adds a card prefab to cardParent_Deck + Registers card to deck card list
-    private void CreateCardObj_Deck(string id) {
-        GameObject newCardObj = GameObject.Instantiate(cardPrefab, cardParent_Deck);
-        Player_Card newCard = newCardObj.GetComponent<Player_Card>();
-
-        newCard.Init(cardLibrary.GetCardByName(id)); // Attach correct card functionality to card obj
-        deck.Add(newCard);
-    }
-
-    // Adds a card prefab to cardParent_GY + Registers card to gy card list
-    private void CreateCardObj_GY(string id) {
-        GameObject newCardObj = GameObject.Instantiate(cardPrefab, cardParent_GY);
-        Player_Card newCard = newCardObj.GetComponent<Player_Card>();
-
-        newCard.Init(cardLibrary.GetCardByName(id)); // Attach correct card functionality to card obj
-        gy.Add(newCard);
-    }
-    
-    private void UpdateNoOfCards_Deck() {
-        textDeck.text = deck.Count.ToString();
-    }
-    
-    private void UpdateNoOfCards_Hand() {
-        textHand.text = hand.Count.ToString();
-    }
-    
-    private void UpdateNoOfCards_GY() {
-        textGY.text = gy.Count.ToString();
     }
 }

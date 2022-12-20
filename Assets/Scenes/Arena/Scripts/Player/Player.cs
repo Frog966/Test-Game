@@ -64,16 +64,18 @@ public class Player : MonoBehaviour, IEntity {
         // Debug.Log("Player starting turn!");
 
         _movementHandler.ResetMoveCost();
-        CardsHandler().Draw(5);
+        StartCoroutine(CardsHandler().Draw(5));
     }
 
     // Player's end turn function
     // Contains anything that triggers at end of turn
     // Also used at the "End Turn" button
     public void EndTurn() {
-        Debug.Log("Player ends turn!");
+        if (!World_AnimHandler.instance.isAnimating) {
+            Debug.Log("Player ends turn!");
 
-        turnsHandler.EndTurn();
+            turnsHandler.EndTurn();
+        }
     }
 
     void Awake() {

@@ -1,62 +1,42 @@
-// using System.Collections;
 using System;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 //! Contains every single card in the game in library variable
 public class Player_CardLibrary : MonoBehaviour {
-    private Dictionary<string, Card> library;
+    [SerializeField] private Player player;
 
-    public Card GetCardByName(string cardName) { return library[cardName]; }
-    public void PlayCardByName(string cardName) { GetCardByName(cardName).Play(); }
-    public Dictionary<string, Card>.KeyCollection GetAllCardIDs() { return library.Keys; }
+    private Dictionary<string, ICard> library = new Dictionary<string, ICard>();
+    
     public bool DoesLibraryHaveID(string id) { return library.ContainsKey(id); }
 
-    void Awake() {
-        InitLibrary();
+    public ICard GetCardByID(string id) {
+        if (library.ContainsKey(id)) { return library[id]; }
+        else {
+            Debug.LogWarning("Card ID '" + id + "' not found in library!");
+
+            return null;
+        }
     }
 
     private void InitLibrary() {
-        // Just to streamline setting card name
-        KeyValuePair<string, Card> CreateEntry(string cardName, Action cardEffect) {
-            return new KeyValuePair<string, Card> (cardName, new Card(cardName, cardEffect));
-        }
-        
-        // Initialize the library dictionary here
-        // All card functionality is here
-        library = new Dictionary<string, Card>(
-            new [] {
-                CreateEntry(
-                    "Test Card",
-                    () => {
-                        Debug.Log("Card Played!");
-                    }
-                )
+        foreach (ICard card in Resources.LoadAll("Cards", typeof(ICard)).Cast<ICard>().ToArray()) {
+            if(!library.ContainsKey(card.gameObj.name)) { 
+                // Setup card as we're adding it to the library
+                card.Setup(player); 
+
+                library.Add(card.id, card); 
             }
-        );
-    }
-}
-
-// A container for all card functionality in the dictionary
-// Certain variables must be public for Player_Card
-public class Card {
-    // Card stats
-    public string id; // Doubles as card name
-    public int cost;
-    public string desc;
-    public int dmg;
-
-    public bool isTemp; // In case cards get generated during combat
-
-    private Action effect; // Used to save card functionality assigned by library
-
-    public Card(string newName, Action newEffect) {
-        id = newName;
-        effect = new Action(newEffect);
+            else { Debug.LogWarning("There is a duplicate card ID '" + card.id + "' found in the Resources folder!"); }
+        }
     }
 
-    public void Play() {
-        effect();
+
+    void Awake() {
+        //! Sanity Checks
+        if (!player) player = this.gameObject.GetComponent<Player>();
+        
+        InitLibrary();
     }
 }
