@@ -4,7 +4,7 @@ using UnityEngine;
 // Contains a static bool (isAnimating) that is used to determine if any important animations are playing
 // Also contains some functions for waiting for animations to finish
 public class World_AnimHandler : MonoBehaviour {
-    public static World_AnimHandler Instance { get; private set; }
+    public static World_AnimHandler instance { get; private set; }
     public bool isAnimating { get; set; }
 
     // A simple coroutine that waits for animation to finish playing
@@ -18,7 +18,7 @@ public class World_AnimHandler : MonoBehaviour {
     }
 
     void Awake() {
-        Instance = this;
+        instance = this;
         isAnimating = false;
     }
 }

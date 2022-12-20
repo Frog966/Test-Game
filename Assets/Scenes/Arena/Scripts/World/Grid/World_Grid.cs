@@ -78,7 +78,7 @@ public class World_Grid : MonoBehaviour {
     }
 
     public IEnumerator TelegraphHere(List<Vector2Int> posList) {
-        World_AnimHandler.Instance.isAnimating = true;
+        World_AnimHandler.instance.isAnimating = true;
         
         ReturnDistinctPosList(posList); // Remove any duplicates 
 
@@ -88,14 +88,14 @@ public class World_Grid : MonoBehaviour {
             currNode.PlayAnim_Flicker(); 
             
             // Begin waiting at the last pos
-            if (i >= posList.Count - 1) yield return World_AnimHandler.Instance.WaitForCurrentAnim(currNode.GetAnimator());
+            if (i >= posList.Count - 1) yield return World_AnimHandler.instance.WaitForCurrentAnim(currNode.GetAnimator());
         }
 
-        World_AnimHandler.Instance.isAnimating = false;
+        World_AnimHandler.instance.isAnimating = false;
     }
 
     public IEnumerator FlashHere(List<Vector2Int> posList, float delay = 0.25f) {
-        World_AnimHandler.Instance.isAnimating = true;
+        World_AnimHandler.instance.isAnimating = true;
         
         ReturnDistinctPosList(posList); // Remove any duplicates 
 
@@ -105,7 +105,7 @@ public class World_Grid : MonoBehaviour {
             currNode.PlayAnim_Flash(); 
             
             // Begin waiting at the last pos
-            if (i >= posList.Count - 1) yield return World_AnimHandler.Instance.WaitForSeconds(delay);
+            if (i >= posList.Count - 1) yield return World_AnimHandler.instance.WaitForSeconds(delay);
         }
 
         for (int i = 0; i < posList.Count; i++) { 
@@ -114,7 +114,7 @@ public class World_Grid : MonoBehaviour {
             currNode.StopAnim_Flash();
         }
 
-        World_AnimHandler.Instance.isAnimating = false;
+        World_AnimHandler.instance.isAnimating = false;
     }
 
     public void HitHere(Faction attackerFaction, List<Vector2Int> posList, int dmg) {
