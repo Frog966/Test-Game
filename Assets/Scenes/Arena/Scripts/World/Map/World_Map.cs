@@ -86,7 +86,6 @@ public class World_Map : MonoBehaviour {
                     newNextNodes,
                     enemyLibrary.ReturnRandomEncounter(currLocale, newNodeType),
                     MoveToNode
-
                 );
                 //-----------------------------------------------------------------------------------------------------------------------
             }
