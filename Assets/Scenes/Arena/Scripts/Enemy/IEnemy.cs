@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 //! This is the base interface for enemy scripts
 //! Do not modify this script unless you're sure you want to affect ALL enemies
