@@ -13,6 +13,9 @@ public class Card_Behaviour : EventTrigger {
     private Vector2 mousePosOffset;
     private Vector2 startLocalPos; // Where the card's local pos is in player's hand
 
+    //Getters
+    public float GetWidthOffset() { return (this.GetComponent<RectTransform>().rect.width / 2.0f); } // Returns half of width because of card's pivot
+
     // Setters
     public void SetStartLocalPos(Vector2 newPos) { startLocalPos = newPos; }
 
@@ -26,22 +29,8 @@ public class Card_Behaviour : EventTrigger {
         if (!World_AnimHandler.instance.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
     }
 
-    // Drop event
-    public override void OnDrop(PointerEventData data) {
-        if (!World_AnimHandler.instance.isAnimating) {
-            bool canPay = cardScript.energyHandler.CanPayEnergyCost(cardScript.cost);
-            float dist = Vector2.Distance(startLocalPos, this.transform.localPosition);
-
-            Debug.Log("On Drop Dist: " + dist);
-
-            if (canPay && dist >= 80) { StartCoroutine(MoveToPlayTarget()); }
-            else {
-                if (!canPay) { cardScript.energyHandler.NotEnoughEnergy(); }
-
-                StartCoroutine(ReturnToHandPos()); 
-            }
-        }
-    }
+    // Drag end event
+    public override void OnEndDrag(PointerEventData data) { PlayCard(); }
 
     // Double click event
     public override void OnPointerClick(PointerEventData eventData) {
@@ -70,7 +59,23 @@ public class Card_Behaviour : EventTrigger {
         World_AnimHandler.instance.isAnimating = false;
     }
 
-    public float GetWidthOffset() { return (this.GetComponent<RectTransform>().rect.width / 2.0f); } // Returns half of width because of card's pivot
+    private void PlayCard() {
+        if (!World_AnimHandler.instance.isAnimating) {
+            bool canPay = cardScript.energyHandler.CanPayEnergyCost(cardScript.cost);
+            float dist = Vector2.Distance(startLocalPos, this.transform.localPosition);
+
+            // Debug.Log("Test: " + startLocalPos + ", " + this.transform.localPosition);
+            // Debug.Log("On Drop Dist: " + dist);
+
+            if (canPay && dist >= 80) { StartCoroutine(MoveToPlayTarget()); }
+            else {
+                if (!canPay) { cardScript.energyHandler.NotEnoughEnergy(); }
+
+                StartCoroutine(ReturnToHandPos()); 
+            }
+        }
+    }
+
     private Vector2 GetMouseWorldPos() { return Camera.main.ScreenToWorldPoint(Input.mousePosition); }
 
     void Awake() {

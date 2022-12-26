@@ -87,19 +87,21 @@ public class Player_Cards : MonoBehaviour {
             // We're updating the deck and hand lists as we move cards between them each time we draw a card
             // Therefore, only the top card of the deck (deck[0]) is accessed
             ICard currCard = deck[0]; 
+            GameObject currCardObj = currCard.gameObj; 
 
             hand.Add(currCard);
             deck.RemoveAt(0);
 
-            currCard.gameObj.transform.SetParent(cardParent_Hand);
-            currCard.gameObj.SetActive(true);
+            currCardObj.transform.SetParent(cardParent_Hand);
+            currCardObj.SetActive(true);
 
             // Debug.Log("Draw " + (i + 1));
 
-            currCard.gameObj.transform.DOLocalMove(
-                new Vector2(0.0f - ((currCard.gameObj.GetComponent<RectTransform>().rect.width / 2.0f) * (cardParent_Hand.childCount - 1)), 0.0f), 
-                tweenDur
-            );
+            // Card position in hand
+            Vector2 newPos = new Vector2(0.0f - ((currCardObj.GetComponent<RectTransform>().rect.width / 2.0f) * (cardParent_Hand.childCount - 1)), 0.0f);
+
+            currCardObj.transform.DOLocalMove(newPos, tweenDur);
+            currCardObj.GetComponent<Card_Behaviour>().SetStartLocalPos(newPos);
 
             yield return World_AnimHandler.instance.WaitForSeconds(tweenDelay);
         }
