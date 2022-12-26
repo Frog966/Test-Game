@@ -4,19 +4,20 @@ using UnityEngine;
 
 // In charge of turn creation, order and execution
 public class World_Turns : MonoBehaviour {
-    private World world;
-
+    [SerializeField] private Player player;
     [SerializeField] private Transform enemyParent;
+
+    [Header("Turn Stuff")]
     [SerializeField] private GameObject turnPrefab;
     [SerializeField] private Transform turnParent, turnPool;
 
-    [SerializeField] private List<World_Turn> turnList = new List<World_Turn>();
-    private List<World_Turn> turnListNext = new List<World_Turn>();
+    private List<World_Turn> turnList = new List<World_Turn>();
+    // private List<World_Turn> turnListNext = new List<World_Turn>();
 
     // Setup the encounter
     public void SetupEncounter(World_MapNode currMapNode) {
         // Reset player pos
-        World_Grid.Movement.SetGridPos(world.Player(), Vector2Int.one);
+        World_Grid.Movement.SetGridPos(player, Vector2Int.one);
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
@@ -26,7 +27,7 @@ public class World_Turns : MonoBehaviour {
 
         // Set up first turn for player and enemy
         // Player always first
-        CreateTurn(world.Player());
+        CreateTurn(player);
         
         // Create turns for enemies
         foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<IEnemy>()); }
@@ -69,7 +70,7 @@ public class World_Turns : MonoBehaviour {
             EndTurn(); 
         }
         else {
-            world.Player().StartTurn();
+            player.StartTurn();
         }
     }
 
@@ -164,10 +165,5 @@ public class World_Turns : MonoBehaviour {
         while (turnPool.childCount < 5) {
             World_Turn newTurn = InstantiateTurn();
         }
-    }
-
-    void Start() {
-        // Sanity checks
-        world = this.gameObject.GetComponent<World>();
     }
 }
