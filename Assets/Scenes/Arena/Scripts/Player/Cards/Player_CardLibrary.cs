@@ -22,13 +22,13 @@ public class Player_CardLibrary : MonoBehaviour {
 
     private void InitLibrary() {
         foreach (ICard card in Resources.LoadAll("Cards", typeof(ICard)).Cast<ICard>().ToArray()) {
-            if(!library.ContainsKey(card.gameObj.name)) { 
+            if(!library.ContainsKey(card.GameObj.name)) { 
                 // Setup card as we're adding it to the library
                 card.Setup(player); 
 
-                library.Add(card.id, card); 
+                library.Add(card.ID, card); 
             }
-            else { Debug.LogWarning("There is a duplicate card ID '" + card.id + "' found in the Resources folder!"); }
+            else { Debug.LogWarning("There is a duplicate card ID '" + card.ID + "' found in the Resources folder!"); }
         }
     }
 

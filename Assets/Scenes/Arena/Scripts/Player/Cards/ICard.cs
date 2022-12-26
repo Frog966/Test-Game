@@ -6,26 +6,26 @@ using UnityEngine.UI;
 //! Do not modify this script unless you're sure you want to affect ALL cards
 public interface ICard {
     //! Stuff that needs to be defined for cards to work
-    Player_Cards resolver { get; }
-    Player_Energy energyHandler { get; }
-    Card_Behaviour behaviour { get; }
+    Player_Cards Resolver { get; }
+    Player_Energy EnergyHandler { get; }
+    Card_Behaviour Behaviour { get; }
 
     // Card settings
-    bool isTemp { get; set; } // In case temporary cards get generated during combat
+    bool IsTemp { get; set; } // In case temporary cards get generated during combat
 
     // Card stats
-    string id { get; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
-    string desc { get; }
-    int dmg { get; }
-    int cost { get; }
+    string ID { get; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
+    string Desc { get; }
+    int Dmg { get; }
+    int Cost { get; }
 
-    Text id_T { get; }
-    Text desc_T { get; } 
-    Text dmg_T { get; } 
-    Text cost_T { get; }
+    Text ID_T { get; }
+    Text Desc_T { get; } 
+    Text Dmg_T { get; } 
+    Text Cost_T { get; }
 
     // Misc.
-    GameObject gameObj { get; }
+    GameObject GameObj { get; }
 
     // Constructor
     void Setup(Player player);

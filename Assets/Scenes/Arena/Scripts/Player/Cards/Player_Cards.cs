@@ -71,8 +71,8 @@ public class Player_Cards : MonoBehaviour {
                     // Add each card listed in gy to deck then clear gy 
                     foreach (ICard card in gy) {
                         deck.Add(card);
-                        card.gameObj.transform.SetParent(cardParent_Deck);
-                        card.gameObj.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
+                        card.GameObj.transform.SetParent(cardParent_Deck);
+                        card.GameObj.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
                     }
 
                     gy.Clear();
@@ -87,7 +87,7 @@ public class Player_Cards : MonoBehaviour {
             // We're updating the deck and hand lists as we move cards between them each time we draw a card
             // Therefore, only the top card of the deck (deck[0]) is accessed
             ICard currCard = deck[0]; 
-            GameObject currCardObj = currCard.gameObj; 
+            GameObject currCardObj = currCard.GameObj; 
 
             hand.Add(currCard);
             deck.RemoveAt(0);
@@ -122,11 +122,11 @@ public class Player_Cards : MonoBehaviour {
     }
 
     public IEnumerator PlayCardToGY(ICard playedCard) {
-        playedCard.gameObj.transform.SetParent(cardParent_Play); // Store the played card here temporarily
+        playedCard.GameObj.transform.SetParent(cardParent_Play); // Store the played card here temporarily
 
         ArrangeCardsInHand(); // Arrange cards in hand after moving played card out of hand
 
-        energyHandler.DecreaseEnergy(playedCard.cost); // Reduce player's energy based on played card's cost
+        energyHandler.DecreaseEnergy(playedCard.Cost); // Reduce player's energy based on played card's cost
 
         yield return playedCard.Effect(); // Play card effect
         yield return MoveCardToGY(playedCard); // Move card to GY
@@ -135,10 +135,10 @@ public class Player_Cards : MonoBehaviour {
     }
 
     private IEnumerator MoveCardToGY(ICard playedCard) {
-        Transform cardTrans = playedCard.gameObj.transform;
+        Transform cardTrans = playedCard.GameObj.transform;
 
         float tweenDur = 0.2f;
-        Vector3 endPoint = cardTrans.InverseTransformPoint(cardParent_GY.position) + cardTrans.localPosition + new Vector3(playedCard.behaviour.GetWidthOffset(), 0.0f, 0.0f);
+        Vector3 endPoint = cardTrans.InverseTransformPoint(cardParent_GY.position) + cardTrans.localPosition + new Vector3(playedCard.Behaviour.GetWidthOffset(), 0.0f, 0.0f);
 
         // Debug.Log("1: " + cardParent_GY.localPosition);
         // Debug.Log("2: " + cardTrans.localPosition);
@@ -169,7 +169,7 @@ public class Player_Cards : MonoBehaviour {
         ICard cardPrefab = cardLibrary.GetCardByID(id);
 
         if (cardPrefab != null) {
-            GameObject newCard = GameObject.Instantiate(cardPrefab.gameObj, cardParent_Deck);
+            GameObject newCard = GameObject.Instantiate(cardPrefab.GameObj, cardParent_Deck);
             deck.Add(newCard.GetComponent<ICard>());
             newCard.SetActive(false); // Cards are created disabled
             newCard.transform.localPosition = Vector3.zero;
@@ -184,7 +184,7 @@ public class Player_Cards : MonoBehaviour {
         ICard cardPrefab = cardLibrary.GetCardByID(id);
 
         if (cardPrefab != null) {
-            GameObject newCard = GameObject.Instantiate(cardPrefab.gameObj, cardParent_GY);
+            GameObject newCard = GameObject.Instantiate(cardPrefab.GameObj, cardParent_GY);
             gy.Add(newCard.GetComponent<ICard>());
             newCard.SetActive(false); // Cards are created disabled
             newCard.transform.localPosition = Vector3.zero;

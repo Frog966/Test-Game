@@ -35,18 +35,18 @@ public class Card_Behaviour : EventTrigger {
     // Double click event
     public override void OnPointerClick(PointerEventData eventData) {
         if (eventData.clickCount == 2 && !World_AnimHandler.isAnimating) {
-            if (cardScript.energyHandler.CanPayEnergyCost(cardScript.cost)) { StartCoroutine(MoveToPlayTarget()); }
-            else { cardScript.energyHandler.NotEnoughEnergy(); }
+            if (cardScript.EnergyHandler.CanPayEnergyCost(cardScript.Cost)) { StartCoroutine(MoveToPlayTarget()); }
+            else { cardScript.EnergyHandler.NotEnoughEnergy(); }
         }
     }
 
     private IEnumerator MoveToPlayTarget() {
         World_AnimHandler.isAnimating = true; // Ends in Player_Cards.PlayCardToGY()
 
-        this.transform.DOLocalMove(this.transform.InverseTransformPoint(cardScript.resolver.GetPlayParent().position) + this.transform.localPosition + new Vector3(GetWidthOffset(), 0.0f, 0.0f), tweenDur);
+        this.transform.DOLocalMove(this.transform.InverseTransformPoint(cardScript.Resolver.GetPlayParent().position) + this.transform.localPosition + new Vector3(GetWidthOffset(), 0.0f, 0.0f), tweenDur);
 
         yield return World_AnimHandler.WaitForSeconds(tweenDur);
-        yield return cardScript.resolver.PlayCardToGY(cardScript); // Play card effect once reach play target
+        yield return cardScript.Resolver.PlayCardToGY(cardScript); // Play card effect once reach play target
     }
     
     private IEnumerator ReturnToHandPos() {
@@ -61,7 +61,7 @@ public class Card_Behaviour : EventTrigger {
 
     private void PlayCard() {
         if (!World_AnimHandler.isAnimating) {
-            bool canPay = cardScript.energyHandler.CanPayEnergyCost(cardScript.cost);
+            bool canPay = cardScript.EnergyHandler.CanPayEnergyCost(cardScript.Cost);
             float dist = Vector2.Distance(startLocalPos, this.transform.localPosition);
 
             // Debug.Log("Test: " + startLocalPos + ", " + this.transform.localPosition);
@@ -69,7 +69,7 @@ public class Card_Behaviour : EventTrigger {
 
             if (canPay && dist >= 80) { StartCoroutine(MoveToPlayTarget()); }
             else {
-                if (!canPay) { cardScript.energyHandler.NotEnoughEnergy(); }
+                if (!canPay) { cardScript.EnergyHandler.NotEnoughEnergy(); }
 
                 StartCoroutine(ReturnToHandPos()); 
             }
