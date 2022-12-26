@@ -45,10 +45,6 @@ public class Player : MonoBehaviour, IEntity {
     }
     //--------------------------------------------------------------------------------------------------------------------------------------
 
-    // Player stats
-    public int energyMaxTrue = 3, energy, energyMax;  // Energy amounts
-    public int moveCostTrue = 1, moveCost; // Movement cost
-
     // Handler Getters
     public Player_Cards CardsHandler() { return _cardsHandler; }
     public Player_Energy EnergyHandler() { return _energyHandler; }

@@ -2,50 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Player_Energy : MonoBehaviour {
-    private Player player;
+    [SerializeField] private int energyMaxTrue = 3, energy, energyMax;  // Energy amounts
 
+    [Header("UI Stuff")]
     [SerializeField] private Text energyText, energyMaxText;
     [SerializeField] private Image fill;
 
-    // Start is called before the first frame update
-    void Start() {
-        //! Sanity Checks
-        player = this.gameObject.GetComponent<Player>();
-
-        ResetEnergy();
-    }
-
-    private void UpdateUI() {
-        // Debug.Log("UpdateUI: " + player.energy + ", " + player.energyMax);
-
-        // Update UI text
-        energyText.text = player.energy.ToString();
-        energyMaxText.text = player.energyMax.ToString();
-        
-        // Calculates UI's fill amount with simple division
-        // Includes sanity check to avoid dividing 0 with number
-        // Type casting to float because we need it as float
-        fill.fillAmount = (float)player.energy > 0.0f ? (float)player.energy / (float)player.energyMax : 0.0f;
-    }
-
     public void ResetEnergy() {
-        player.energy = player.energyMax = player.energyMaxTrue;
+        energy = energyMax = energyMaxTrue;
 
         UpdateUI();
     }
 
-    // A simple bool to check if player can play the card
-    public bool CanPayEnergyCost(int cost) { return player.energy >= cost; }
-    
-    public void NotEnoughEnergy() { 
-        Debug.Log("Player does not have enough energy to play the card!");
-    }
-
     // Increase energy amount
     public void IncreaseEnergy(int i) {
-        // Debug.Log("IncreaseEnergy: " + player.energy + ", " + i);
+        // Debug.Log("IncreaseEnergy: " + energy + ", " + i);
 
-        player.energy += i;
+        energy += i;
 
         UpdateUI();
     }
@@ -53,10 +26,35 @@ public class Player_Energy : MonoBehaviour {
     // Decrease energy amount
     // Cannot go below 0
     public void DecreaseEnergy(int i) {
-        // Debug.Log("DecreaseEnergy: " + player.energy + ", " + i);
+        // Debug.Log("DecreaseEnergy: " + energy + ", " + i);
 
-        player.energy = (player.energy - i < 0) ? 0 : player.energy - i;
+        energy = (energy - i < 0) ? 0 : energy - i;
         
         UpdateUI();
+    }
+
+    // A simple bool to check if player can play the card
+    public bool CanPayEnergyCost(int cost) { return energy >= cost; }
+    
+    // Contains the animation that plays to tell the player they don't have enough energy
+    public void NotEnoughEnergy() { 
+        Debug.Log("Player does not have enough energy to play the card!");
+    }
+
+    private void UpdateUI() {
+        // Debug.Log("UpdateUI: " + energy + ", " + energyMax);
+
+        // Update UI text
+        energyText.text = energy.ToString();
+        energyMaxText.text = energyMax.ToString();
+        
+        // Calculates UI's fill amount with simple division
+        // Type casting to float because we need it as float
+        fill.fillAmount = (float)energy / (float)energyMax;
+    }
+
+    // Start is called before the first frame update
+    void Start() {
+        ResetEnergy();
     }
 }

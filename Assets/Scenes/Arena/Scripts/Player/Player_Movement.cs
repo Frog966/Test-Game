@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Movement : MonoBehaviour {
-    private Player player;
+    [SerializeField] private Player player;
+    [SerializeField] private Player_Energy energyHandler;
+    [SerializeField] private int moveCostTrue = 1, moveCost; // Movement cost
 
-    public void ResetMoveCost() { player.moveCost = player.moveCostTrue; }
+    public void ResetMoveCost() { moveCost = moveCostTrue; }
 
     // World_Grid.Movement.SetGridPos() but with restrictions
     public void MoveTo(Vector2Int vec2) {
-        World_GridNode node = World_Grid.GetNode(vec2);
+        if (!World_AnimHandler.isAnimating) {
+            World_GridNode node = World_Grid.GetNode(vec2);
 
-        // Player must have enough energy to move and can only move onto player-controlled nodes 
-        if (player.energy - player.moveCost >= 0 && node && node.IsPlayerControlled()) {
-            World_Grid.Movement.MoveToPos(player, vec2);
-            player.EnergyHandler().DecreaseEnergy(player.moveCost); // Each move lowers energy
+            // Player must have enough energy to move and can only move onto player-controlled nodes 
+            if (energyHandler.CanPayEnergyCost(moveCost) && node && node.IsPlayerControlled()) {
+                World_Grid.Movement.MoveToPos(player, vec2);
+                energyHandler.DecreaseEnergy(moveCost); // Each move lowers energy
+            }
+            else {
+                if (!energyHandler.CanPayEnergyCost(moveCost)) { energyHandler.NotEnoughEnergy(); }
+                // else if (!node) {
+                //     Debug.Log("Player is moving to an invalid node! Target Node: " + x + ", " + y);
+                // }
+                // else if (!node.IsPlayerControlled) {
+                //     Debug.Log("Player is moving to an enemy-controlled node! Target Node: " + x + ", " + y);
+                // }
+            }
         }
-        // else {
-        //     if (player.energy - player.moveCost < 1) {
-        //         Debug.Log("Player has not enough energy! Move Cost: " + player.moveCost + ". Current Energy: " + player.energy);
-        //     }
-        //     else if (!node) {
-        //         Debug.Log("Player is moving to an invalid node! Target Node: " + x + ", " + y);
-        //     }
-        //     else if (!node.IsPlayerControlled) {
-        //         Debug.Log("Player is moving to an enemy-controlled node! Target Node: " + x + ", " + y);
-        //     }
-        // }
     }
 
     // Shortcuts
@@ -38,7 +40,8 @@ public class Player_Movement : MonoBehaviour {
 
     void Awake() {
         //! Sanity Checks
-        player = this.gameObject.GetComponent<Player>();
+        if (!player) player = this.gameObject.GetComponent<Player>();
+        if (!energyHandler) energyHandler = this.gameObject.GetComponent<Player_Energy>();
     }
 
     void Start() {
