@@ -8,7 +8,7 @@ using DG.Tweening;
 //! Card parents are always enabled to allow for animations. The cards themselves will be disabled
 public class Player_Cards : MonoBehaviour {
     // References
-    private Player player;
+    [SerializeField] private Player_Energy energyHandler;
     [SerializeField] private Player_CardLibrary cardLibrary;
 
     // Holds all of player deck cards as IDs
@@ -126,7 +126,7 @@ public class Player_Cards : MonoBehaviour {
 
         ArrangeCardsInHand(); // Arrange cards in hand after moving played card out of hand
 
-        player.EnergyHandler().DecreaseEnergy(playedCard.cost); // Reduce player's energy based on played card's cost
+        energyHandler.DecreaseEnergy(playedCard.cost); // Reduce player's energy based on played card's cost
 
         yield return playedCard.Effect(); // Play card effect
         yield return MoveCardToGY(playedCard); // Move card to GY
@@ -200,7 +200,7 @@ public class Player_Cards : MonoBehaviour {
 
     void Awake() {
         //! Sanity Checks
-        player = this.gameObject.GetComponent<Player>();
+        if (energyHandler == null) energyHandler = this.gameObject.GetComponent<Player_Energy>();
         if (cardLibrary == null) cardLibrary = this.gameObject.GetComponent<Player_CardLibrary>();
         
         // Clear out any children in cardParent_Deck
