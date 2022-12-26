@@ -8,9 +8,8 @@ using Game.Map;
 // In charge of storing/display the map as well as instantiate encounters
 public class World_Map : MonoBehaviour {
     // Handlers
-    private World world;
-    private World_MapNode currMapNode;
-    private World_EnemyLibrary enemyLibrary;
+    [SerializeField] private World_Turns turnsHandler;
+    [SerializeField] private World_EnemyLibrary enemyLibrary;
 
     // Stats
     [SerializeField] private int currLayer = 0;
@@ -20,6 +19,9 @@ public class World_Map : MonoBehaviour {
     [SerializeField] private GameObject mapParent;
     [SerializeField] private GameObject mapNodePrefab; // Sprite holder and clickable object
     [SerializeField] private Transform nodePool, nodeParent;
+    
+    // The current map node that the player selected. Null means player hasn't selected their first node
+    private World_MapNode currMapNode;
 
     // A 2D array that represents an array of "layers" each containing an array of map nodes the player can traverse
     // Each player can only go to MapNodes on the next layer from where they are currently on but only certain nodes are valid
@@ -202,13 +204,12 @@ public class World_Map : MonoBehaviour {
         currMapNode = newNode;
         currLayer++;
 
-        world.TurnsHandler().SetupEncounter(newNode); // Setup the encounter first before disabling map UI
+        turnsHandler.SetupEncounter(newNode); // Setup the encounter first before disabling map UI
         mapParent.SetActive(false);
     }
 
     void Awake() {
         // Sanity checks
-        world = this.gameObject.GetComponent<World>();
         if (enemyLibrary == null) enemyLibrary = this.gameObject.GetComponent<World_EnemyLibrary>();
 
         mapParent.SetActive(true);

@@ -8,36 +8,15 @@ public class World : MonoBehaviour {
     [SerializeField] private static int randSeed;
 
     [SerializeField] private Player player;
-    [SerializeField] private Transform enemyParent;
-
-    // Handlers
-    private World_Map _mapHandler;
-    private World_Grid _gridHandler;
-    private World_Turns _turnsHandler;
 
     // Getters
     public int GetSeed() { return randSeed; }
     public Player Player() { return player; }
-    public Transform EnemyParent() { return enemyParent; }
-
-    // Handler Getters
-    public World_Map MapHandler() { return _mapHandler; }
-    public World_Grid GridHandler() { return _gridHandler; }
-    public World_Turns TurnsHandler() { return _turnsHandler; }
 
     void Awake() {
-        // Sanity checks
-        if (_mapHandler == null) _mapHandler = this.gameObject.GetComponent<World_Map>();
-        if (_gridHandler == null) _gridHandler = this.gameObject.GetComponent<World_Grid>();
-        if (_turnsHandler == null) _turnsHandler = this.gameObject.GetComponent<World_Turns>();
-
         randSeed = UnityEngine.Random.Range(0, System.Int32.MaxValue); // Randomize randomizer seed
         Random.InitState(randSeed); // Set randomizer seed
         // Random.InitState(123456); // Test randomizer seed 
-        
-        // Destroy every GO in world.enemyParent
-        // enemyParent will be populated in the future
-        foreach (Transform child in enemyParent) { Destroy(child.gameObject); }
     }
 
     void Start() {

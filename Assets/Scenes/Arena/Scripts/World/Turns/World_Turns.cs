@@ -6,6 +6,7 @@ using UnityEngine;
 public class World_Turns : MonoBehaviour {
     private World world;
 
+    [SerializeField] private Transform enemyParent;
     [SerializeField] private GameObject turnPrefab;
     [SerializeField] private Transform turnParent, turnPool;
 
@@ -15,12 +16,12 @@ public class World_Turns : MonoBehaviour {
     // Setup the encounter
     public void SetupEncounter(World_MapNode currMapNode) {
         // Reset player pos
-        World_Grid.instance.SetGridPos(world.Player(), Vector2Int.one);
+        World_Grid.Movement.SetGridPos(world.Player(), Vector2Int.one);
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
-            GameObject newEnemyObj = GameObject.Instantiate(details.enemy.GameObj, world.EnemyParent());
-            World_Grid.instance.SetGridPos(newEnemyObj.GetComponent<IEnemy>(), details.gridPos);
+            GameObject newEnemyObj = GameObject.Instantiate(details.enemy.GameObj, enemyParent);
+            World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<IEnemy>(), details.gridPos);
         }
 
         // Set up first turn for player and enemy
@@ -28,39 +29,11 @@ public class World_Turns : MonoBehaviour {
         CreateTurn(world.Player());
         
         // Create turns for enemies
-        foreach (Transform child in world.EnemyParent()) {
-            CreateTurn(child.GetComponent<IEnemy>());
-        }
+        foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<IEnemy>()); }
 
         ArrangeTurnObjs();
 
         StartCoroutine(StartTurn()); // Start 1st turn
-    }
-
-    // Start current turn
-    // If enemy, perform turn's task list then end the turn. If player, turn will continue until player ends turn manually
-    // Perform certain buff/debuff updates here
-    public IEnumerator StartTurn() {
-        World_Turn currTurn = turnList[0];
-
-        // Only end the turn if currTurn's owner is not a Player script
-        if (!(currTurn.GetOwner() is Player)) { 
-            yield return currTurn.Execute();
-
-            EndTurn(); 
-        }
-        else {
-            world.Player().StartTurn();
-        }
-    }
-
-    // Remove turn obj from turnParent as well as update turnList
-    public void RemoveTurn(int i = 0) {
-        // Moving selected turn into turnPool then rearrange the turnParent
-        turnList[i].transform.SetParent(turnPool);
-        turnList.RemoveAt(i);
-
-        ArrangeTurnObjs();
     }
 
     // Remove all turns that belong to entity param
@@ -81,6 +54,32 @@ public class World_Turns : MonoBehaviour {
         if (turnList.Find((turn) => turn.GetOwner() is Player)) {
             StartCoroutine(StartTurn()); // Start the next turn which is the new current
         }
+    }
+
+    // Start current turn
+    // If enemy, perform turn's task list then end the turn. If player, turn will continue until player ends turn manually
+    // Perform certain buff/debuff updates here
+    private IEnumerator StartTurn() {
+        World_Turn currTurn = turnList[0];
+
+        // Only end the turn if currTurn's owner is not a Player script
+        if (!(currTurn.GetOwner() is Player)) { 
+            yield return currTurn.Execute();
+
+            EndTurn(); 
+        }
+        else {
+            world.Player().StartTurn();
+        }
+    }
+
+    // Remove turn obj from turnParent as well as update turnList
+    private void RemoveTurn(int i = 0) {
+        // Moving selected turn into turnPool then rearrange the turnParent
+        turnList[i].transform.SetParent(turnPool);
+        turnList.RemoveAt(i);
+
+        ArrangeTurnObjs();
     }
 
     // Instantiates a turn prefab to turnPool and returns the new GO's World_Turn component
@@ -136,6 +135,10 @@ public class World_Turns : MonoBehaviour {
     void Awake() {
         turnPool.gameObject.SetActive(false);
         turnParent.gameObject.SetActive(true);
+        
+        // Destroy every GO in enemyParent
+        // enemyParent will be populated in the future
+        foreach (Transform child in enemyParent) { Destroy(child.gameObject); }
         
         // Destroy any GOs that do not have World_Turn component in turnPool
         foreach (Transform child in turnPool) {
