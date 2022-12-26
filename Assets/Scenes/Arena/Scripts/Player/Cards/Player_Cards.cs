@@ -103,10 +103,10 @@ public class Player_Cards : MonoBehaviour {
             currCardObj.transform.DOLocalMove(newPos, tweenDur);
             currCardObj.GetComponent<Card_Behaviour>().SetStartLocalPos(newPos);
 
-            yield return World_AnimHandler.instance.WaitForSeconds(tweenDelay);
+            yield return World_AnimHandler.WaitForSeconds(tweenDelay);
         }
 
-        yield return World_AnimHandler.instance.WaitForSeconds(tweenDur - tweenDelay);
+        yield return World_AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
 
         UpdateNoOfCards_Hand();
     }
@@ -131,7 +131,7 @@ public class Player_Cards : MonoBehaviour {
         yield return playedCard.Effect(); // Play card effect
         yield return MoveCardToGY(playedCard); // Move card to GY
 
-        // World_AnimHandler.instance.isAnimating = false;
+        // World_AnimHandler.isAnimating = false;
     }
 
     private IEnumerator MoveCardToGY(ICard playedCard) {
@@ -147,7 +147,7 @@ public class Player_Cards : MonoBehaviour {
         cardTrans.DOLocalMoveX(endPoint.x, tweenDur).SetEase(Ease.OutQuint);
         cardTrans.DOLocalMoveY(endPoint.y, tweenDur);
         
-        yield return World_AnimHandler.instance.WaitForSeconds(tweenDur);
+        yield return World_AnimHandler.WaitForSeconds(tweenDur);
 
         cardTrans.SetParent(cardParent_GY);
 
@@ -161,7 +161,7 @@ public class Player_Cards : MonoBehaviour {
         UpdateNoOfCards_Hand();
         UpdateNoOfCards_Deck(); // Also update deck card counter in case played card adds cards to deck
 
-        World_AnimHandler.instance.isAnimating = false;
+        World_AnimHandler.isAnimating = false;
     }
 
     // Adds a card prefab to cardParent_Deck + Registers card to deck card list

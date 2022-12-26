@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, IEntity {
     // Contains anything that triggers at end of turn
     // Also used at the "End Turn" button
     public void EndTurn() {
-        if (!World_AnimHandler.instance.isAnimating) {
+        if (!World_AnimHandler.isAnimating) {
             Debug.Log("Player ends turn!");
 
             turnsHandler.EndTurn();

@@ -60,7 +60,7 @@ public class Card_Test : MonoBehaviour, ICard {
     }
     
     // Do not call Effect(). Card_Behaviour will call it instead
-    // Does not require World_AnimHandler.instance.isAnimating as Card_Behaviour will handle that
+    // Does not require World_AnimHandler.isAnimating as Card_Behaviour will handle that
     public IEnumerator Effect() {
         Debug.Log("Card is being played!");
         

@@ -21,12 +21,12 @@ public class Card_Behaviour : EventTrigger {
 
     // Pointer down event
     public override void OnPointerDown(PointerEventData data) {
-        mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
+        if (!World_AnimHandler.isAnimating) mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
     }
 
     // Drag event
     public override void OnDrag(PointerEventData data) {
-        if (!World_AnimHandler.instance.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
+        if (!World_AnimHandler.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
     }
 
     // Drag end event
@@ -34,33 +34,33 @@ public class Card_Behaviour : EventTrigger {
 
     // Double click event
     public override void OnPointerClick(PointerEventData eventData) {
-        if (eventData.clickCount == 2 && !World_AnimHandler.instance.isAnimating) {
+        if (eventData.clickCount == 2 && !World_AnimHandler.isAnimating) {
             if (cardScript.energyHandler.CanPayEnergyCost(cardScript.cost)) { StartCoroutine(MoveToPlayTarget()); }
             else { cardScript.energyHandler.NotEnoughEnergy(); }
         }
     }
 
     private IEnumerator MoveToPlayTarget() {
-        World_AnimHandler.instance.isAnimating = true; // Ends in Player_Cards.PlayCardToGY()
+        World_AnimHandler.isAnimating = true; // Ends in Player_Cards.PlayCardToGY()
 
         this.transform.DOLocalMove(this.transform.InverseTransformPoint(cardScript.resolver.GetPlayParent().position) + this.transform.localPosition + new Vector3(GetWidthOffset(), 0.0f, 0.0f), tweenDur);
 
-        yield return World_AnimHandler.instance.WaitForSeconds(tweenDur);
+        yield return World_AnimHandler.WaitForSeconds(tweenDur);
         yield return cardScript.resolver.PlayCardToGY(cardScript); // Play card effect once reach play target
     }
     
     private IEnumerator ReturnToHandPos() {
-        World_AnimHandler.instance.isAnimating = true;
+        World_AnimHandler.isAnimating = true;
 
         this.transform.DOLocalMove(startLocalPos, tweenDur);
 
-        yield return World_AnimHandler.instance.WaitForSeconds(tweenDur);
+        yield return World_AnimHandler.WaitForSeconds(tweenDur);
 
-        World_AnimHandler.instance.isAnimating = false;
+        World_AnimHandler.isAnimating = false;
     }
 
     private void PlayCard() {
-        if (!World_AnimHandler.instance.isAnimating) {
+        if (!World_AnimHandler.isAnimating) {
             bool canPay = cardScript.energyHandler.CanPayEnergyCost(cardScript.cost);
             float dist = Vector2.Distance(startLocalPos, this.transform.localPosition);
 
