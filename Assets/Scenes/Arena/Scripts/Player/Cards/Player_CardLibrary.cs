@@ -32,7 +32,6 @@ public class Player_CardLibrary : MonoBehaviour {
         }
     }
 
-
     void Awake() {
         //! Sanity Checks
         if (!player) player = this.gameObject.GetComponent<Player>();
