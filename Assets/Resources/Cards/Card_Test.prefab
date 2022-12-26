@@ -208,15 +208,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c66551ca2c954a4eac0b89495c817b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _behaviour: {fileID: 0}
   _isTemp: 0
   _id: Test
   _desc: Testing only!
   _dmg: 1
   _cost: 0
-  id_T: {fileID: 2782027997789881445}
-  desc_T: {fileID: 54147918229441622}
-  dmg_T: {fileID: 7456626589853883689}
-  cost_T: {fileID: 5000246994660261003}
+  _id_T: {fileID: 2782027997789881445}
+  _desc_T: {fileID: 54147918229441622}
+  _dmg_T: {fileID: 7456626589853883689}
+  _cost_T: {fileID: 5000246994660261003}
 --- !u!114 &4970521528452964976
 MonoBehaviour:
   m_ObjectHideFlags: 0

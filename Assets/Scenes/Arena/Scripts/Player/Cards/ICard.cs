@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 //! This is the base interface for card scripts
 //! Do not modify this script unless you're sure you want to affect ALL cards
@@ -17,6 +18,11 @@ public interface ICard {
     string desc { get; }
     int dmg { get; }
     int cost { get; }
+
+    Text id_T { get; }
+    Text desc_T { get; } 
+    Text dmg_T { get; } 
+    Text cost_T { get; }
 
     // Misc.
     GameObject gameObj { get; }

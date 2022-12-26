@@ -16,8 +16,8 @@ public class Card_Test : MonoBehaviour, ICard {
     [SerializeField] private int _dmg, _cost;
     
     [Header("Card Text Fields")]
-    [SerializeField] private Text id_T;
-    [SerializeField] private Text desc_T, dmg_T, cost_T;
+    [SerializeField] private Text _id_T;
+    [SerializeField] private Text _desc_T, _dmg_T, _cost_T;
 
     //! Stuff that needs to be defined for cards to work
     public Player_Cards resolver { get => _resolver; }
@@ -32,6 +32,12 @@ public class Card_Test : MonoBehaviour, ICard {
     public string desc { get => _desc; }
     public int dmg { get => _dmg; }
     public int cost { get => _cost; }
+
+    // Card text fields
+    public Text id_T { get => _id_T; }
+    public Text desc_T { get => _desc_T; }
+    public Text dmg_T { get => _dmg_T; }
+    public Text cost_T { get => _cost_T; }
 
     // Misc.
     public GameObject gameObj { get => this.gameObject; }
