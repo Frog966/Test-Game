@@ -11,7 +11,6 @@ public class Card_Test : MonoBehaviour, ICard {
     private Vector2 startLocalPos;
     
     [Header("Card Stats")]
-    [SerializeField] private bool isTemp;
     [SerializeField] private string id, desc;
     [SerializeField] private int dmg, cost;
     
@@ -23,9 +22,6 @@ public class Card_Test : MonoBehaviour, ICard {
     public Player_Cards Resolver { get => resolver; }
     public Player_Energy EnergyHandler { get => energyHandler; }
     public Card_Behaviour Behaviour { get => behaviour; }
-
-    // Card settings
-    public bool IsTemp { get => isTemp; set => isTemp = value; } // In case temporary cards get generated during combat
 
     // Card stats
     public string ID { get => id; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly

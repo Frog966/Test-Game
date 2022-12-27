@@ -41,12 +41,12 @@ public class Card_Behaviour : EventTrigger {
     }
 
     private IEnumerator MoveToPlayTarget() {
-        World_AnimHandler.isAnimating = true; // Ends in Player_Cards.PlayCardToGY()
+        World_AnimHandler.isAnimating = true; // Ends after Player_Cards.PlayCard()
 
         this.transform.DOLocalMove(this.transform.InverseTransformPoint(cardScript.Resolver.GetPlayParent().position) + this.transform.localPosition + new Vector3(GetWidthOffset(), 0.0f, 0.0f), tweenDur);
 
         yield return World_AnimHandler.WaitForSeconds(tweenDur);
-        yield return cardScript.Resolver.PlayCardToGY(cardScript); // Play card effect once reach play target
+        yield return cardScript.Resolver.PlayCard(cardScript); // Play card effect once reach play target
     }
     
     private IEnumerator ReturnToHandPos() {

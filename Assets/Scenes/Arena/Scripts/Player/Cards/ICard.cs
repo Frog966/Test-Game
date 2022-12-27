@@ -10,9 +10,6 @@ public interface ICard {
     Player_Energy EnergyHandler { get; }
     Card_Behaviour Behaviour { get; }
 
-    // Card settings
-    bool IsTemp { get; set; } // In case temporary cards get generated during combat
-
     // Card stats
     string ID { get; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     string Desc { get; }

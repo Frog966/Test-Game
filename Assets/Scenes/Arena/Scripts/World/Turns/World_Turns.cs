@@ -4,7 +4,10 @@ using UnityEngine;
 
 // In charge of turn creation, order and execution
 public class World_Turns : MonoBehaviour {
+    // Handlers
     [SerializeField] private Player player;
+    [SerializeField] private Player_Cards cardHandler;
+
     [SerializeField] private Transform enemyParent;
 
     [Header("Turn Stuff")]
@@ -16,8 +19,8 @@ public class World_Turns : MonoBehaviour {
 
     // Setup the encounter
     public void SetupEncounter(World_MapNode currMapNode) {
-        // Reset player pos
-        World_Grid.Movement.SetGridPos(player, Vector2Int.one);
+        cardHandler.ResetCards(); // Reset cards
+        World_Grid.Movement.SetGridPos(player, Vector2Int.one); // Reset player pos
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
