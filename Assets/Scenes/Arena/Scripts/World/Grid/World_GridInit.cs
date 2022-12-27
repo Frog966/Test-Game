@@ -98,29 +98,6 @@ public static class World_Grid {
         public static bool IsEntityHere(IEntity entity, Vector2Int pos) { return entitiesPos[entity] == pos; }
         public static bool IsEntityHere(IEntity entity, List<Vector2Int> posList) { return posList.Contains(entitiesPos[entity]); }
 
-        // Returns a valid pos list that is relative to the origin point
-        // relativePosList MUST be values that are relative to origin point
-        // eg. origin: (0, 0), relativePosList: [(-1, 0)] means the post list will be the left of origin
-        // Set includeOrigin to false if you don't want to include the origin point
-        public static List<Vector2Int> ReturnRelativePosList(Vector2Int origin, List<Vector2Int> relativePosList, bool includeOrigin = true) {
-            List<Vector2Int> validPosList = new List<Vector2Int>();
-
-            // Calculate and add any pos that are within the grid
-            foreach (Vector2Int v2 in relativePosList) {
-                int newX = v2[0] + origin[0];
-                int newY = v2[1] + origin[1];
-
-                Vector2Int newCoor = new Vector2Int(newX, newY);
-
-                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-            }
-
-            if (includeOrigin) { validPosList.Add(origin); }
-            else { validPosList.RemoveAll((v2) => v2 == origin); } // Remove any points that are equal to origin in case someone added it accidentally
-
-            return ReturnDistinctPosList(validPosList); // Remove any duplicates 
-        }
-
         public static IEnumerator TelegraphHere(List<Vector2Int> posList) {
             World_AnimHandler.isAnimating = true;
             
@@ -169,8 +146,111 @@ public static class World_Grid {
             }
         }
 
+        // Returns a valid pos list that is relative to the origin point
+        // relativePosList MUST be values that are relative to origin point
+        // eg. origin: (0, 0), relativePosList: [(-1, 0)] means the post list will be the left of origin
+        // If you add origin, it'll be included in the returned list
+        public static List<Vector2Int> ReturnRelativePosList(Vector2Int origin, List<Vector2Int> relativePosList, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            // Calculate and add any pos that are within the grid
+            foreach (Vector2Int v2 in relativePosList) {
+                Vector2Int newCoor = new Vector2Int(v2[0] + origin[0], v2[1] + origin[1]);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
+        // Returns a straight line to the left of origin
+        public static List<Vector2Int> ReturnPosList_Left(Vector2Int origin, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            for (int i = origin.x; i > 0; i--) { 
+                Vector2Int newCoor = new Vector2Int(i, origin.y);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
+        // Returns a straight line to the right of origin
+        public static List<Vector2Int> ReturnPosList_Right(Vector2Int origin, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            for (int i = origin.x; i < row; i++) { 
+                Vector2Int newCoor = new Vector2Int(i, origin.y);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
+        // Returns a straight horizontal line on the same row as origin
+        public static List<Vector2Int> ReturnPosList_Horizontal(Vector2Int origin, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            for (int i = 0; i < row; i++) { 
+                Vector2Int newCoor = new Vector2Int(i, origin.y);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
+        // Returns a straight line above origin
+        public static List<Vector2Int> ReturnPosList_Up(Vector2Int origin, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            for (int i = origin.y; i > 0; i--) { 
+                Vector2Int newCoor = new Vector2Int(origin.x, i);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
+        // Returns a straight line below origin
+        public static List<Vector2Int> ReturnPosList_Down(Vector2Int origin, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            for (int i = origin.y; i < col; i++) { 
+                Vector2Int newCoor = new Vector2Int(origin.x, i);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
+        // Returns a straight line below origin
+        public static List<Vector2Int> ReturnPosList_Vertical(Vector2Int origin, bool includeOrigin = false) {
+            List<Vector2Int> validPosList = new List<Vector2Int>();
+
+            for (int i = 0; i < col; i++) { 
+                Vector2Int newCoor = new Vector2Int(origin.x, i);
+
+                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+            }
+
+            return ReturnFinishedPosList(origin, validPosList, includeOrigin);
+        }
+
         // Returns a pos list without any duplicates
         private static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
+
+        // Returns a pos list without any duplicates and possibly include origin depending on includeOrigin bool
+        private static List<Vector2Int> ReturnFinishedPosList(Vector2Int origin, List<Vector2Int> posList, bool includeOrigin) { 
+            if (includeOrigin) { posList.Add(origin); }
+            else { posList.RemoveAll((v2) => v2 == origin); } // Remove any points that are equal to origin in case someone added it accidentally
+
+            return ReturnDistinctPosList(posList); 
+        }
 
         // Removes an entity from the library
         // Usually used when an enemy dies

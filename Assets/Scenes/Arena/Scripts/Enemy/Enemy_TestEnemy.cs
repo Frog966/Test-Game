@@ -44,8 +44,7 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
                             new Vector2Int(1, 0),
                             new Vector2Int(0, -1),
                             new Vector2Int(0, 1)
-                        },
-                        false
+                        }
                     );
 
                     // AddToTurnQueue(new IEnumerator[] { World_Grid.TelegraphHere(posList) });
