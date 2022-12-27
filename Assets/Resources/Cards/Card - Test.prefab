@@ -210,7 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behaviour: {fileID: 4970521528452964976}
   isTemp: 0
-  id: Testing!
+  id: Test
   desc: Testing Only!
   dmg: 0
   cost: 0
@@ -534,7 +534,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 0
 --- !u!1 &5903173344567158546
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,7 +772,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Testing only!
+  m_Text: Testing Only!
 --- !u!1 &7223631719385053963
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,7 +852,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Test
+  m_Text: Testing!
 --- !u!1 &7745568432782094371
 GameObject:
   m_ObjectHideFlags: 0
