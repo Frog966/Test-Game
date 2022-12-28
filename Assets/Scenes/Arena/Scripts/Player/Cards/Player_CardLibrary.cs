@@ -9,8 +9,8 @@ public class Player_CardLibrary : MonoBehaviour {
 
     private Dictionary<string, ICard> library = new Dictionary<string, ICard>();
     
+    // Getters
     public bool DoesLibraryHaveID(string id) { return library.ContainsKey(id); }
-
     public ICard GetCardByID(string id) {
         if (library.ContainsKey(id)) { return library[id]; }
         else {
@@ -22,10 +22,8 @@ public class Player_CardLibrary : MonoBehaviour {
 
     private void InitLibrary() {
         foreach (ICard card in Resources.LoadAll("Cards", typeof(ICard)).Cast<ICard>().ToArray()) {
-            if(!library.ContainsKey(card.GameObj.name)) { 
-                // Setup card as we're adding it to the library
-                card.Setup(player); 
-
+            if(!library.ContainsKey(card.ID)) { 
+                card.Setup(player); // Setup card as we're adding it to the library
                 library.Add(card.ID, card); 
             }
             else { Debug.LogWarning("There is a duplicate card ID '" + card.ID + "' found in the Resources folder!"); }

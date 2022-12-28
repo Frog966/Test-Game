@@ -11,9 +11,13 @@ public class Player_Cards : MonoBehaviour {
     [SerializeField] private Player_Energy energyHandler;
     [SerializeField] private Player_CardLibrary cardLibrary;
 
+    [Header("Card Parents")]
     [SerializeField] private Transform cardParent_Play; // A parent to temporarily hold the played card as well as act as their tween targets
     [SerializeField] private Transform cardParent_Deck, cardParent_Hand, cardParent_GY, cardParent_Exile;
-    [SerializeField] private Text textDeck, textHand, textGY, textExile;
+
+    [Header("Text Fields")]
+    [SerializeField] private Text textDeck;
+    [SerializeField] private Text textHand, textGY, textExile;
 
     private List<ICard> gy = new List<ICard>(); // Lists all card prefabs in GY
     private List<ICard> deck = new List<ICard>(); // Lists all card prefabs in deck
@@ -57,10 +61,15 @@ public class Player_Cards : MonoBehaviour {
                     }
 
                     gy.Clear();
-                    
-                    Shuffle(); // Shuffle the deck
                     UpdateNoOfCards_GY(); // Update GY count
+
+                    Shuffle(); // Shuffle the deck
+
+                    yield return World_AnimHandler.WaitForSeconds(0.2f); //! TODO: Play shuffle anim here
+
                     UpdateNoOfCards_Deck(); // Update deck count
+
+                    yield return World_AnimHandler.WaitForSeconds(0.2f);
                 }
                 else { break; }
             }
@@ -68,7 +77,7 @@ public class Player_Cards : MonoBehaviour {
             // We're updating the deck and hand lists as we move cards between them each time we draw a card
             // Therefore, only the top card of the deck (deck[0]) is accessed
             ICard currCard = deck[0]; 
-            GameObject currCardObj = currCard.GameObj; 
+            GameObject currCardObj = currCard.GameObj;
 
             hand.Add(currCard);
             deck.RemoveAt(0);
@@ -79,34 +88,18 @@ public class Player_Cards : MonoBehaviour {
             // Debug.Log("Draw " + (i + 1));
 
             // Card position in hand
-            Vector2 newPos = new Vector2(0.0f - ((currCardObj.GetComponent<RectTransform>().rect.width / 2.0f) * (cardParent_Hand.childCount - 1)), 0.0f);
+            Vector2 newPos = GetCardHandPos(currCardObj.transform, cardParent_Hand.childCount - 1);
 
             currCardObj.transform.DOLocalMove(newPos, tweenDur);
-            currCardObj.GetComponent<Card_Behaviour>().SetStartLocalPos(newPos);
+            currCard.EventHandler.SetCardLocalStartPos(newPos);
+
+            UpdateNoOfCards_Hand();
+            UpdateNoOfCards_Deck();
 
             yield return World_AnimHandler.WaitForSeconds(tweenDelay);
         }
 
         yield return World_AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
-
-        UpdateNoOfCards_Hand();
-    }
-
-    public IEnumerator PlayCard(ICard playedCard, bool isExiled = false) {
-        playedCard.GameObj.transform.SetParent(cardParent_Play); // Store the played card here temporarily
-
-        ArrangeCardsInHand(); // Arrange cards in hand after moving played card out of hand
-
-        energyHandler.DecreaseEnergy(playedCard.Cost); // Reduce player's energy based on played card's cost
-
-        yield return playedCard.Effect(); // Play card effect
-
-        if (isExiled) {
-            yield return MoveCardToGY(playedCard); // Move card to GY
-        }
-        else {
-            yield return ExileCard(playedCard); // Move card to exile
-        }
     }
 
     // Adds a card prefab to cardParent_Deck + Registers card to deck card list
@@ -116,9 +109,10 @@ public class Player_Cards : MonoBehaviour {
 
         if (cardPrefab != null) {
             GameObject newCard = GameObject.Instantiate(cardPrefab.GameObj, cardParent_Deck);
-            deck.Add(newCard.GetComponent<ICard>());
             newCard.SetActive(false); // Cards are created disabled
             newCard.transform.localPosition = Vector3.zero;
+            
+            deck.Add(newCard.GetComponent<ICard>());
             
             UpdateNoOfCards_Deck();
         }
@@ -132,9 +126,10 @@ public class Player_Cards : MonoBehaviour {
 
         if (cardPrefab != null) {
             GameObject newCard = GameObject.Instantiate(cardPrefab.GameObj, cardParent_GY);
-            gy.Add(newCard.GetComponent<ICard>());
             newCard.SetActive(false); // Cards are created disabled
             newCard.transform.localPosition = Vector3.zero;
+            
+            gy.Add(newCard.GetComponent<ICard>());
             
             UpdateNoOfCards_GY();
         }
@@ -169,60 +164,88 @@ public class Player_Cards : MonoBehaviour {
         UpdateNoOfCards_Exile();
     }
 
-    private IEnumerator MoveCardToGY(ICard playedCard) {
+    // Just a wrapper so that Player_Cards is the one performing the coroutine
+    public void ResolveCard(ICard playedCard) { StartCoroutine(ResolveCard_Anim(playedCard)); }
+
+    private IEnumerator ResolveCard_Anim(ICard playedCard) {
+        World_AnimHandler.isAnimating = true;
+        
         Transform cardTrans = playedCard.GameObj.transform;
 
-        float tweenDur = 0.2f;
-        Vector3 endPoint = cardTrans.InverseTransformPoint(cardParent_GY.position) + cardTrans.localPosition + new Vector3(playedCard.Behaviour.GetWidthOffset(), 0.0f, 0.0f);
+        // Move card to cardParent_Play
+        //--------------------------------------------------------------------------------------------------------------------------------------------------
+        float tweenDur1 = 0.2f;
 
-        // Debug.Log("1: " + cardParent_GY.localPosition);
-        // Debug.Log("2: " + cardTrans.localPosition);
-        // Debug.Log("3: " + new Vector3(playedCard.behaviour.GetWidthOffset(), 0.0f, 0.0f));
+        cardTrans.SetParent(cardParent_Play); // Store the played card here temporarily
+        cardTrans.DOLocalMove(Vector2.zero, tweenDur1);
 
-        cardTrans.DOLocalMoveX(endPoint.x, tweenDur).SetEase(Ease.OutQuint);
-        cardTrans.DOLocalMoveY(endPoint.y, tweenDur);
-        
-        yield return World_AnimHandler.WaitForSeconds(tweenDur);
-
-        cardTrans.SetParent(cardParent_GY);
-        gy.Add(playedCard); // Add to GY list
-
-        UpdateNoOfCards_GY();
-        FinishPlayingCard(playedCard);
-    }
-
-    private IEnumerator ExileCard(ICard playedCard) {        
-        Transform cardTrans = playedCard.GameObj.transform;
-
-        yield return World_AnimHandler.WaitForSeconds(0.2f);
-
-        cardTrans.SetParent(cardParent_Exile);
-        exile.Add(playedCard); // Add to exile list
-
-        UpdateNoOfCards_Exile();
-        FinishPlayingCard(playedCard);
-    }
-
-    private void FinishPlayingCard(ICard playedCard) {
-        Transform cardTrans = playedCard.GameObj.transform;
-
-        hand.RemoveAt(hand.FindIndex((card) => playedCard == card)); // Remove from hand list
-        
-        cardTrans.gameObject.SetActive(false); // Disable card after card effect
-        cardTrans.localPosition = Vector3.zero; // Set card pos
-        
+        energyHandler.DecreaseEnergy(playedCard.Cost); // Reduce player's energy based on played card's cost
+        hand.RemoveAt(hand.FindIndex((card) => playedCard == card)); // Remove from hand list as card is tweening to cardParent_Play
         UpdateNoOfCards_Hand();
-        UpdateNoOfCards_Deck(); // Also update deck card counter in case played card adds cards to deck
+
+        yield return World_AnimHandler.WaitForSeconds(tweenDur1);
+
+        ArrangeCardsInHand(); // Arrange cards in hand after moving played card out of hand
+        //--------------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Play card's effect
+        yield return playedCard.Effect();
+
+        if (playedCard.IsExiled) {
+            // Move card to cardParent_Exile
+            //--------------------------------------------------------------------------------------------------------------------------------------------------
+            float tweenDur3 = 0.2f;
+
+            cardTrans.SetParent(cardParent_Exile);
+            cardTrans.DOLocalMove(Vector2.zero, tweenDur3);
+
+            yield return World_AnimHandler.WaitForSeconds(tweenDur3);
+
+            exile.Add(playedCard); // Add to exile list
+
+            UpdateNoOfCards_Exile();
+            //--------------------------------------------------------------------------------------------------------------------------------------------------
+        }
+        else {
+            // Move card to cardParent_GY
+            //--------------------------------------------------------------------------------------------------------------------------------------------------
+            float tweenDur2 = 0.2f;
+
+            cardTrans.SetParent(cardParent_GY);
+            cardTrans.DOLocalMove(Vector2.zero, tweenDur2);
+            
+            yield return World_AnimHandler.WaitForSeconds(tweenDur2);
+
+            gy.Add(playedCard); // Add to GY list
+
+            UpdateNoOfCards_GY();
+            //--------------------------------------------------------------------------------------------------------------------------------------------------
+        }
+
+        // Finish resolving card
+        //--------------------------------------------------------------------------------------------------------------------------------------------------        
+        cardTrans.gameObject.SetActive(false); // Disable card after card effect
+        // cardTrans.localPosition = Vector3.zero; // Set card pos
+        
+        // UpdateNoOfCards_Hand();
+        // UpdateNoOfCards_Deck(); // Also update deck card counter in case played card adds cards to deck
 
         World_AnimHandler.isAnimating = false;
+        //--------------------------------------------------------------------------------------------------------------------------------------------------
+    }
+
+    private Vector2 GetCardHandPos(Transform card, int multiplier) {
+        ICard cardScript = card.GetComponent<ICard>();
+
+        return new Vector2((-(cardScript.UIHandler.GetWidthOffset() * multiplier) - cardScript.UIHandler.GetWidthOffset()), 0.0f);
     }
 
     private void ArrangeCardsInHand() {
         for (int i = 0; i < cardParent_Hand.childCount; i ++) {
             Transform card = cardParent_Hand.GetChild(i);
-            Vector2 newPos = new Vector2(0.0f - ((card.GetComponent<RectTransform>().rect.width / 2.0f) * i), 0.0f); // Set card position in hand
+            Vector2 newPos = GetCardHandPos(card, i);
 
-            card.GetComponent<Card_Behaviour>().SetStartLocalPos(newPos);
+            card.GetComponent<ICard>().EventHandler.SetCardLocalStartPos(newPos); // Set card position in hand
             card.transform.DOLocalMove(newPos, 0.2f);
         }
     }
@@ -230,7 +253,7 @@ public class Player_Cards : MonoBehaviour {
     private void UpdateNoOfCards_GY() { textGY.text = gy.Count.ToString(); }
     private void UpdateNoOfCards_Deck() { textDeck.text = deck.Count.ToString(); }
     private void UpdateNoOfCards_Hand() { textHand.text = hand.Count.ToString(); }
-    private void UpdateNoOfCards_Exile() { textHand.text = hand.Count.ToString(); }
+    private void UpdateNoOfCards_Exile() { textExile.text = exile.Count.ToString(); }
 
     public static class Deck {
         private static Player_Cards cardsHandler;
