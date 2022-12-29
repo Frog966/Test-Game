@@ -39,14 +39,23 @@ public static class World_Grid {
 
     private static int row = 6, col = 3;
     private static World_GridNode[,] grid = new World_GridNode[row, col]; // A 2D array that goes from left to right, top to bottom;
-    private static Dictionary<IEntity, Vector2Int> entitiesPos = new Dictionary<IEntity, Vector2Int>(); // Contains all entities on grid and their position
+    private static Dictionary<Entity, Vector2Int> entitiesPos = new Dictionary<Entity, Vector2Int>(); // Contains all entities on grid and their position
 
     // Getters
     public static int GetRow() { return row; }
     public static int GetCol() { return col; }
     public static World_GridNode GetNode(int x, int y) { return isCoorInGrid(x, y) ? grid[x, y] : null; }
     public static World_GridNode GetNode(Vector2Int vec2) { return isCoorInGrid(vec2) ? grid[vec2.x, vec2.y] : null; }
-    public static Vector2Int GetEntityGridPos(IEntity entity) { return entitiesPos.ContainsKey(entity) ? entitiesPos[entity] : new Vector2Int(); }
+    public static Vector2Int GetEntityGridPos(Entity entity) { return entitiesPos.ContainsKey(entity) ? entitiesPos[entity] : new Vector2Int(); }
+
+    // Overloaded functions to check if entity is on specfic grid pos
+    public static bool IsEntityHere(Entity entity, Vector2Int pos) { return entitiesPos[entity] == pos; }
+    public static bool IsEntityHere(Entity entity, int posX, int posY) { return entitiesPos[entity] == new Vector2Int(posX, posY); }
+    public static bool IsEntityHere(Entity entity, List<Vector2Int> posList) { return posList.Contains(entitiesPos[entity]); }
+    
+    // Overloaded functions to check if there is an entity on specfic grid pos
+    public static bool IsThereAnEntity(Vector2Int here) { return entitiesPos.Values.ToList().Contains(here); }
+    public static bool IsThereAnEntity(int hereX, int hereY) { return IsThereAnEntity(new Vector2Int(hereX, hereY)); }
 
     // Setters
     public static void SetTurnsHandler(World_Turns handler) { turnsHandler = handler; }
@@ -64,7 +73,7 @@ public static class World_Grid {
         // Set entities' grid position
         // Registers/updates the entitiesPos when an entity moves to a grid position
         // Has no restrictions other than requiring a valid grid pos
-        public static void SetGridPos(IEntity entity, Vector2Int vec2) {
+        public static void SetGridPos(Entity entity, Vector2Int vec2) {
             // Debug.Log("SetGridPos: " + entity + ", " + vec2);
 
             World_GridNode targetNode = GetNode(vec2);
@@ -76,7 +85,7 @@ public static class World_Grid {
 
                 // Move entity to new grid position
                 // Use world position for accuracy
-                entity.GameObj.transform.position = targetNode.gameObject.transform.position;
+                entity.transform.position = targetNode.gameObject.transform.position;
             }
             else {
                 Debug.LogWarning("Node is out of bounds or does not have component attached!");
@@ -84,19 +93,18 @@ public static class World_Grid {
         }
 
         // SetGridPos() with a "entities cannot move to a grid node with another entity on it" restriction
-        public static void MoveToPos(IEntity entity, Vector2Int gridCoor) {
+        public static void MoveToPos(Entity entity, Vector2Int gridCoor) {
             if (!entitiesPos.Values.ToList().Contains(gridCoor)) { SetGridPos(entity, gridCoor); }
         }
 
         // Some overloaded functions in case you just want to pass 2 ints instead
-        public static void SetGridPos(IEntity entity, int x, int y) { SetGridPos(entity, new Vector2Int(x, y)); }
-        public static void MoveToPos(IEntity entity, int x, int y) { MoveToPos(entity, new Vector2Int(x, y)); }
+        public static void SetGridPos(Entity entity, int x, int y) { SetGridPos(entity, new Vector2Int(x, y)); }
+        public static void MoveToPos(Entity entity, int x, int y) { MoveToPos(entity, new Vector2Int(x, y)); }
     }
 
     public static class Combat {
-        // Overloaded functions to check if entity is on specfic grid pos
-        public static bool IsEntityHere(IEntity entity, Vector2Int pos) { return entitiesPos[entity] == pos; }
-        public static bool IsEntityHere(IEntity entity, List<Vector2Int> posList) { return posList.Contains(entitiesPos[entity]); }
+        // Returns a pos list without any duplicates
+        public static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
 
         public static IEnumerator TelegraphHere(List<Vector2Int> posList) {
             World_AnimHandler.isAnimating = true;
@@ -141,8 +149,20 @@ public static class World_Grid {
         public static void HitHere(Faction attackerFaction, List<Vector2Int> posList, int dmg) {
             ReturnDistinctPosList(posList); // Remove any duplicates 
 
-            foreach (IEntity entity in GetEntitiesOnMap(attackerFaction)) {
-                if (IsEntityHere(entity, posList)) { ResolveHitsOnEntity(entity, dmg); }
+            foreach (Entity entity in GetEntitiesOnMap(attackerFaction)) {
+                if (IsEntityHere(entity, posList)) { 
+                    entity.OnHit(dmg); 
+
+                    // Entity dies here
+                    if (entity.GetHealth() <= 0) {
+                        Debug.Log(entity.gameObject.name + " has died!");
+
+                        entity.OnDeath();
+                        
+                        entitiesPos.Remove(entity); // Remove entity from the library
+                        turnsHandler.RemoveAllTurnsByEntity(entity); // Remove all turns by said entity
+                    }
+                }
             }
         }
 
@@ -164,117 +184,91 @@ public static class World_Grid {
         }
 
         // Returns a straight line to the left of origin
-        public static List<Vector2Int> ReturnPosList_Left(Vector2Int origin, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnPosList_Left(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
             for (int i = origin.x; i > 0; i--) { 
                 Vector2Int newCoor = new Vector2Int(i, origin.y);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+                if (!isPiercing && i != origin.x && IsThereAnEntity(newCoor)) { break; } // Stop moving left if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
         }
 
         // Returns a straight line to the right of origin
-        public static List<Vector2Int> ReturnPosList_Right(Vector2Int origin, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnPosList_Right(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
             for (int i = origin.x; i < row; i++) { 
                 Vector2Int newCoor = new Vector2Int(i, origin.y);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+                if (!isPiercing && i != origin.x && IsThereAnEntity(newCoor)) { break; } // Stop moving right if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
         }
 
         // Returns a straight horizontal line on the same row as origin
-        public static List<Vector2Int> ReturnPosList_Horizontal(Vector2Int origin, bool includeOrigin = false) {
-            List<Vector2Int> validPosList = new List<Vector2Int>();
-
-            for (int i = 0; i < row; i++) { 
-                Vector2Int newCoor = new Vector2Int(i, origin.y);
-
-                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-            }
+        public static List<Vector2Int> ReturnPosList_Horizontal(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
+            // Combines left and right pos lists while also checking for piercing in both
+            List<Vector2Int> validPosList = ReturnPosList_Left(origin, isPiercing, includeOrigin).Concat(ReturnPosList_Right(origin, isPiercing, includeOrigin)).ToList();
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
         }
 
         // Returns a straight line above origin
-        public static List<Vector2Int> ReturnPosList_Up(Vector2Int origin, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnPosList_Up(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
             for (int i = origin.y; i > 0; i--) { 
                 Vector2Int newCoor = new Vector2Int(origin.x, i);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+                if (!isPiercing && i != origin.y && IsThereAnEntity(newCoor)) { break; } // Stop moving up if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
         }
 
         // Returns a straight line below origin
-        public static List<Vector2Int> ReturnPosList_Down(Vector2Int origin, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnPosList_Down(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
             for (int i = origin.y; i < col; i++) { 
                 Vector2Int newCoor = new Vector2Int(origin.x, i);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
+                if (!isPiercing && i != origin.y && IsThereAnEntity(newCoor)) { break; } // Stop moving down if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
         }
 
         // Returns a straight line below origin
-        public static List<Vector2Int> ReturnPosList_Vertical(Vector2Int origin, bool includeOrigin = false) {
-            List<Vector2Int> validPosList = new List<Vector2Int>();
-
-            for (int i = 0; i < col; i++) { 
-                Vector2Int newCoor = new Vector2Int(origin.x, i);
-
-                if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-            }
+        public static List<Vector2Int> ReturnPosList_Vertical(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
+            // Combines up and down pos lists while also checking for piercing in both
+            List<Vector2Int> validPosList = ReturnPosList_Up(origin, isPiercing, includeOrigin).Concat(ReturnPosList_Down(origin, isPiercing, includeOrigin)).ToList();
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
         }
-
-        // Returns a pos list without any duplicates
-        private static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
 
         // Returns a pos list without any duplicates and possibly include origin depending on includeOrigin bool
         private static List<Vector2Int> ReturnFinishedPosList(Vector2Int origin, List<Vector2Int> posList, bool includeOrigin) { 
             if (includeOrigin) { posList.Add(origin); }
             else { posList.RemoveAll((v2) => v2 == origin); } // Remove any points that are equal to origin in case someone added it accidentally
 
-            return ReturnDistinctPosList(posList); 
-        }
-
-        // Removes an entity from the library
-        // Usually used when an enemy dies
-        private static void RemoveEntityFromGrid(IEntity entity) { 
-            entitiesPos.Remove(entity); 
-            turnsHandler.RemoveAllTurnsByEntity(entity);
+            return ReturnDistinctPosList(posList);
         }
 
         // Returns entities that are not the attacker's faction
-        private static List<IEntity> GetEntitiesOnMap(Faction attackerFaction) {
+        private static List<Entity> GetEntitiesOnMap(Faction attackerFaction) {
             List<Faction> targetFactions = System.Enum.GetValues(typeof(Faction)).Cast<Faction>().ToList(); // Remove attacker faction from faction list
             targetFactions.Remove(attackerFaction);
 
-            return entitiesPos.Keys.ToList().Where((entity) => targetFactions.Contains(entity.Faction)).ToList(); // Return entities that belong to the remain factions
-        }
-
-        private static void ResolveHitsOnEntity(IEntity entity, int damage) {
-            entity.OnHit(damage); 
-
-            // Entity dies here
-            if (entity.Health <= 0) { 
-                entity.OnDeath(); 
-                RemoveEntityFromGrid(entity);
-            }
+            return entitiesPos.Keys.ToList().Where((entity) => targetFactions.Contains(entity.GetFaction())).ToList(); // Return entities that belong to the remain factions
         }
     }
 }

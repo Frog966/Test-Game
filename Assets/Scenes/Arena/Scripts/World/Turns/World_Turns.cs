@@ -20,20 +20,20 @@ public class World_Turns : MonoBehaviour {
     // Setup the encounter
     public void SetupEncounter(World_MapNode currMapNode) {
         cardHandler.ResetCards(); // Reset cards
-        World_Grid.Movement.SetGridPos(player, Vector2Int.one); // Reset player pos
+        World_Grid.Movement.SetGridPos(player.GetEntity(), Vector2Int.one); // Reset player pos
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
-            GameObject newEnemyObj = GameObject.Instantiate(details.enemy.GameObj, enemyParent);
-            World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<IEnemy>(), details.gridPos);
+            GameObject newEnemyObj = GameObject.Instantiate(details.enemy.Entity.gameObject, enemyParent);
+            World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<Entity>(), details.gridPos);
         }
 
         // Set up first turn for player and enemy
         // Player always first
-        CreateTurn(player);
+        CreateTurn(player.GetEntity());
         
         // Create turns for enemies
-        foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<IEnemy>()); }
+        foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<Entity>()); }
 
         ArrangeTurnObjs();
 
@@ -41,7 +41,7 @@ public class World_Turns : MonoBehaviour {
     }
 
     // Remove all turns that belong to entity param
-    public void RemoveAllTurnsByEntity(IEntity entity) {
+    public void RemoveAllTurnsByEntity(Entity entity) {
         List<World_Turn> removableTurns = turnList.FindAll((turn) => turn.GetOwner() == entity); // Find all turns owned by entity
         foreach (World_Turn turn in removableTurns) { turn.transform.SetParent(turnPool); } // Move turn obj back to pool
 
@@ -55,7 +55,7 @@ public class World_Turns : MonoBehaviour {
         RemoveTurn();
         
         // Only start turn if there's a player
-        if (turnList.Find((turn) => turn.GetOwner() is Player)) {
+        if (turnList.Find((turn) => turn.GetOwner() != player.GetEntity())) {
             StartCoroutine(StartTurn()); // Start the next turn which is the new current
         }
     }
@@ -67,7 +67,7 @@ public class World_Turns : MonoBehaviour {
         World_Turn currTurn = turnList[0];
 
         // Only end the turn if currTurn's owner is not a Player script
-        if (!(currTurn.GetOwner() is Player)) { 
+        if (currTurn.GetOwner() != player.GetEntity()) { 
             yield return currTurn.Execute();
 
             EndTurn(); 
@@ -101,7 +101,7 @@ public class World_Turns : MonoBehaviour {
 
     // Recycles a turn prefab from turnPool and passes it to turnParent
     // If no prefabs are available, instantiate a new one in turnPool then passes it to turnParent
-    private void CreateTurn(IEntity owner) {
+    private void CreateTurn(Entity owner) {
         World_Turn newTurn = null;
 
         if (turnPool.childCount < 1) {
@@ -129,9 +129,10 @@ public class World_Turns : MonoBehaviour {
             }
         }
 
-        newTurn.Setup(owner, !(owner is Player) ? owner.GameObj.GetComponent<IEnemy>().ReturnCurrentTurn() : null); // If enemy, pass task list. Else, pass null
+        // Debug.Log("Test: " + owner + ", " + (owner is IEnemy));
+
+        newTurn.Setup(owner, owner.GetComponent<IEnemy>() != null ? owner.GetComponent<IEnemy>().ReturnCurrentTurn() : null); // If enemy, pass task list. Else, pass null
         newTurn.transform.SetParent(turnParent); // Place newTurn into turnParent
-        // newTurn.transform.SetAsLastSibling();
         
         turnList.Add(newTurn); // Add newTurn to turnList
     }

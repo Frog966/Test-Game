@@ -16,7 +16,7 @@ public class Player_Movement : MonoBehaviour {
 
             // Player must have enough energy to move and can only move onto player-controlled nodes 
             if (energyHandler.CanPayEnergyCost(moveCost) && node && node.IsPlayerControlled()) {
-                World_Grid.Movement.MoveToPos(player, vec2);
+                World_Grid.Movement.MoveToPos(player.GetEntity(), vec2);
                 energyHandler.DecreaseEnergy(moveCost); // Each move lowers energy
             }
             else {
@@ -33,10 +33,10 @@ public class Player_Movement : MonoBehaviour {
 
     // Shortcuts
     //! Up and down is reversed because of how the grid is setup
-    public void MoveUp() { MoveTo(World_Grid.GetEntityGridPos(player) + Vector2Int.down); }
-    public void MoveLeft() { MoveTo(World_Grid.GetEntityGridPos(player) + Vector2Int.left); }
-    public void MoveDown() { MoveTo(World_Grid.GetEntityGridPos(player) + Vector2Int.up); }
-    public void MoveRight() { MoveTo(World_Grid.GetEntityGridPos(player) + Vector2Int.right); }
+    public void MoveUp() { MoveTo(World_Grid.GetEntityGridPos(player.GetEntity()) + Vector2Int.down); }
+    public void MoveLeft() { MoveTo(World_Grid.GetEntityGridPos(player.GetEntity()) + Vector2Int.left); }
+    public void MoveDown() { MoveTo(World_Grid.GetEntityGridPos(player.GetEntity()) + Vector2Int.up); }
+    public void MoveRight() { MoveTo(World_Grid.GetEntityGridPos(player.GetEntity()) + Vector2Int.right); }
 
     void Awake() {
         //! Sanity Checks

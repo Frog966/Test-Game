@@ -3,27 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Unit;
 
-// C# does not allow multiple inheritance so we're attaching an IEnemy interface (which inherits IEntity) to Enemy script so that we can use a single type to handle turns
+// C# does not allow multiple inheritance so we're attaching an IEnemy interface (which inherits Entity) to Enemy script so that we can use a single type to handle turns
 public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
+    [SerializeField] private string id = "Test Enemy";
+    [SerializeField] private Entity entity;
+
+    // Properties
+    public string ID { get => id; }
+    public Entity Entity { get => entity; }
+
     // This AI has patterns that span multiple turns
     private Queue<Queue<IEnumerator>> turnQueue = new Queue<Queue<IEnumerator>>();
 
-    // Properties
-    //--------------------------------------------------------------------------------------------------------------------------------------
-    [SerializeField] private string id = "Test Enemy";
-    public string ID { get => id; }
-
-    [SerializeField] private int healthMax, health;
-    public int Health { get => health; set => health = value; }
-    public int HealthMax  { get => healthMax; set => healthMax = value; }
-
-    public Faction Faction { get => Faction.ENEMY; }
-    public GameObject GameObj { get => this.gameObject; }
-
-    public void OnHit(int damage) {}
-    public void OnDeath() {}
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
+    // The enemy's AI
     public Queue<IEnumerator> ReturnCurrentTurn() {
         if (turnQueue.Count > 0) { return turnQueue.Dequeue(); }
         else {
@@ -53,7 +45,7 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
                     return turnQueue.Dequeue();
 
                     IEnumerator Attack() {
-                        World_Grid.Combat.HitHere(this.Faction, posList, 1000);
+                        World_Grid.Combat.HitHere(entity.GetFaction(), posList, 1000);
 
                         yield return World_Grid.Combat.FlashHere(posList);
                     }
@@ -76,6 +68,7 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
     }
 
     void Awake() {
-        healthMax = health = 500; // Setting up enemy's health properties
+        //! Sanity Checks
+        if (!entity) entity = this.GetComponent<Entity>();
     }
 }

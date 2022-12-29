@@ -13,12 +13,12 @@ public class World_Turn : MonoBehaviour {
     [SerializeField] private Color color_Enemy;
     [SerializeField] private Color color_Neutral;
 
-    private IEntity owner; //! Who this turn belongs to
+    private Entity owner; //! Who this turn belongs to
     public Queue<IEnumerator> actionQueue = new Queue<IEnumerator>();
 
     //! Basically a constructor. Remember to call this when instantiating a Turn prefab
     // Action queue can be empty especially for player.cs as it does not have defined tasks
-    public void Setup(IEntity newOwner, Queue<IEnumerator> newTaskList = null) {
+    public void Setup(Entity newOwner, Queue<IEnumerator> newTaskList = null) {
         owner = newOwner;
 
         // If newTaskList = null, reset actionQueue into empty list with no elements
@@ -26,20 +26,28 @@ public class World_Turn : MonoBehaviour {
         else { actionQueue.Clear(); }
 
         // Set image color
-        if (newOwner.GetType().IsAssignableFrom(typeof(Player))) { bg.color = color_Ally; }
-        else if (newOwner.GetType().GetInterface(nameof(IEnemy)) != null) { bg.color = color_Enemy; }
-        else { bg.color = color_Neutral; }
+        switch (owner.GetFaction()) {
+            case Faction.ALLY:
+                bg.color = color_Ally;
+                break;
+            case Faction.ENEMY:
+                bg.color = color_Enemy;
+                break;
+            default:
+                bg.color = color_Neutral;
+                break;
+        }
     }
 
     // Getters
-    public IEntity GetOwner() { return owner; }
+    public Entity GetOwner() { return owner; }
     public Queue<IEnumerator> GetActionQueue() { return actionQueue; }
 
     public IEnumerator Execute() {
-        Debug.Log(owner.GameObj.name + " performs turn!");
+        Debug.Log(owner.gameObject.name + " performs turn!");
 
         while (actionQueue.Count > 0) { yield return actionQueue.Dequeue(); }
 
-        Debug.Log(owner.GameObj.name + " ends turn!");
+        Debug.Log(owner.gameObject.name + " ends turn!");
     }
 }

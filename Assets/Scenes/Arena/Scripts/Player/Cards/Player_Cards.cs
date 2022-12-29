@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -102,6 +103,37 @@ public class Player_Cards : MonoBehaviour {
         yield return World_AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
     }
 
+    // Discard cards
+    public IEnumerator Discard(List<ICard> discardedCards) {
+        if (discardedCards.Count > 0) {
+            float tweenDur = 0.2f;
+
+            gy = new List<ICard>(gy.Concat(discardedCards).ToList()); // Pass discarded cards to GY
+            hand = new List<ICard>(hand.Where((card) => !discardedCards.Contains(card)).ToList()); // Remove discarded cards from hand
+
+            UpdateNoOfCards_Hand();
+
+            // Move cards to cardParent_GY
+            //--------------------------------------------------------------------------------------------------------------------------------------------------
+            foreach (ICard card in discardedCards) {
+                Transform cardTrans = card.GameObj.transform;
+
+                cardTrans.SetParent(cardParent_GY);
+                cardTrans.DOLocalMove(Vector2.zero, tweenDur);
+            }
+            
+            yield return World_AnimHandler.WaitForSeconds(tweenDur);
+
+            foreach (ICard card in discardedCards) { card.GameObj.SetActive(false); }
+
+            UpdateNoOfCards_GY();
+            //--------------------------------------------------------------------------------------------------------------------------------------------------
+        }
+        else { yield return null; } // Don't do anything if there is nothing to discard
+    }
+
+    public IEnumerator DiscardHand() { yield return Discard(hand); }
+
     // Adds a card prefab to cardParent_Deck + Registers card to deck card list
     //! These cards are temporary and will be cleared out when the battle ends unless called by Deck.InstantiateDeck()
     public void CreateCard_Deck(string id) {
@@ -164,7 +196,7 @@ public class Player_Cards : MonoBehaviour {
         UpdateNoOfCards_Exile();
     }
 
-    // Just a wrapper so that Player_Cards is the one performing the coroutine
+    // Just a wrapper so that Player_Cards is the one performing the coroutine and not the card itself
     public void ResolveCard(ICard playedCard) { StartCoroutine(ResolveCard_Anim(playedCard)); }
 
     private IEnumerator ResolveCard_Anim(ICard playedCard) {
@@ -234,12 +266,6 @@ public class Player_Cards : MonoBehaviour {
         //--------------------------------------------------------------------------------------------------------------------------------------------------
     }
 
-    private Vector2 GetCardHandPos(Transform card, int multiplier) {
-        ICard cardScript = card.GetComponent<ICard>();
-
-        return new Vector2((-(cardScript.UIHandler.GetWidthOffset() * multiplier) - cardScript.UIHandler.GetWidthOffset()), 0.0f);
-    }
-
     private void ArrangeCardsInHand() {
         for (int i = 0; i < cardParent_Hand.childCount; i ++) {
             Transform card = cardParent_Hand.GetChild(i);
@@ -248,6 +274,12 @@ public class Player_Cards : MonoBehaviour {
             card.GetComponent<ICard>().EventHandler.SetCardLocalStartPos(newPos); // Set card position in hand
             card.transform.DOLocalMove(newPos, 0.2f);
         }
+    }
+
+    private Vector2 GetCardHandPos(Transform card, int multiplier) {
+        ICard cardScript = card.GetComponent<ICard>();
+
+        return new Vector2((-(cardScript.UIHandler.GetWidthOffset() * multiplier) - cardScript.UIHandler.GetWidthOffset()), 0.0f);
     }
     
     private void UpdateNoOfCards_GY() { textGY.text = gy.Count.ToString(); }
@@ -321,12 +353,16 @@ public class Player_Cards : MonoBehaviour {
     void Start() {
         // Testing only!
         Deck.SetDeck(new List<string>() {
-            "Test",
-            "Test",
-            "Test",
-            "Test",
-            "Test",
-            "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            "Cannon",
+            "Cannon",
+            "Cannon",
+            "Cannon",
         });
 
         ResetCards();
