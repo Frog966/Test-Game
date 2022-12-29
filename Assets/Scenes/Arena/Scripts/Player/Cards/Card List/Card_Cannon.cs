@@ -1,9 +1,11 @@
 using System.Collections;
-// using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Game.Unit;
 
-public class Card_Test : MonoBehaviour, ICard {
+public class Card_Cannon : MonoBehaviour, ICard {
+    private static Player player;
     private static Player_Cards cardHandler;
     private static Player_Energy energyHandler;
     
@@ -36,20 +38,25 @@ public class Card_Test : MonoBehaviour, ICard {
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     // Constructor
-    public void Setup(Player player) {
-        if (!cardHandler) cardHandler = player.CardsHandler();
-        if (!energyHandler) energyHandler = player.EnergyHandler();
+    public void Setup(Player _player) {
+        if (!cardHandler) cardHandler = _player.CardsHandler();
+        if (!energyHandler) energyHandler = _player.EnergyHandler();
         if (!uiHandler) uiHandler = this.transform.GetChild(0).GetComponent<Card_UI>();
         if (!eventHandler) eventHandler = this.transform.GetChild(0).GetComponent<Card_Events>();
 
+        player = _player;
         uiHandler.Setup(this);
     }
     
     // Do not call Effect(). Card_Events will call it instead
     // Does not require World_AnimHandler.isAnimating as Card_Events will handle that
     public IEnumerator Effect() {
-        // Debug.Log(this + " is being played!");
-        
-        yield return cardHandler.Draw(1);
+        Debug.Log(this + " is being played!");
+
+        List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(player.GetEntity()), false);
+
+        World_Grid.Combat.HitHere(Faction.ALLY, posList, dmg);
+
+        yield return World_Grid.Combat.FlashHere(posList);
     }
 }
