@@ -169,26 +169,30 @@ public class Player_Cards : MonoBehaviour {
     }
 
     // Clears out all parents and recreate the deck
-    // Called at World_Turns.SetupEncounter()
+    // Called at World_Turns.StartEncounter()
     public void ResetCards() {
-        void CheckCard(Transform currCard) {
-            ICard card = currCard.GetComponent<ICard>();
-
-            if (Deck.GetDeckCards().Contains(card)) { currCard.SetParent(cardParent_Deck); }
-            else { Destroy(currCard.gameObject); }
-        }
-
         gy.Clear();
         deck.Clear();
         hand.Clear();
         exile.Clear();
 
-        deck = new List<ICard>(Deck.GetDeckCards()); // Registers all cards in deckCards
+        foreach (Transform child in cardParent_Deck) { child.SetParent(cardParent_GY); } // Move cards from cardParent_Deck to cardParent_GY first
 
-        foreach (Transform child in cardParent_GY) { CheckCard(child); }
-        foreach (Transform child in cardParent_Deck) { CheckCard(child); }
-        foreach (Transform child in cardParent_Hand) { CheckCard(child); }
-        foreach (Transform child in cardParent_Exile) { CheckCard(child); }
+        deck = new List<ICard>(Deck.GetDeckCards()); // Reregisters all cards from deckCards into deck
+
+        // Move cards that are registered as default deck cards back into cardParent_Deck
+        foreach (ICard card in deck) { 
+            Transform currCard = card.GameObj.transform;
+
+            currCard.SetParent(cardParent_Deck); 
+            currCard.localPosition = Vector3.zero;
+        }
+        
+        // Destroy every other card
+        foreach (Transform child in cardParent_GY) { Destroy(child.gameObject); }
+        foreach (Transform child in cardParent_Play) { Destroy(child.gameObject); }
+        foreach (Transform child in cardParent_Hand) { Destroy(child.gameObject); }
+        foreach (Transform child in cardParent_Exile) { Destroy(child.gameObject); }
         
         UpdateNoOfCards_GY();
         UpdateNoOfCards_Hand();
