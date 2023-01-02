@@ -156,11 +156,11 @@ public static class World_Grid {
                     // Entity dies here
                     if (entity.GetHealth() <= 0) {
                         Debug.Log(entity.gameObject.name + " has died!");
-
-                        entity.OnDeath();
                         
                         entitiesPos.Remove(entity); // Remove entity from the library
                         turnsHandler.RemoveAllTurnsByEntity(entity); // Remove all turns by said entity
+
+                        entity.OnDeath(); // The entity destroys itself here
                     }
                 }
             }

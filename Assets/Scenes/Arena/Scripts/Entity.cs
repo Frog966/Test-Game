@@ -21,5 +21,7 @@ public class Entity : MonoBehaviour {
         health_T.text = health.ToString(); // Update health text
     }
 
-    public virtual void OnDeath() {}
+    public virtual void OnDeath() {
+        Destroy(this.gameObject); // Remember to always destroy the GO on death. It should be the last function to call
+    }
 }
