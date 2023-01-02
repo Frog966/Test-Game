@@ -28,18 +28,18 @@ public class World_MapNode : MonoBehaviour {
     public NodeType GetNodeType() { return nodeType; }
     public List<EncounterEnemyDetails> GetEncounter() { return encounter; }
     public List<World_MapNode> GetPrevNodes() { return prevNodes; }
-    public List<World_MapNode> GetNextNodes() { return prevNodes; }
+    public List<World_MapNode> GetNextNodes() { return nextNodes; }
 
     // Enable this node to be moved onto
-    public void EnableNode() {
-        buttonScript.enabled = true;
-        icon.color = Color.white; 
+    public void EnableNode(bool isCurrNode = false) {
+        buttonScript.enabled = !isCurrNode; // If isCurrNode, disable button script
+        icon.color = Color.white;
     }
 
     // Disable this node from being moved onto
     public void DisableNode() {
         buttonScript.enabled = false;
-        icon.color = Color.gray; 
+        icon.color = Color.gray;
     }
 
     // Constructor

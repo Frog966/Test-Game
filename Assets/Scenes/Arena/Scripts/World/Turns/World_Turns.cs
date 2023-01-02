@@ -7,8 +7,10 @@ public class World_Turns : MonoBehaviour {
     // Handlers
     [SerializeField] private Player player;
     [SerializeField] private Player_Cards cardHandler;
+    [SerializeField] private World_Map mapHandler;
 
     [SerializeField] private Transform enemyParent;
+    [SerializeField] private Transform enemyTrash; // The transform to pool enemies to be destroyed
 
     [Header("Turn Stuff")]
     [SerializeField] private GameObject turnPrefab;
@@ -18,15 +20,23 @@ public class World_Turns : MonoBehaviour {
     // private List<World_Turn> turnListNext = new List<World_Turn>();
 
     // Setup the encounter
-    public void SetupEncounter(World_MapNode currMapNode) {
-        cardHandler.ResetCards(); // Reset cards
+    public void StartEncounter(World_MapNode currMapNode) {
+        // Set up units
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        // cardHandler.ResetCards(); // Reset player cards
         World_Grid.Movement.SetGridPos(player.GetEntity(), Vector2Int.one); // Reset player pos
+
+        ClearEnemyParent(); // Destroy every GO in enemyParent
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
             GameObject newEnemyObj = GameObject.Instantiate(details.enemy.Entity.gameObject, enemyParent);
             World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<Entity>(), details.gridPos);
         }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Set up turns
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
 
         // Set up first turn for player and enemy
         // Player always first
@@ -36,6 +46,7 @@ public class World_Turns : MonoBehaviour {
         foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<Entity>()); }
 
         ArrangeTurnObjs();
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
 
         StartCoroutine(StartTurn()); // Start 1st turn
     }
@@ -54,9 +65,23 @@ public class World_Turns : MonoBehaviour {
         CreateTurn(turnList[0].GetOwner()); // Recreate the current turn. If enemy, possibly progress it's pattern
         RemoveTurn();
         
-        // Only start turn if there's a player
-        if (turnList.Find((turn) => turn.GetOwner() != player.GetEntity())) {
+        // Only start turn if there's a player and enemy
+        if (turnList.Find((turn) => turn.GetOwner() == player.GetEntity()) && turnList.Find((turn) => turn.GetOwner() != player.GetEntity())) {
             StartCoroutine(StartTurn()); // Start the next turn which is the new current
+        }
+        else {
+            foreach (World_Turn turn in turnList) { turn.transform.SetParent(turnPool); } // Move all turn obj back to pool
+            cardHandler.ResetCards(); // Reset player cards
+
+            // If all enemies died
+            if (!(turnList.Find((turn) => turn.GetOwner() != player.GetEntity()))) {
+                Debug.Log("Player Won!");
+
+                mapHandler.EnableMap();
+            }
+            else { // If player died
+                Debug.Log("Player Lost!");
+            }
         }
     }
 
@@ -137,13 +162,24 @@ public class World_Turns : MonoBehaviour {
         turnList.Add(newTurn); // Add newTurn to turnList
     }
 
+    // Destroy every enemy in enemyParent
+    private void ClearEnemyParent() {
+        foreach (Transform child in enemyParent) { 
+            child.SetParent(enemyTrash);
+            Destroy(child.gameObject); 
+        }
+    }
+
     void Awake() {
+        //! Sanity Checks
+        if (!player) Debug.LogError("World_Turns does not have Player.cs!"); 
+        if (!cardHandler) Debug.LogError("World_Turns does not have Player_Cards.cs!"); 
+        if (!mapHandler) mapHandler = this.GetComponent<World_Map>();
+
         turnPool.gameObject.SetActive(false);
         turnParent.gameObject.SetActive(true);
-        
-        // Destroy every GO in enemyParent
-        // enemyParent will be populated in the future
-        foreach (Transform child in enemyParent) { Destroy(child.gameObject); }
+
+        ClearEnemyParent(); // Destroy every GO in enemyParent
         
         // Destroy any GOs that do not have World_Turn component in turnPool
         foreach (Transform child in turnPool) {

@@ -12,16 +12,14 @@ public class World_Map : MonoBehaviour {
     [SerializeField] private World_EnemyLibrary enemyLibrary;
 
     // Stats
-    [SerializeField] private int currLayer = 0;
     [SerializeField] private MapLocale currLocale = MapLocale.TEST;
+    [SerializeField] private int currLayer = 0;
+    private World_MapNode currMapNode = null; // The current map node that the player selected. Null means player hasn't selected their first node
     
     [Header("Important Stuff")]
     [SerializeField] private GameObject mapParent;
     [SerializeField] private GameObject mapNodePrefab; // Sprite holder and clickable object
     [SerializeField] private Transform nodePool, nodeParent;
-    
-    // The current map node that the player selected. Null means player hasn't selected their first node
-    private World_MapNode currMapNode;
 
     // A 2D array that represents an array of "layers" each containing an array of map nodes the player can traverse
     // Each player can only go to MapNodes on the next layer from where they are currently on but only certain nodes are valid
@@ -29,6 +27,33 @@ public class World_Map : MonoBehaviour {
 
     // Getters
     // public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
+
+    public void EnableMap() {
+        UpdateMapUI();
+
+        mapParent.SetActive(true);
+    }
+    
+    private void UpdateMapUI() {
+        for (int x = 0; x < map.Count; x++) {
+            for (int y = 0; y < map[x].Count; y++) {
+                World_MapNode currNode = map[x][y];
+
+                // Allow only specific map nodes to be moved onto
+                // Unless it's the first layer where the player has not selected a node before, only the current node and it's next nodes can be moved onto
+                if (
+                    (currMapNode == null && x == 0) || // Current node hasn't been picked and is first layer
+                    currNode == currMapNode || // Is current node
+                    (x == currLayer && currMapNode.GetNextNodes().Contains(currNode)) // Is next layer and current node has been picked and the node is the next node of the current node
+                ) {
+                    currNode.EnableNode(currNode == currMapNode);
+                }
+                else {
+                    currNode.DisableNode();
+                }
+            }
+        }
+    }
 
     // Generates a tree that will be used as the map
     private void GenerateMap() {
@@ -180,23 +205,6 @@ public class World_Map : MonoBehaviour {
         }
     }
     
-    private void UpdateMapUI() {
-        for (int x = 0; x < map.Count; x++) {
-            for (int y = 0; y < map[x].Count; y++) {
-                World_MapNode currNode = map[x][y];
-
-                // Allow only specific map nodes to be moved onto
-                // Unless it's the first layer where the player has not selected a node before, only the current node and it's next nodes can be moved onto
-                if ((x == currLayer && (currMapNode == null || currNode == currMapNode)) || (x == currLayer + 1 && currMapNode != null && currMapNode.GetNextNodes().Contains(currNode))) {
-                    currNode.EnableNode();
-                }
-                else {
-                    currNode.DisableNode();
-                }
-            }
-        }
-    }
-    
     // Button function
     void MoveToNode(World_MapNode newNode) {
         Debug.Log("Moving to map node " + newNode.gameObject.name);
@@ -204,7 +212,7 @@ public class World_Map : MonoBehaviour {
         currMapNode = newNode;
         currLayer++;
 
-        turnsHandler.SetupEncounter(newNode); // Setup the encounter first before disabling map UI
+        turnsHandler.StartEncounter(newNode); // Setup the encounter first before disabling map UI
         mapParent.SetActive(false);
     }
 
