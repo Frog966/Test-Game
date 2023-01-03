@@ -14,6 +14,7 @@ public class Card_Test : MonoBehaviour, ICard {
     [Header("Card Stats")]
     [SerializeField] private CardRarity rarity;
     [SerializeField] private bool isExiled;
+    [SerializeField] private bool isUpgraded;
     [SerializeField] private Sprite image;
     [SerializeField] private string id, desc;
     [SerializeField] private int cost, dmg, noOfHits = 1;
@@ -27,6 +28,7 @@ public class Card_Test : MonoBehaviour, ICard {
 
     public CardRarity Rarity { get => rarity; }
     public bool IsExiled { get => isExiled; }
+    public bool IsUpgraded { get => isUpgraded; }
     public string ID { get => id; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     public string Desc { get => desc; }
     public int Dmg { get => dmg; }

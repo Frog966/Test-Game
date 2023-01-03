@@ -23,6 +23,7 @@ public interface ICard {
     // Card Stats
     CardRarity Rarity { get; }
     bool IsExiled { get; }
+    bool IsUpgraded { get; }
     string ID { get; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     string Desc { get; }
     int Dmg { get; }
