@@ -96,7 +96,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &433137881901792053
 GameObject:
@@ -160,7 +160,6 @@ MonoBehaviour:
   icon_MiniBoss: {fileID: 21300000, guid: 3d30a64dab5f9234d9128296f0a8102b, type: 3}
   icon_Boss: {fileID: 21300000, guid: 4673eb2295e5f9e4087fc91140cf5288, type: 3}
   icon_Shop: {fileID: 21300000, guid: dab20d82957a54c48a3f7f6fb53c0a2f, type: 3}
-  encounter: []
 --- !u!114 &455237114373514012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +223,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &1748538813258539199
 MonoBehaviour:
@@ -454,7 +453,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &9202595874036698197
 GameObject:
@@ -552,5 +551,5 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
