@@ -218,6 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerControlled: 1
   telegraph: {fileID: 4418157573063630503}
+  animator: {fileID: 5360438667388820178}
   top: {fileID: 4427715048544785992}
   front: {fileID: 1243411890184048391}
   color_Player: {r: 0, g: 0.5058824, b: 1, a: 1}
