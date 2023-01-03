@@ -37,7 +37,6 @@ public class World_Turns : MonoBehaviour {
 
         // Set up turns
         //-----------------------------------------------------------------------------------------------------------------------------------------------
-
         // Set up first turn for player and enemy
         // Player always first
         CreateTurn(player.GetEntity());
@@ -47,6 +46,8 @@ public class World_Turns : MonoBehaviour {
 
         ArrangeTurnObjs();
         //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+        cardHandler.Shuffle(); // Shuffle player's deck before start of encounter
 
         StartCoroutine(StartTurn()); // Start 1st turn
     }
