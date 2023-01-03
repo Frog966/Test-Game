@@ -2,6 +2,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum CardRarity {
+    COMMON,
+    UNCOMMON,
+    RARE,
+    LEGENDARY,
+}
+
 //! This is the base interface for card scripts
 //! Do not modify this script unless you're sure you want to affect ALL cards
 public interface ICard {
@@ -14,6 +21,7 @@ public interface ICard {
     Card_Events EventHandler { get; }
 
     // Card Stats
+    CardRarity Rarity { get; }
     bool IsExiled { get; }
     string ID { get; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     string Desc { get; }

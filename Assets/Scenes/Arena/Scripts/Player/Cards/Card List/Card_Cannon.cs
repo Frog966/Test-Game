@@ -14,6 +14,7 @@ public class Card_Cannon : MonoBehaviour, ICard {
     [SerializeField] private Card_Events eventHandler;
 
     [Header("Card Stats")]
+    [SerializeField] private CardRarity rarity;
     [SerializeField] private bool isExiled;
     [SerializeField] private Sprite image;
     [SerializeField] private string id, desc;
@@ -26,6 +27,7 @@ public class Card_Cannon : MonoBehaviour, ICard {
     public Card_UI UIHandler { get => uiHandler; }
     public Card_Events EventHandler { get => eventHandler; }
 
+    public CardRarity Rarity { get => rarity; }
     public bool IsExiled { get => isExiled; }
     public string ID { get => id; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     public string Desc { get => desc; }
