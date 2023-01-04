@@ -27,6 +27,9 @@ public class Player_Cards : MonoBehaviour {
 
     // Getters
     public Transform GetPlayParent() { return cardParent_Play; }
+    public List<ICard> GetGY() { return gy; }
+    public List<ICard> GetDeck() { return deck; }
+    public List<ICard> GetExile() { return exile; }
 
     public void Shuffle() {
         System.Random rng = new System.Random();
@@ -193,7 +196,7 @@ public class Player_Cards : MonoBehaviour {
         foreach (Transform child in cardParent_Play) { Destroy(child.gameObject); }
         foreach (Transform child in cardParent_Hand) { Destroy(child.gameObject); }
         foreach (Transform child in cardParent_Exile) { Destroy(child.gameObject); }
-        
+
         UpdateNoOfCards_GY();
         UpdateNoOfCards_Hand();
         UpdateNoOfCards_Deck();
@@ -367,6 +370,12 @@ public class Player_Cards : MonoBehaviour {
             "Cannon",
             "Cannon",
             "Cannon",
+            "Minigun",
+            "Minigun",
+            "Minigun",
+            "Minigun",
+            "LookItUp",
+            "LookItUp",
         });
 
         ResetCards();
