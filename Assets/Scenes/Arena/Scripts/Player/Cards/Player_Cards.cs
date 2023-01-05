@@ -360,12 +360,6 @@ public class Player_Cards : MonoBehaviour {
     void Start() {
         // Testing only!
         Deck.SetDeck(new List<string>() {
-            // "Test",
-            // "Test",
-            // "Test",
-            // "Test",
-            // "Test",
-            // "Test",
             "Cannon",
             "Cannon",
             "Cannon",
