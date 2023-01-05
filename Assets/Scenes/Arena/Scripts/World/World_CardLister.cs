@@ -54,45 +54,19 @@ public class World_CardLister : MonoBehaviour {
 
         if (cardList.Count > 0) {
             // Generate enough cards in pool first
-            if (cardList.Count > cardPool.childCount) { InstantiateCardsIntoPool(cardList.Count - cardPool.childCount); }
+            if (cardList.Count > cardPool.childCount) { InstantiateCardsIntoPool(cardList.Count - cardPool.childCount); }     
 
-            // Local pos calculations for each card in selected pile
-            // rowSize determines how many cards will be in a row. Might be useful if resolutions change
-            //-------------------------------------------------------------------------------------------------------------------------------------------------
-            Rect cardRect = cardList[0].GameObj.GetComponent<RectTransform>().rect;
-
-            float cardPaddingX = 10.0f;
-            float cardPaddingY = 10.0f;
-
-            float contentWidth = scrollRect.content.rect.width;
-            float contentHeight = scrollRect.content.rect.height;
-            float cardWidth = cardRect.width + cardPaddingX;
-            float cardHeight = cardRect.height + cardPaddingY;
-            int rowSize = (int)(contentWidth / cardWidth);
-            float startX = (-cardWidth * (float)rowSize / 2.0f) + (cardWidth / 2.0f);
-            float startY = (contentHeight / 2.0f) + (cardHeight / 2.0f);
-
-            int x = 0;
-            int y = 0;
-            
+            // Adding cards to content
+            // Positioning will be handled by content's GridLayoutGroup component     
             foreach (ICard card in cardList) {
                 Transform currCard = cardPool.GetChild(0);
 
-                currCard.SetParent(scrollRect.content);
-                currCard.localPosition = new Vector2(startX + (cardWidth * (float)x), (startY / 2.0f) + (cardHeight * (float)y));
-                
+                currCard.SetParent(scrollRect.content);                
                 currCard.GetComponent<Card_UI>().Setup(card);
-
-                // Once the loop reached the end of row, reset x and add 1 to y (Move to next column and start again)
-                if (x + 1 >= rowSize - 1) {
-                    x = 0;
-                    y ++;
-                }
-                else { x ++; }
             }
-            //-------------------------------------------------------------------------------------------------------------------------------------------------
             
             uiObj.SetActive(true);
+            scrollRect.verticalNormalizedPosition = 1.0f;
         }
         else {
             Debug.Log("No cards found in " + listType);
@@ -100,7 +74,10 @@ public class World_CardLister : MonoBehaviour {
     }
 
     private void InstantiateCardsIntoPool(int no = 1) {
-        for (int i = 0; i < no; i ++) { GameObject.Instantiate(cardPrefab, cardPool); }
+        for (int i = 0; i < no; i ++) {
+            GameObject newCard = GameObject.Instantiate(cardPrefab, cardPool); 
+            newCard.GetComponent<Card_Events>().enabled = false; // Disable the new card's Card_Events script
+        }
     }
 
     void Awake() {
