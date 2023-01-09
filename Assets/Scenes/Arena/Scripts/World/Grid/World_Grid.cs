@@ -6,36 +6,14 @@ using Game.Unit;
 
 // This script contains the World_Grid static class
 // The MonoBehaviour class is simply to initialize some things required by World_Grid
-public class World_GridInit : MonoBehaviour {
-    [SerializeField] private World_Turns turnsHandler;
+public class World_Grid : MonoBehaviour {
     [SerializeField] private Transform gridNodeParent;
-
-    // Grid array must be initialized before Start()
-    void Awake() {
-        int childCounter = 0;
-
-        // Store/Init all grid nodes into "grid" 2d array
-        for(int x = 0; x < World_Grid.GetRow(); x++) {
-            for(int y = 0; y < World_Grid.GetCol(); y++) {
-                // Debug.Log("Node [" + x + ", " + y + "]: " + childCounter);
-                
-                World_GridNode currNode = World_Grid.RecordNode(gridNodeParent.GetChild(childCounter).GetComponent<World_GridNode>(), x, y);
-
-                currNode.gameObject.name = "Node [" + x + ", " + y + "]"; // Set node name for easier debugging
-                currNode.SetIsPlayerControlled(x < 3); // Set right half of grid to enemy control
-
-                childCounter++;
-            }
-        }
-
-        World_Grid.SetTurnsHandler(turnsHandler);
-    }
-}
-
-// Stores information about the grid
-// Handles movement and combat which is tied to the grid
-public static class World_Grid {
+    
     private static World_Turns turnsHandler;
+    
+    // Singleton instance
+    // Set to private to quietly check for only one instance of this class to delete any extra World_Grid.cs scripts in the scene
+    private static World_Grid Inst { get; set; }
 
     private static int row = 6, col = 3;
     private static World_GridNode[,] grid = new World_GridNode[row, col]; // A 2D array that goes from left to right, top to bottom;
@@ -58,16 +36,15 @@ public static class World_Grid {
     public static bool IsThereAnEntity(int hereX, int hereY) { return IsThereAnEntity(new Vector2Int(hereX, hereY)); }
 
     // Setters
-    public static void SetTurnsHandler(World_Turns handler) { turnsHandler = handler; }
     public static World_GridNode RecordNode(World_GridNode node, int x, int y) { 
         grid[x, y] = node; 
 
         return grid[x, y]; // Returns recorded node
     }
-
+    
     private static bool isCoorInGrid(int x, int y) { return (x >= 0 && x < row && y >= 0 && y < col); }
     private static bool isCoorInGrid(Vector2Int vec2) { return isCoorInGrid(vec2.x, vec2.y); }
-
+    
     // A built-in container to hold all movement-related functions for World_Grid
     public static class Movement {
         // Set entities' grid position
@@ -270,5 +247,33 @@ public static class World_Grid {
 
             return entitiesPos.Keys.ToList().Where((entity) => targetFactions.Contains(entity.GetFaction())).ToList(); // Return entities that belong to the remain factions
         }
+    }
+
+    // Grid array must be initialized before Start()
+    void Awake() {
+        // Instance declaration
+        if (Inst != null && Inst != this) { Destroy(this); }
+        else { Inst = this; }
+        
+        // Sanity checks
+        if (!turnsHandler) turnsHandler = this.GetComponent<World_Turns>();
+
+        // Store/Init all grid nodes into "grid" 2d array
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        int childCounter = 0;
+
+        for(int x = 0; x < GetRow(); x++) {
+            for(int y = 0; y < GetCol(); y++) {
+                // Debug.Log("Node [" + x + ", " + y + "]: " + childCounter);
+                
+                World_GridNode currNode = RecordNode(gridNodeParent.GetChild(childCounter).GetComponent<World_GridNode>(), x, y);
+
+                currNode.gameObject.name = "Node [" + x + ", " + y + "]"; // Set node name for easier debugging
+                currNode.SetIsPlayerControlled(x < 3); // Set right half of grid to enemy control
+
+                childCounter++;
+            }
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     }
 }
