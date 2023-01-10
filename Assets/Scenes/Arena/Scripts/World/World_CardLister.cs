@@ -1,13 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class World_CardLister : MonoBehaviour {
     //! Handlers
+    [Header("Handlers")]
     [SerializeField] private Player_Cards cardsHandler;
 
     // Misc. Stuff
+    [Header("Misc. Stuff")]
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private GameObject uiObj;
     [SerializeField] private Text title;
@@ -28,55 +29,61 @@ public class World_CardLister : MonoBehaviour {
 
     public void CloseList() {
         uiObj.SetActive(false);
-            
-        foreach (Transform card in scrollRect.content) { card.SetParent(cardPool); } // Move cards back into card pool
+        
+        while (scrollRect.content.childCount > 0) { scrollRect.content.GetChild(0).SetParent(cardPool); } // Move cards back into card pool
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     private void DisplayPile(ListType listType) {
-        List<ICard> cardList;
+        // Do not display card list when an animation is playing as player could be using a card which would affect the card lists
+        if (!World_AnimHandler.isAnimating) {            
+            // Determine which card list we're getting from Player_Cards.cs
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+            List<Card_Stats> cardList;
 
-        switch (listType) {
-            case ListType.GY:
-                cardList = new List<ICard>(cardsHandler.GetGY());
-                title.text = "Discard Pile";
-            break;
-            case ListType.EXILE:
-                cardList = new List<ICard>(cardsHandler.GetExile());
-                title.text = "Exile Pile";
-            break;
-            default:
-                cardList = new List<ICard>(cardsHandler.GetDeck());
-                cardList.Sort((card1, card2) => card1.ID.CompareTo(card2.ID));
-                title.text = "Deck Pile";
-            break;
-        }
-
-        if (cardList.Count > 0) {
-            // Generate enough cards in pool first
-            if (cardList.Count > cardPool.childCount) { InstantiateCardsIntoPool(cardList.Count - cardPool.childCount); }     
-
-            // Adding cards to content
-            // Positioning will be handled by content's GridLayoutGroup component     
-            foreach (ICard card in cardList) {
-                Transform currCard = cardPool.GetChild(0);
-
-                currCard.SetParent(scrollRect.content);                
-                currCard.GetComponent<Card_UI>().Setup(card);
+            switch (listType) {
+                case ListType.GY:
+                    cardList = new List<Card_Stats>(cardsHandler.GetGY());
+                    title.text = "Discard Pile";
+                break;
+                case ListType.EXILE:
+                    cardList = new List<Card_Stats>(cardsHandler.GetExile());
+                    title.text = "Exile Pile";
+                break;
+                default:
+                    cardList = new List<Card_Stats>(cardsHandler.GetDeck());
+                    cardList.Sort((card1, card2) => card1.ID.CompareTo(card2.ID)); // Only deck list is sorted alphabetically to avoid people learning deck order
+                    title.text = "Deck Pile";
+                break;
             }
-            
-            uiObj.SetActive(true);
-            scrollRect.verticalNormalizedPosition = 1.0f;
-        }
-        else {
-            Debug.Log("No cards found in " + listType);
+            //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+            if (cardList.Count > 0) {
+                // Generate enough cards in pool first
+                if (cardList.Count > cardPool.childCount) { InstantiateCardsIntoPool(cardList.Count - cardPool.childCount); }     
+
+                // Adding cards to content
+                // Positioning will be handled by content's GridLayoutGroup component     
+                foreach (Card_Stats card in cardList) {
+                    Transform currCard = cardPool.GetChild(0);
+
+                    currCard.SetParent(scrollRect.content);
+                    currCard.GetComponent<Card_Stats>().Copy(card);
+                }
+                
+                uiObj.SetActive(true);
+                scrollRect.verticalNormalizedPosition = 1.0f;
+            }
+            else {
+                Debug.Log("No cards found in " + listType);
+            }
         }
     }
 
     private void InstantiateCardsIntoPool(int no = 1) {
         for (int i = 0; i < no; i ++) {
             GameObject newCard = GameObject.Instantiate(cardPrefab, cardPool); 
-            newCard.GetComponent<Card_Events>().enabled = false; // Disable the new card's Card_Events script
+            newCard.GetComponent<Card_Stats>().cardType = Card_Stats.CardType.DISPLAY; // Set the card to display
         }
     }
 

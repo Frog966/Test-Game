@@ -133,11 +133,13 @@ public class World_Grid : MonoBehaviour {
                     // Entity dies here
                     if (entity.GetHealth() <= 0) {
                         Debug.Log(entity.gameObject.name + " has died!");
+
+                        entity.OnDeath(); // The entity disables itself here
                         
                         entitiesPos.Remove(entity); // Remove entity from the library
                         turnsHandler.RemoveAllTurnsByEntity(entity); // Remove all turns by said entity
 
-                        entity.OnDeath(); // The entity destroys itself here
+                        turnsHandler.HasEncounterEnded(); // Check if encounter has ended
                     }
                 }
             }

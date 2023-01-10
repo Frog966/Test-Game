@@ -8,6 +8,14 @@ namespace Game {
             NEUTRAL,
         }
     }
+    namespace Card {
+        public enum CardRarity {
+            COMMON,
+            UNCOMMON,
+            RARE,
+            LEGENDARY,
+        }
+    }
     namespace Map {
         public enum MapLocale {
             TEST = 0,

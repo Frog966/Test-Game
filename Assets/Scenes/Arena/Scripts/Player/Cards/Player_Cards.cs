@@ -13,23 +13,25 @@ public class Player_Cards : MonoBehaviour {
     [SerializeField] private Player_CardLibrary cardLibrary;
 
     [Header("Card Parents")]
-    [SerializeField] private Transform cardParent_Play; // A parent to temporarily hold the played card as well as act as their tween targets
-    [SerializeField] private Transform cardParent_Deck, cardParent_Hand, cardParent_GY, cardParent_Exile;
+    [SerializeField] private Transform cardUI; // A parent to temporarily hold the played card as well as act as their tween targets
+    [SerializeField] private Transform cardParent_Play, cardParent_Deck, cardParent_Hand, cardParent_GY, cardParent_Exile;
 
     [Header("Text Fields")]
     [SerializeField] private Text textDeck;
     [SerializeField] private Text textHand, textGY, textExile;
 
-    private List<ICard> gy = new List<ICard>(); // Lists all card prefabs in GY
-    private List<ICard> deck = new List<ICard>(); // Lists all card prefabs in deck
-    private List<ICard> hand = new List<ICard>(); // Lists all card prefabs in hand
-    private List<ICard> exile = new List<ICard>(); // Lists all card prefabs in exile
+    private List<Card_Stats> gy = new List<Card_Stats>(); // Lists all card prefabs in GY
+    private List<Card_Stats> deck = new List<Card_Stats>(); // Lists all card prefabs in deck
+    private List<Card_Stats> hand = new List<Card_Stats>(); // Lists all card prefabs in hand
+    private List<Card_Stats> exile = new List<Card_Stats>(); // Lists all card prefabs in exile
 
     // Getters
-    public Transform GetPlayParent() { return cardParent_Play; }
-    public List<ICard> GetGY() { return gy; }
-    public List<ICard> GetDeck() { return deck; }
-    public List<ICard> GetExile() { return exile; }
+    public List<Card_Stats> GetGY() { return gy; }
+    public List<Card_Stats> GetDeck() { return deck; }
+    public List<Card_Stats> GetExile() { return exile; }
+    public Transform GetCardParent_GY() { return cardParent_GY; }
+    public Transform GetCardParent_Deck() { return cardParent_Deck; }
+    public Transform GetCardParent_Exile() { return cardParent_Exile; }
 
     public void Shuffle() {
         System.Random rng = new System.Random();
@@ -38,7 +40,7 @@ public class Player_Cards : MonoBehaviour {
         while (n > 1) {  
             n--;  
             int k = rng.Next(n + 1);  
-            ICard value = deck[k];  
+            Card_Stats value = deck[k];  
             deck[k] = deck[n];  
             deck[n] = value;
         }
@@ -58,10 +60,10 @@ public class Player_Cards : MonoBehaviour {
                 //! Only shuffle GY into deck when the deck is empty which means you have to draw cards 1 by 1 until deck is empty first
                 if (gy.Count > 0) {
                     // Add each card listed in gy to deck then clear gy 
-                    foreach (ICard card in gy) {
+                    foreach (Card_Stats card in gy) {
                         deck.Add(card);
-                        card.GameObj.transform.SetParent(cardParent_Deck);
-                        card.GameObj.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
+                        card.transform.SetParent(cardParent_Deck);
+                        card.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
                     }
 
                     gy.Clear();
@@ -80,21 +82,20 @@ public class Player_Cards : MonoBehaviour {
 
             // We're updating the deck and hand lists as we move cards between them each time we draw a card
             // Therefore, only the top card of the deck (deck[0]) is accessed
-            ICard currCard = deck[0]; 
-            GameObject currCardObj = currCard.GameObj;
+            Card_Stats currCard = deck[0]; 
 
             hand.Add(currCard);
             deck.RemoveAt(0);
 
-            currCardObj.transform.SetParent(cardParent_Hand);
-            currCardObj.SetActive(true);
+            currCard.transform.SetParent(cardParent_Hand);
+            currCard.gameObject.SetActive(true);
 
             // Debug.Log("Draw " + (i + 1));
 
             // Card position in hand
-            Vector2 newPos = GetCardHandPos(currCardObj.transform, cardParent_Hand.childCount - 1);
+            Vector2 newPos = GetCardHandPos(currCard.transform, cardParent_Hand.childCount - 1);
 
-            currCardObj.transform.DOLocalMove(newPos, tweenDur);
+            currCard.transform.DOLocalMove(newPos, tweenDur);
             currCard.EventHandler.SetCardLocalStartPos(newPos);
 
             UpdateNoOfCards_Hand();
@@ -107,19 +108,19 @@ public class Player_Cards : MonoBehaviour {
     }
 
     // Discard cards
-    public IEnumerator Discard(List<ICard> discardedCards) {
+    public IEnumerator Discard(List<Card_Stats> discardedCards) {
         if (discardedCards.Count > 0) {
             float tweenDur = 0.2f;
 
-            gy = new List<ICard>(gy.Concat(discardedCards).ToList()); // Pass discarded cards to GY
-            hand = new List<ICard>(hand.Where((card) => !discardedCards.Contains(card)).ToList()); // Remove discarded cards from hand
+            gy = new List<Card_Stats>(gy.Concat(discardedCards).ToList()); // Pass discarded cards to GY
+            hand = new List<Card_Stats>(hand.Where((card) => !discardedCards.Contains(card)).ToList()); // Remove discarded cards from hand
 
             UpdateNoOfCards_Hand();
 
             // Move cards to cardParent_GY
             //--------------------------------------------------------------------------------------------------------------------------------------------------
-            foreach (ICard card in discardedCards) {
-                Transform cardTrans = card.GameObj.transform;
+            foreach (Card_Stats card in discardedCards) {
+                Transform cardTrans = card.transform;
 
                 cardTrans.SetParent(cardParent_GY);
                 cardTrans.DOLocalMove(Vector2.zero, tweenDur);
@@ -127,7 +128,7 @@ public class Player_Cards : MonoBehaviour {
             
             yield return World_AnimHandler.WaitForSeconds(tweenDur);
 
-            foreach (ICard card in discardedCards) { card.GameObj.SetActive(false); }
+            foreach (Card_Stats card in discardedCards) { card.gameObject.SetActive(false); }
 
             UpdateNoOfCards_GY();
             //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -138,37 +139,53 @@ public class Player_Cards : MonoBehaviour {
     public IEnumerator DiscardHand() { yield return Discard(hand); }
 
     // Adds a card prefab to cardParent_Deck + Registers card to deck card list
-    //! These cards are temporary and will be cleared out when the battle ends unless called by Deck.InstantiateDeck()
-    public void CreateCard_Deck(string id) {
-        ICard cardPrefab = cardLibrary.GetCardByID(id);
+    // Returns the card that was created
+    public Card_Stats CreateCard_Deck(string id) {
+        Card_Stats cardStats = cardLibrary.GetCardByID(id);
 
-        if (cardPrefab != null) {
-            GameObject newCard = GameObject.Instantiate(cardPrefab.GameObj, cardParent_Deck);
+        if (cardStats != null) {
+            GameObject newCard = GameObject.Instantiate(cardStats.gameObject, cardParent_Deck);
+            Card_Stats newCardScript = newCard.GetComponent<Card_Stats>();
+
             newCard.SetActive(false); // Cards are created disabled
             newCard.transform.localPosition = Vector3.zero;
             
-            deck.Add(newCard.GetComponent<ICard>());
+            deck.Add(newCardScript);
             
             UpdateNoOfCards_Deck();
+
+            return newCardScript;
         }
-        else { Debug.LogError("Cannot add card ID '" + id + "' to deck!"); }
+        else { 
+            Debug.LogError("Cannot add card ID '" + id + "' to deck!"); 
+
+            return null;
+        }
     }
 
     // Adds a card prefab to cardParent_GY + Registers card to gy card list
-    //! These cards are temporary and will be cleared out when the battle ends
-    public void CreateCard_GY(string id) {
-        ICard cardPrefab = cardLibrary.GetCardByID(id);
+    // Returns the card that was created
+    public Card_Stats CreateCard_GY(string id) {
+        Card_Stats cardPrefab = cardLibrary.GetCardByID(id);
 
         if (cardPrefab != null) {
-            GameObject newCard = GameObject.Instantiate(cardPrefab.GameObj, cardParent_GY);
+            GameObject newCard = GameObject.Instantiate(cardPrefab.gameObject, cardParent_GY);
+            Card_Stats newCardScript = newCard.GetComponent<Card_Stats>();
+
             newCard.SetActive(false); // Cards are created disabled
             newCard.transform.localPosition = Vector3.zero;
             
-            gy.Add(newCard.GetComponent<ICard>());
+            gy.Add(newCardScript);
             
             UpdateNoOfCards_GY();
+
+            return newCardScript;
         }
-        else { Debug.LogError("Cannot add card ID '" + id + "' to GY!"); }
+        else { 
+            Debug.LogError("Cannot add card ID '" + id + "' to deck!"); 
+
+            return null;
+        }
     }
 
     // Clears out all parents and recreate the deck
@@ -181,14 +198,15 @@ public class Player_Cards : MonoBehaviour {
 
         foreach (Transform child in cardParent_Deck) { child.SetParent(cardParent_GY); } // Move cards from cardParent_Deck to cardParent_GY first
 
-        deck = new List<ICard>(Deck.GetDeckCards()); // Reregisters all cards from deckCards into deck
+        deck = new List<Card_Stats>(Deck.GetDeckCards()); // Reregisters all cards from deckCards into deck
 
         // Move cards that are registered as default deck cards back into cardParent_Deck
-        foreach (ICard card in deck) { 
-            Transform currCard = card.GameObj.transform;
+        foreach (Card_Stats card in deck) { 
+            Transform currCard = card.transform;
 
             currCard.SetParent(cardParent_Deck); 
             currCard.localPosition = Vector3.zero;
+            card.gameObject.SetActive(false);
         }
         
         // Destroy every other card
@@ -204,12 +222,36 @@ public class Player_Cards : MonoBehaviour {
     }
 
     // Just a wrapper so that Player_Cards is the one performing the coroutine and not the card itself
-    public void ResolveCard(ICard playedCard) { StartCoroutine(ResolveCard_Anim(playedCard)); }
+    public void ResolveCard(Card_Stats playedCard) { StartCoroutine(ResolveCard_Anim(playedCard)); }
 
-    private IEnumerator ResolveCard_Anim(ICard playedCard) {
+    // public IEnumerator CardUI_Enter() {
+    //     float tweenDur = 0.2f;
+
+    //     cardUI.DOLocalMoveY(0, tweenDur);
+
+    //     yield return World_AnimHandler.WaitForSeconds(tweenDur);
+    // }
+
+    public void CardUI_Enter() {
+        cardUI.localPosition = Vector2.zero;
+    }
+
+    public IEnumerator CardUI_Exit() {
+        World_AnimHandler.isAnimating = true;
+
+        float tweenDur = 0.2f;
+
+        cardUI.DOLocalMoveY(-100, tweenDur);
+
+        yield return World_AnimHandler.WaitForSeconds(tweenDur);
+        
+        World_AnimHandler.isAnimating = false;
+    }
+
+    private IEnumerator ResolveCard_Anim(Card_Stats playedCard) {
         World_AnimHandler.isAnimating = true;
         
-        Transform cardTrans = playedCard.GameObj.transform;
+        Transform cardTrans = playedCard.transform;
 
         // Move card to cardParent_Play
         //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -264,10 +306,6 @@ public class Player_Cards : MonoBehaviour {
         // Finish resolving card
         //--------------------------------------------------------------------------------------------------------------------------------------------------        
         cardTrans.gameObject.SetActive(false); // Disable card after card effect
-        // cardTrans.localPosition = Vector3.zero; // Set card pos
-        
-        // UpdateNoOfCards_Hand();
-        // UpdateNoOfCards_Deck(); // Also update deck card counter in case played card adds cards to deck
 
         World_AnimHandler.isAnimating = false;
         //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -278,13 +316,13 @@ public class Player_Cards : MonoBehaviour {
             Transform card = cardParent_Hand.GetChild(i);
             Vector2 newPos = GetCardHandPos(card, i);
 
-            card.GetComponent<ICard>().EventHandler.SetCardLocalStartPos(newPos); // Set card position in hand
+            card.GetComponent<Card_Stats>().EventHandler.SetCardLocalStartPos(newPos); // Set card position in hand
             card.transform.DOLocalMove(newPos, 0.2f);
         }
     }
 
     private Vector2 GetCardHandPos(Transform card, int multiplier) {
-        ICard cardScript = card.GetComponent<ICard>();
+        Card_Stats cardScript = card.GetComponent<Card_Stats>();
 
         return new Vector2((-(cardScript.UIHandler.GetWidthOffset() * multiplier) - cardScript.UIHandler.GetWidthOffset()), 0.0f);
     }
@@ -299,11 +337,11 @@ public class Player_Cards : MonoBehaviour {
         private static Player_CardLibrary cardLibrary;
 
         private static List<string> deckIDs = new List<string>(); // Holds all of player deck cards as IDs
-        private static List<ICard> deckCards = new List<ICard>(); // A record of every single card belonging to the deck. Any card not under this list will be destroyed when resetting the cards
+        private static List<Card_Stats> deckCards = new List<Card_Stats>(); // A record of every single card belonging to the deck. Any card not under this list will be destroyed when resetting the cards
 
         // Getters
         public static List<string> GetDeckIDs() { return deckIDs; }
-        public static List<ICard> GetDeckCards() { return deckCards; }
+        public static List<Card_Stats> GetDeckCards() { return deckCards; }
 
         public static void SetDeck(List<string> newDeck) {
             // Remove any invalid card IDs from newDeck
@@ -320,18 +358,21 @@ public class Player_Cards : MonoBehaviour {
             // Instantiate card objs into deck
             foreach (string id in deckIDs) { cardsHandler.CreateCard_Deck(id); }
 
-            deckCards = new List<ICard>(cardsHandler.deck); // Registers all cards in deckCards
+            deckCards = new List<Card_Stats>(cardsHandler.deck); // Registers all cards in deckCards
         }
 
         // The only way to permanently add a card to deck
-        public static void AddCardToDeck(ICard card) {
-            deckIDs.Add(card.ID);
-            cardsHandler.CreateCard_Deck(card.ID);
+        public static void AddCardToDeck(string cardID) {
+            Debug.Log("Added card '" + cardID + "' to deck!");
+
+            deckIDs.Add(cardID);
+            deckCards.Add(cardsHandler.CreateCard_Deck(cardID)); // Creates a new card into deck and adds said card into deckCards so it's a permanent card
+            
         }
 
         // The only way to permanently remove a card from deck
         // No need to remove the card from any lists as ResetCards() will handle that if called on start of encounter
-        public static void RemoveCardFromDeck(ICard card) {
+        public static void RemoveCardFromDeck(Card_Stats card) {
             deckIDs.Remove(card.ID);
         }
 

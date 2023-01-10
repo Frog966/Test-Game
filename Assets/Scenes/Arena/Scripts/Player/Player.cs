@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using Game.Unit;
 
 // C# does not allow multiple inheritance so we're attaching an Entity interface to Player script so that we can use a single type to handle turns
 public class Player : MonoBehaviour {

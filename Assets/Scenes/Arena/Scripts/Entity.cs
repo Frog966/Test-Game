@@ -22,6 +22,6 @@ public class Entity : MonoBehaviour {
     }
 
     public virtual void OnDeath() {
-        Destroy(this.gameObject); // Remember to always destroy the GO on death. It should be the last function to call
+        this.gameObject.SetActive(false);
     }
 }

@@ -7,8 +7,8 @@ public class World_Turns : MonoBehaviour {
     // Handlers
     [SerializeField] private Player player;
     [SerializeField] private Player_Cards cardHandler;
-    [SerializeField] private World_Map mapHandler;
 
+    [SerializeField] private GameObject nextMapNodeButton;
     [SerializeField] private Transform enemyParent;
     [SerializeField] private Transform enemyTrash; // The transform to pool enemies to be destroyed
 
@@ -23,10 +23,10 @@ public class World_Turns : MonoBehaviour {
     public void StartEncounter(World_MapNode currMapNode) {
         // Set up units
         //-----------------------------------------------------------------------------------------------------------------------------------------------
-        // cardHandler.ResetCards(); // Reset player cards
         World_Grid.Movement.SetGridPos(player.GetEntity(), Vector2Int.one); // Reset player pos
 
         ClearEnemyParent(); // Destroy every GO in enemyParent
+        cardHandler.ResetCards(); // Reset player cards
 
         // Instantiate and set enemies' pos
         foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
@@ -49,7 +49,26 @@ public class World_Turns : MonoBehaviour {
 
         cardHandler.Shuffle(); // Shuffle player's deck before start of encounter
 
+        cardHandler.CardUI_Enter();
         StartCoroutine(StartTurn()); // Start 1st turn
+    }
+
+    // End the encounter if possible
+    public void HasEncounterEnded() {
+        // If all enemies died
+        if (!(turnList.Find((turn) => turn.GetOwner() != player.GetEntity()))) {
+            Debug.Log("Player Won!");
+
+            foreach (Transform enemy in enemyParent) { Destroy(enemy.gameObject); } // Destroy all enemies if player won
+            foreach (World_Turn turn in turnList) { turn.transform.SetParent(turnPool); } // Move all turn obj back to pool
+
+            StartCoroutine(cardHandler.CardUI_Exit());
+
+            nextMapNodeButton.SetActive(true);
+        }
+        else { // If player died
+            Debug.Log("Player Lost!");
+        }
     }
 
     // Remove all turns that belong to entity param
@@ -60,6 +79,9 @@ public class World_Turns : MonoBehaviour {
         turnList.RemoveAll((turn) => removableTurns.Contains(turn)); // Remove said turns from turn list
     }
 
+    // Used as button function
+    public void DisableNextMapNodeButton() { nextMapNodeButton.SetActive(false); }
+
     // End current turn
     // Perform certain buff/debuff updates here
     public void EndTurn() {
@@ -69,20 +91,6 @@ public class World_Turns : MonoBehaviour {
         // Only start turn if there's a player and enemy
         if (turnList.Find((turn) => turn.GetOwner() == player.GetEntity()) && turnList.Find((turn) => turn.GetOwner() != player.GetEntity())) {
             StartCoroutine(StartTurn()); // Start the next turn which is the new current
-        }
-        else {
-            foreach (World_Turn turn in turnList) { turn.transform.SetParent(turnPool); } // Move all turn obj back to pool
-            cardHandler.ResetCards(); // Reset player cards
-
-            // If all enemies died
-            if (!(turnList.Find((turn) => turn.GetOwner() != player.GetEntity()))) {
-                Debug.Log("Player Won!");
-
-                mapHandler.EnableMap();
-            }
-            else { // If player died
-                Debug.Log("Player Lost!");
-            }
         }
     }
 
@@ -175,10 +183,10 @@ public class World_Turns : MonoBehaviour {
         //! Sanity Checks
         if (!player) Debug.LogError("World_Turns does not have Player.cs!"); 
         if (!cardHandler) Debug.LogError("World_Turns does not have Player_Cards.cs!"); 
-        if (!mapHandler) mapHandler = this.GetComponent<World_Map>();
 
         turnPool.gameObject.SetActive(false);
         turnParent.gameObject.SetActive(true);
+        nextMapNodeButton.SetActive(false);
 
         ClearEnemyParent(); // Destroy every GO in enemyParent
         

@@ -28,6 +28,7 @@ public class World_Map : MonoBehaviour {
     // Getters
     // public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
 
+    // Used as button function
     public void EnableMap() {
         UpdateMapUI();
 

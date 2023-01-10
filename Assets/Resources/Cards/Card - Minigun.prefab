@@ -1,80 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4027003960344860399
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3499660516013516670}
-  - component: {fileID: 4818910869033578748}
-  m_Layer: 0
-  m_Name: Card - Minigun
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3499660516013516670
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4027003960344860399}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4850096421268148143}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 90, y: 130}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4818910869033578748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4027003960344860399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5909b9c8fd36c764095c8f02a77b40b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiHandler: {fileID: 2667163542492552231}
-  eventHandler: {fileID: 3973473067295312545}
-  rarity: 0
-  isExiled: 0
-  isUpgraded: 0
-  image: {fileID: 0}
-  id: Minigun
-  desc: 
-  cost: 1
-  dmg: 10
-  noOfHits: 3
---- !u!1001 &8349192454022818001
+--- !u!1001 &8086147858864651789
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 3499660516013516670}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2616692353571187361, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
-      propertyPath: m_Offset.x
-      value: 0
+    - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: id
+      value: Minigun
       objectReference: {fileID: 0}
-    - target: {fileID: 2782027997789881445, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+    - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: dmg
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: cost
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: rarity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: noOfHits
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 54147918229441622, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: m_Text
-      value: Test
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3499660516013516670, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: m_Pivot.x
@@ -162,34 +117,56 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4027003960344860399, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: m_Name
-      value: CardBase
+      value: Card - Minigun
+      objectReference: {fileID: 0}
+    - target: {fileID: 5000246994660261003, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: m_Text
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7456626589853883689, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: m_Text
+      value: 10x3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7456626589853883689, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7456626589853883689, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7456626589853883689, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
---- !u!114 &2667163542492552231 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6259406796654572790, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
-  m_PrefabInstance: {fileID: 8349192454022818001}
+--- !u!1 &5176059181162817762 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4027003960344860399, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+  m_PrefabInstance: {fileID: 8086147858864651789}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &-5617985730734257152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5176059181162817762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be72fc513950edb408aa91c7d330ac64, type: 3}
+  m_Script: {fileID: 11500000, guid: 5909b9c8fd36c764095c8f02a77b40b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3973473067295312545 stripped
+  cardStats: {fileID: 8093334226866045974}
+--- !u!114 &8093334226866045974 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4970521528452964976, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
-  m_PrefabInstance: {fileID: 8349192454022818001}
+  m_CorrespondingSourceObject: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
+  m_PrefabInstance: {fileID: 8086147858864651789}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5176059181162817762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f411ee03eecd754cb08acbad0d5675b, type: 3}
+  m_Script: {fileID: 11500000, guid: a72298ec0fca1a041985190eb639df86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &4850096421268148143 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3499660516013516670, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
-  m_PrefabInstance: {fileID: 8349192454022818001}
-  m_PrefabAsset: {fileID: 0}
