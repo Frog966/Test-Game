@@ -75,14 +75,18 @@ public class World_EnemyLibrary : MonoBehaviour {
                     {
                         NodeType.MINI_BOSS,
                         new List<List<EncounterEnemyDetails>>() {
-                            new List<EncounterEnemyDetails>() {}
+                            new List<EncounterEnemyDetails>() {
+                                new EncounterEnemyDetails(ReturnEnemyById("Test Miniboss"), new Vector2Int(4, 1)),
+                            }
                         }
                     },
                     // All bosses of MapLocale.TEST
                     {
                         NodeType.BOSS,
                         new List<List<EncounterEnemyDetails>>() {
-                            new List<EncounterEnemyDetails>() {}
+                            new List<EncounterEnemyDetails>() {
+                                new EncounterEnemyDetails(ReturnEnemyById("Test Boss"), new Vector2Int(4, 1)),
+                            }
                         }
                     }
                 }

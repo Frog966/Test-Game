@@ -258,7 +258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5469419406887838645, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
       propertyPath: m_Name
-      value: Enemy - Dummy
+      value: Boss - Dummy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
@@ -278,7 +278,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5469419406887838645, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
   m_PrefabInstance: {fileID: 2503331607721406163}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4653137197196256972
+--- !u!114 &8974240087892532341
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,7 +287,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7591618910962617702}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd89f22ef20980848873c6e13b486a6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 60d7731a5d195c24989a6b87b6c3388e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 120481796723809344}

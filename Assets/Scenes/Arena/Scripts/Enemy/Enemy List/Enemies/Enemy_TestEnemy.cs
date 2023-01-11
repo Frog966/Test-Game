@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Unit;
 
 // C# does not allow multiple inheritance so we're attaching an IEnemy interface (which inherits Entity) to Enemy script so that we can use a single type to handle turns
 public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
-    [SerializeField] private string id = "Test Enemy";
     [SerializeField] private Entity entity;
+    private string id = "Test Enemy";
 
     // Properties
     public string ID { get => id; }
