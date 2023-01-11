@@ -6,6 +6,7 @@ using DG.Tweening;
 // Handles how each card behaves under mouse
 // Also includes how the card is played
 public class Card_Events : EventTrigger {
+    private Canvas canvas;
     private Card_Stats cardScript;
 
     private Vector2 startLocalPos; // Where the card's local pos is in player's hand
@@ -15,23 +16,7 @@ public class Card_Events : EventTrigger {
 
     // Setters
     public void SetCardLocalStartPos(Vector2 newPos) { startLocalPos = newPos; } // Sets the pos this card will return to when calling ReturnToHandPos()
-
-    // Constructor
-    public void Setup(Card_Stats _cardScript) {
-        cardScript = _cardScript;
-        
-        // Adding a double click event to this card
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------
-        EventTrigger.Entry entry = new EventTrigger.Entry();
-        entry.eventID = EventTriggerType.PointerClick;
-        entry.callback.AddListener((eventData) => {
-            // Double click event if playable
-            if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && ((PointerEventData)eventData).clickCount == 2 && !World_AnimHandler.isAnimating) { PlayCard(); }
-        });
-
-        this.triggers.Add(entry);
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------
-    }
+    public void SetCanvasOverrideSorting(bool _bool) { canvas.overrideSorting = _bool; }
 
     //! Events
     // PointerClick events are not overridden as other scripts may want to add their own functions to it
@@ -39,6 +24,22 @@ public class Card_Events : EventTrigger {
     // Pointer down event
     public override void OnPointerDown(PointerEventData data) {
         if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
+    }
+
+    // Pointer enter event
+    public override void OnPointerEnter(PointerEventData data) {
+        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) {
+            SetCanvasOverrideSorting(true);
+            this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f);
+        }
+    }
+
+    // Pointer enter event
+    public override void OnPointerExit(PointerEventData data) {
+        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) {
+            SetCanvasOverrideSorting(false);
+            this.transform.DOLocalMove(startLocalPos, 0.1f);
+        }
     }
 
     // Drag event
@@ -77,4 +78,23 @@ public class Card_Events : EventTrigger {
     }
 
     private Vector2 GetMouseWorldPos() { return Camera.main.ScreenToWorldPoint(Input.mousePosition); }
+
+    void Awake() {
+        canvas = this.GetComponent<Canvas>(); 
+        cardScript = this.GetComponent<Card_Stats>();
+        
+        SetCanvasOverrideSorting(false);
+
+        // Adding a double click event to this card
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = EventTriggerType.PointerClick;
+        entry.callback.AddListener((eventData) => {
+            // Double click event if playable
+            if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && ((PointerEventData)eventData).clickCount == 2 && !World_AnimHandler.isAnimating) { PlayCard(); }
+        });
+
+        this.triggers.Add(entry);
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------
+    }
 }

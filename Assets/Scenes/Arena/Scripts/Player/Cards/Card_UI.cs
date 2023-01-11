@@ -11,8 +11,11 @@ public class Card_UI : MonoBehaviour {
     [SerializeField] private Text dmg_T;
     [SerializeField] private Text cost_T;
 
+    private RectTransform rectTrans;
+
     //Getters
-    public float GetWidthOffset() { return (this.GetComponent<RectTransform>().rect.width / 2.0f); } // Returns half of width because of card's pivot
+    public float GetWidth() { return rectTrans.rect.width; } // Returns half of width because of card's pivot
+    public float GetHeight() { return rectTrans.rect.height; } // Returns half of width because of card's pivot
 
     // Constructor
     public void Setup(Card_Stats card) {
@@ -24,5 +27,9 @@ public class Card_UI : MonoBehaviour {
         desc_T.text = card.Desc;
         cost_T.text = card.Cost.ToString();
         dmg_T.text = card.Dmg.ToString() + (card.NoOfHits > 1 ? "x" + card.NoOfHits : "");
+    }
+
+    void Awake() {
+        rectTrans = this.GetComponent<RectTransform>();
     }
 }

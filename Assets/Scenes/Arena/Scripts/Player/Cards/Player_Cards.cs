@@ -224,14 +224,6 @@ public class Player_Cards : MonoBehaviour {
     // Just a wrapper so that Player_Cards is the one performing the coroutine and not the card itself
     public void ResolveCard(Card_Stats playedCard) { StartCoroutine(ResolveCard_Anim(playedCard)); }
 
-    // public IEnumerator CardUI_Enter() {
-    //     float tweenDur = 0.2f;
-
-    //     cardUI.DOLocalMoveY(0, tweenDur);
-
-    //     yield return World_AnimHandler.WaitForSeconds(tweenDur);
-    // }
-
     public void CardUI_Enter() {
         cardUI.localPosition = Vector2.zero;
     }
@@ -251,6 +243,8 @@ public class Player_Cards : MonoBehaviour {
     private IEnumerator ResolveCard_Anim(Card_Stats playedCard) {
         World_AnimHandler.isAnimating = true;
         
+        playedCard.EventHandler.SetCanvasOverrideSorting(false); // Disable card's override sorting just in case
+
         Transform cardTrans = playedCard.transform;
 
         // Move card to cardParent_Play
@@ -304,7 +298,7 @@ public class Player_Cards : MonoBehaviour {
         }
 
         // Finish resolving card
-        //--------------------------------------------------------------------------------------------------------------------------------------------------        
+        //--------------------------------------------------------------------------------------------------------------------------------------------------
         cardTrans.gameObject.SetActive(false); // Disable card after card effect
 
         World_AnimHandler.isAnimating = false;
@@ -324,7 +318,7 @@ public class Player_Cards : MonoBehaviour {
     private Vector2 GetCardHandPos(Transform card, int multiplier) {
         Card_Stats cardScript = card.GetComponent<Card_Stats>();
 
-        return new Vector2((-(cardScript.UIHandler.GetWidthOffset() * multiplier) - cardScript.UIHandler.GetWidthOffset()), 0.0f);
+        return new Vector2((-(cardScript.UIHandler.GetWidth() / 2.0f * multiplier) - (cardScript.UIHandler.GetWidth() / 2.0f)), 0.0f);
     }
     
     private void UpdateNoOfCards_GY() { textGY.text = gy.Count.ToString(); }

@@ -79,7 +79,5 @@ public class Card_Stats : MonoBehaviour {
         if (!uiHandler) uiHandler = this.GetComponent<Card_UI>();
         if (!eventHandler) eventHandler = this.GetComponent<Card_Events>();
         if (effect == null) effect = this.GetComponent<ICardEffect>();
-        
-        eventHandler.Setup(this);
     }
 }
