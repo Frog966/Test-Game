@@ -76,7 +76,7 @@ public class World_EnemyLibrary : MonoBehaviour {
                         NodeType.MINI_BOSS,
                         new List<List<EncounterEnemyDetails>>() {
                             new List<EncounterEnemyDetails>() {
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Miniboss"), new Vector2Int(4, 1)),
+                                new EncounterEnemyDetails(ReturnMiniBossById("Test Miniboss"), new Vector2Int(4, 1)),
                             }
                         }
                     },
@@ -85,7 +85,7 @@ public class World_EnemyLibrary : MonoBehaviour {
                         NodeType.BOSS,
                         new List<List<EncounterEnemyDetails>>() {
                             new List<EncounterEnemyDetails>() {
-                                new EncounterEnemyDetails(ReturnEnemyById("Test Boss"), new Vector2Int(4, 1)),
+                                new EncounterEnemyDetails(ReturnBossById("Test Boss"), new Vector2Int(4, 1)),
                             }
                         }
                     }
