@@ -1,12 +1,12 @@
+// using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class World_BattleRewards : MonoBehaviour {
+public class World_Shop : MonoBehaviour {
     [Header("Handlers")]
-    [SerializeField] private World_Map mapHandler;
     [SerializeField] private Player_CardLibrary cardLibrary;
-    
+
     [Header("Objects")]
     [SerializeField] private GameObject uiParent;
     [SerializeField] private GameObject cardPrefab;
@@ -14,25 +14,25 @@ public class World_BattleRewards : MonoBehaviour {
 
     // Button functions
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void CloseList() {
+    public void CloseShop() {
         uiParent.SetActive(false);
             
         while (cardParent.childCount > 0) { cardParent.GetChild(0).SetParent(cardPool); } // Move cards back into card pool
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public void DisplayRewards() {
-        GenerateRewards_Cards();
+    public void OpenShop() {
+        GenerateStock_Cards();
         
         uiParent.SetActive(true);
     }
 
-    private int Random1to100() { return Random.Range(1, 100); }
-
-    private void GenerateRewards_Cards() {
-        int noOfCards = 3;
+    private void GenerateStock_Cards() {
+        int noOfCards = 5;
         List<Card_Stats> cardList = new List<Card_Stats>();
 
+        // Functions
+        int Random1to100() { return Random.Range(1, 100); }
         Card_Stats GetRandomCard(List<Card_Stats> list) { return list[Random.Range(0, list.Count - 1)]; }
 
         for (int i = 0; i < noOfCards; i ++) {
@@ -46,7 +46,8 @@ public class World_BattleRewards : MonoBehaviour {
                 else { newReward = GetRandomCard(cardLibrary.GetLibrary_Common()); }
 
                 // Do not allow duplicate rewards
-                if (!cardList.Contains(newReward)) { cardList.Add(newReward); }
+                // if (!cardList.Contains(newReward)) { cardList.Add(newReward); }
+                cardList.Add(newReward);
             }
         }
         
@@ -75,10 +76,7 @@ public class World_BattleRewards : MonoBehaviour {
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((data) => { 
                 if (!currCard.isPlayable && !World_AnimHandler.isAnimating) { 
-                    Player_Cards.Deck.AddCardToDeck(currCard.ID);
-                    
-                    CloseList();
-                    mapHandler.EnableMap();
+                    CloseShop();
                 }
             });
 
@@ -89,10 +87,9 @@ public class World_BattleRewards : MonoBehaviour {
 
     void Awake() {
         //! Sanity checks
-        if (!mapHandler) mapHandler = this.GetComponent<World_Map>(); 
         if (!cardLibrary) Debug.LogError("World_BattleRewards does not have Player_CardLibrary.cs!"); 
 
-        CloseList();
+        CloseShop();
         cardPool.gameObject.SetActive(false);
 
         InstantiateCardsIntoPool(5); // Instantiate 5 cards into card pool first

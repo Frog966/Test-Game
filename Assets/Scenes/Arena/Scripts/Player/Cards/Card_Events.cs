@@ -23,33 +23,37 @@ public class Card_Events : EventTrigger {
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Pointer down event
     public override void OnPointerDown(PointerEventData data) {
-        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
+        if (cardScript.isPlayable && !World_AnimHandler.isAnimating) mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
     }
 
     // Pointer enter event
     public override void OnPointerEnter(PointerEventData data) {
-        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) {
+        if (!World_AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(true);
-            this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f);
+
+            if (cardScript.isPlayable) { this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f); }
+            else { this.transform.DOScale(1.3f, 0.1f); }
         }
     }
 
     // Pointer enter event
     public override void OnPointerExit(PointerEventData data) {
-        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) {
+        if (!World_AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(false);
-            this.transform.DOLocalMove(startLocalPos, 0.1f);
+            
+            if (cardScript.isPlayable) { this.transform.DOLocalMove(startLocalPos, 0.1f); }
+            else { this.transform.DOScale(1.0f, 0.1f); }
         }
     }
 
     // Drag event
     public override void OnDrag(PointerEventData data) {
-        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && !World_AnimHandler.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
+        if (cardScript.isPlayable && !World_AnimHandler.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
     }
 
     // Drag end event
     public override void OnEndDrag(PointerEventData data) {
-        if (cardScript.cardType == Card_Stats.CardType.PLAYABLE) {
+        if (cardScript.isPlayable) {
             float distance = Vector2.Distance(startLocalPos, this.transform.localPosition);
 
             // Debug.Log("Drag Distance: " + distance);
@@ -91,7 +95,7 @@ public class Card_Events : EventTrigger {
         entry.eventID = EventTriggerType.PointerClick;
         entry.callback.AddListener((eventData) => {
             // Double click event if playable
-            if (cardScript.cardType == Card_Stats.CardType.PLAYABLE && ((PointerEventData)eventData).clickCount == 2 && !World_AnimHandler.isAnimating) { PlayCard(); }
+            if (cardScript.isPlayable && ((PointerEventData)eventData).clickCount == 2 && !World_AnimHandler.isAnimating) { PlayCard(); }
         });
 
         this.triggers.Add(entry);

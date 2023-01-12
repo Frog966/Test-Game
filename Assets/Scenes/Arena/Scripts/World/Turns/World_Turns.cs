@@ -6,6 +6,8 @@ using UnityEngine;
 public class World_Turns : MonoBehaviour {
     // Handlers
     [SerializeField] private Player player;
+    [SerializeField] private World_Map mapHandler;
+    [SerializeField] private World_Shop shopHandler;
     [SerializeField] private Player_Cards cardHandler;
 
     [SerializeField] private GameObject nextMapNodeButton;
@@ -28,29 +30,34 @@ public class World_Turns : MonoBehaviour {
         ClearEnemyParent(); // Destroy every GO in enemyParent
         cardHandler.ResetCards(); // Reset player cards
 
-        // Instantiate and set enemies' pos
-        foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
-            GameObject newEnemyObj = GameObject.Instantiate(details.enemy.Entity.gameObject, enemyParent);
-            World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<Entity>(), details.gridPos);
+        if (mapHandler.GetCurrMapNode().GetNodeType() == Game.Map.NodeType.SHOP) {
+            shopHandler.OpenShop();
         }
-        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        else {
+            // Instantiate and set enemies' pos
+            foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
+                GameObject newEnemyObj = GameObject.Instantiate(details.enemy.Entity.gameObject, enemyParent);
+                World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<Entity>(), details.gridPos);
+            }
+            //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        // Set up turns
-        //-----------------------------------------------------------------------------------------------------------------------------------------------
-        // Set up first turn for player and enemy
-        // Player always first
-        CreateTurn(player.GetEntity());
-        
-        // Create turns for enemies
-        foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<Entity>()); }
+            // Set up turns
+            //-----------------------------------------------------------------------------------------------------------------------------------------------
+            // Set up first turn for player and enemy
+            // Player always first
+            CreateTurn(player.GetEntity());
+            
+            // Create turns for enemies
+            foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<Entity>()); }
 
-        ArrangeTurnObjs();
-        //-----------------------------------------------------------------------------------------------------------------------------------------------
+            ArrangeTurnObjs();
+            //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        cardHandler.Shuffle(); // Shuffle player's deck before start of encounter
+            cardHandler.Shuffle(); // Shuffle player's deck before start of encounter
 
-        cardHandler.CardUI_Enter();
-        StartCoroutine(StartTurn()); // Start 1st turn
+            cardHandler.CardUI_Enter();
+            StartCoroutine(StartTurn()); // Start 1st turn
+        }
     }
 
     // End the encounter if possible
@@ -181,6 +188,8 @@ public class World_Turns : MonoBehaviour {
 
     void Awake() {
         //! Sanity Checks
+        if (!mapHandler) mapHandler = this.GetComponent<World_Map>();
+        if (!shopHandler) shopHandler = this.GetComponent<World_Shop>();
         if (!player) Debug.LogError("World_Turns does not have Player.cs!"); 
         if (!cardHandler) Debug.LogError("World_Turns does not have Player_Cards.cs!"); 
 

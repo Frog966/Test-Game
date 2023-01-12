@@ -26,6 +26,7 @@ public class World_Map : MonoBehaviour {
     private List<List<World_MapNode>> map;
 
     // Getters
+    public World_MapNode GetCurrMapNode() { return currMapNode; }
     // public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
 
     // Used as button function

@@ -13,7 +13,7 @@ public class Card_Stats : MonoBehaviour {
     [SerializeField] private ICardEffect effect;
 
     [Header("Card Stats")]
-    public CardType cardType = CardType.PLAYABLE;
+    public bool isPlayable = true; // Determine if this card is played during combat
     [SerializeField] private CardRarity rarity;
     [SerializeField] private bool isExiled;
     [SerializeField] private bool isUpgraded;
@@ -39,12 +39,6 @@ public class Card_Stats : MonoBehaviour {
     public int NoOfHits { get => noOfHits; }
     public Sprite Image { get => image; }
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    public enum CardType {
-        PLAYABLE,
-        DISPLAY,
-        REWARD,      
-    }
     
     // Constructor
     public void Setup(Player _player) {

@@ -83,7 +83,7 @@ public class World_CardLister : MonoBehaviour {
     private void InstantiateCardsIntoPool(int no = 1) {
         for (int i = 0; i < no; i ++) {
             GameObject newCard = GameObject.Instantiate(cardPrefab, cardPool); 
-            newCard.GetComponent<Card_Stats>().cardType = Card_Stats.CardType.DISPLAY; // Set the card to display
+            newCard.GetComponent<Card_Stats>().isPlayable = false; // Set the card to unplayable
         }
     }
 
