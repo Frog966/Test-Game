@@ -5,19 +5,29 @@ using UnityEngine.EventSystems;
 
 public class World_Shop : MonoBehaviour {
     [Header("Handlers")]
+    [SerializeField] private Player player;
     [SerializeField] private Player_CardLibrary cardLibrary;
+    [SerializeField] private World_Shop_NPC shopNPC;
 
     [Header("Objects")]
     [SerializeField] private GameObject uiParent;
-    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject cardStockPrefab;
     [SerializeField] private Transform cardPool, cardParent;
 
     // Button functions
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void CloseShop() {
         uiParent.SetActive(false);
-            
-        while (cardParent.childCount > 0) { cardParent.GetChild(0).SetParent(cardPool); } // Move cards back into card pool
+
+        // Move cards back into card pool   
+        while (cardParent.childCount > 0) {
+            Transform currCard = cardParent.GetChild(0);
+
+            currCard.gameObject.SetActive(true); // Reset shop card to active just in case it was bought
+            currCard.localScale = Vector3.one; // Reset shop card scale because of hover anim
+
+            currCard.SetParent(cardPool); 
+        }
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +45,7 @@ public class World_Shop : MonoBehaviour {
         int Random1to100() { return Random.Range(1, 100); }
         Card_Stats GetRandomCard(List<Card_Stats> list) { return list[Random.Range(0, list.Count - 1)]; }
 
+        // Generate random cards to select for rewards
         for (int i = 0; i < noOfCards; i ++) {
             // Perform a while loop to avoid duplicates in rewards
             while (cardList.Count == i) {
@@ -55,42 +66,66 @@ public class World_Shop : MonoBehaviour {
         if (cardList.Count > cardPool.childCount) { InstantiateCardsIntoPool(cardList.Count - cardPool.childCount); }
 
         // Adding cards to content
-        // Positioning will be handled by content's GridLayoutGroup component     
-        foreach (Card_Stats card in cardList) {
+        // Positioning will be handled by content's GridLayoutGroup component
+        // foreach (Card_Stats card in cardList) {
+        for (int i = 0; i < cardList.Count; i ++) {
+            Card_Stats card = cardList[i];
             Transform currCard = cardPool.GetChild(0);
 
             currCard.SetParent(cardParent);
-            currCard.GetComponent<Card_Stats>().Copy(card);
+            currCard.GetComponent<World_Shop_Card>().Setup(card);
+
+            float cardOffset = card.UIHandler.GetWidth() + 20.0f;
+            float startPoint = -(cardOffset * (cardList.Count - 1.0f) / 2.0f);
+
+            currCard.localPosition = new Vector2(startPoint + cardOffset * i, 0.0f);
         }
     }
 
     private void InstantiateCardsIntoPool(int no = 1) {
         for (int i = 0; i < no; i ++) {
-            Card_Stats currCard = GameObject.Instantiate(cardPrefab, cardPool).GetComponent<Card_Stats>();
-
-            currCard.isPlayable = false; // Set the card to unplayable
+            World_Shop_Card currShopCard = GameObject.Instantiate(cardStockPrefab, cardPool).GetComponent<World_Shop_Card>();
+            Card_Stats currCardScript = currShopCard.GetCard();
 
             // Add a click event to reward cards to add the card to deck and close the list
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((data) => { 
-                if (!currCard.isPlayable && !World_AnimHandler.isAnimating) { 
-                    CloseShop();
+                if (!currCardScript.isPlayable && !World_AnimHandler.isAnimating) { 
+                    if (player.GetBits() >= currShopCard.GetPrice()) {
+                        Player_Cards.Deck.AddCardToDeck(currCardScript.ID);
+                        
+                        // Reduce player bits according to card price
+                        player.SetBits(player.GetBits() - currShopCard.GetPrice());
+
+                        // Disable card after being bought
+                        currShopCard.gameObject.SetActive(false);
+                    }
+                    else {
+                        shopNPC.PopUp_NotEnoughMoney();
+                    }
                 }
             });
 
-            currCard.EventHandler.triggers.Add(entry);
+            currCardScript.EventHandler.triggers.Add(entry);
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------
         }
     }
 
     void Awake() {
         //! Sanity checks
-        if (!cardLibrary) Debug.LogError("World_BattleRewards does not have Player_CardLibrary.cs!"); 
+        if (!player) { Debug.LogError("World_Shop does not have Player.cs!"); }
+        if (!cardLibrary) {
+            if (player) { cardLibrary = player.GetComponent<Player_CardLibrary>(); }
+            else { Debug.LogError("World_Shop does not have Player_CardLibrary.cs!"); }
+        }
+        if (!shopNPC) { Debug.LogError("World_Shop does not have World_Shop_NPC.cs!"); }
 
         CloseShop();
         cardPool.gameObject.SetActive(false);
+
+        while (cardPool.childCount > 0) { DestroyImmediate(cardPool.GetChild(0).gameObject); } // Destroy all objects in card pool
 
         InstantiateCardsIntoPool(5); // Instantiate 5 cards into card pool first
     }

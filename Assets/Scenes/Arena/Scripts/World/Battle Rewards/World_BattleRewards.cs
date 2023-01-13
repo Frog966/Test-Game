@@ -2,26 +2,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum RewardType {
+    BITS,
+    CARDS,
+}
+
 public class World_BattleRewards : MonoBehaviour {
     [Header("Handlers")]
+    [SerializeField] private Player player;
     [SerializeField] private World_Map mapHandler;
     [SerializeField] private Player_CardLibrary cardLibrary;
     
     [Header("Objects")]
     [SerializeField] private GameObject uiParent;
     [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private Transform cardPool, cardParent;
+    [SerializeField] private Transform cardUI, cardPool, cardParent;
+    [SerializeField] private GameObject buttonPrefab;
+    [SerializeField] private Transform buttonPool, buttonParent;
 
     // Button functions
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void CloseList() {
+    public void CloseRewards() {
         uiParent.SetActive(false);
-            
-        while (cardParent.childCount > 0) { cardParent.GetChild(0).SetParent(cardPool); } // Move cards back into card pool
+        
+        while (buttonParent.childCount > 0) { buttonParent.GetChild(0).SetParent(buttonPool); } // Move buttons back into button pool
+        
+        // Move cards back into card pool
+        while (cardParent.childCount > 0) { 
+            Transform currCard = cardParent.GetChild(0);
+
+            currCard.localScale = Vector3.one; // Reset shop card scale because of hover anim
+            currCard.SetParent(cardPool); 
+        }
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public void DisplayRewards() {
+        GenerateRewards_Coins();
         GenerateRewards_Cards();
         
         uiParent.SetActive(true);
@@ -29,7 +46,13 @@ public class World_BattleRewards : MonoBehaviour {
 
     private int Random1to100() { return Random.Range(1, 100); }
 
+    private void GenerateRewards_Coins() {
+        SetupButton(RewardType.BITS);
+    }
+
     private void GenerateRewards_Cards() {
+        SetupButton(RewardType.CARDS);
+
         int noOfCards = 3;
         List<Card_Stats> cardList = new List<Card_Stats>();
 
@@ -77,8 +100,7 @@ public class World_BattleRewards : MonoBehaviour {
                 if (!currCard.isPlayable && !World_AnimHandler.isAnimating) { 
                     Player_Cards.Deck.AddCardToDeck(currCard.ID);
                     
-                    CloseList();
-                    mapHandler.EnableMap();
+                    cardUI.gameObject.SetActive(false);
                 }
             });
 
@@ -87,14 +109,51 @@ public class World_BattleRewards : MonoBehaviour {
         }
     }
 
+    private void SetupButton(RewardType rewardType) {
+        Transform button = buttonPool.GetChild(0);
+        World_BattleRewards_Button buttonScript = button.GetComponent<World_BattleRewards_Button>();
+
+        int coinReward = Random.Range(30, 50);
+
+        button.SetParent(buttonParent);
+        buttonScript.Setup(rewardType, coinReward);
+
+        switch(rewardType) {
+            case RewardType.BITS: 
+                buttonScript.GetButton().onClick.AddListener(() => {
+                    Debug.Log("Player receives " + coinReward + " coins!");
+
+                    player.SetBits(player.GetBits() + coinReward);
+                    button.SetParent(buttonPool);
+                });
+            break;
+            default: 
+                buttonScript.GetButton().onClick.AddListener(() => {
+                    Debug.Log("Player receives a new card!");
+
+                    cardUI.gameObject.SetActive(true);
+                    button.SetParent(buttonPool);
+                });
+            break;
+        }
+    }
+
     void Awake() {
         //! Sanity checks
+        if (!player) { Debug.LogError("World_BattleRewards does not have Player.cs!"); }
         if (!mapHandler) mapHandler = this.GetComponent<World_Map>(); 
         if (!cardLibrary) Debug.LogError("World_BattleRewards does not have Player_CardLibrary.cs!"); 
 
-        CloseList();
+        CloseRewards();
+        cardUI.gameObject.SetActive(false);
         cardPool.gameObject.SetActive(false);
+        buttonPool.gameObject.SetActive(false);
 
         InstantiateCardsIntoPool(5); // Instantiate 5 cards into card pool first
+
+        while (buttonPool.childCount > 0) { DestroyImmediate(buttonPool.GetChild(0).gameObject); } // Destroy all objects in button pool
+        while (buttonParent.childCount > 0) { DestroyImmediate(buttonParent.GetChild(0).gameObject); } // Destroy all objects in button parent
+
+        while (buttonPool.childCount < 3) { GameObject.Instantiate(buttonPrefab, buttonPool); } // Instantiate 3 buttons into button pool
     }
 }

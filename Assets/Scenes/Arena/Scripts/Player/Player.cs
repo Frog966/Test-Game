@@ -15,6 +15,10 @@ public class Player : MonoBehaviour {
     [SerializeField] private Player_Movement _movementHandler;
     [SerializeField] private Player_KeyPresses _keyPressHandler;
 
+    [Header("UI Stuff")]
+    private int bits = 0; // The player's currency
+    [SerializeField] private UnityEngine.UI.Text bitsText;
+
     // Handler Getters
     public Player_Cards CardsHandler() { return _cardsHandler; }
     public Player_Energy EnergyHandler() { return _energyHandler; }
@@ -22,7 +26,14 @@ public class Player : MonoBehaviour {
     public Player_KeyPresses KeyPressHandler() { return _keyPressHandler; }
 
     // Getters
+    public int GetBits() { return bits; }
     public Entity GetEntity() { return entity; }
+
+    // Setters
+    public void SetBits(int newBits) { 
+        bits = newBits;
+        UpdateBitsText();
+    }
 
     // Player's start turn function
     // Contains anything that triggers at start of turn
@@ -55,6 +66,8 @@ public class Player : MonoBehaviour {
         }
     }
 
+    private void UpdateBitsText() { bitsText.text = bits.ToString(); }
+
     void Awake() {
         // Non-player handlers sanity checks
         if (turnsHandler == null) { turnsHandler = this.transform.parent.GetComponentInChildren(typeof(World_Turns)) as World_Turns; }
@@ -64,5 +77,7 @@ public class Player : MonoBehaviour {
         if (_energyHandler == null) _energyHandler = this.gameObject.GetComponent<Player_Energy>();
         if (_movementHandler == null) _movementHandler = this.gameObject.GetComponent<Player_Movement>();
         if (_keyPressHandler == null) _keyPressHandler = this.gameObject.GetComponent<Player_KeyPresses>();
+
+        UpdateBitsText();
     }
 }

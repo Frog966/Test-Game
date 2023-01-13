@@ -13,9 +13,21 @@ public class Card_UI : MonoBehaviour {
 
     private RectTransform rectTrans;
 
-    //Getters
-    public float GetWidth() { return rectTrans.rect.width; } // Returns half of width because of card's pivot
-    public float GetHeight() { return rectTrans.rect.height; } // Returns half of width because of card's pivot
+    // Getters
+    //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Returns card width
+    public float GetWidth() { 
+        if (!rectTrans) rectTrans = this.GetComponent<RectTransform>(); // Sanity check
+
+        return rectTrans.rect.width; 
+    }
+
+    // Returns card height
+    public float GetHeight() { 
+        if (!rectTrans) rectTrans = this.GetComponent<RectTransform>(); // Sanity check
+        return rectTrans.rect.height; 
+    } 
+    //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Constructor
     public void Setup(Card_Stats card) {
