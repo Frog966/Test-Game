@@ -123,8 +123,11 @@ public class World_Grid : MonoBehaviour {
             World_AnimHandler.isAnimating = false;
         }
 
-        public static void HitHere(Faction attackerFaction, List<Vector2Int> posList, int dmg) {
+        // Returns list of hit entities
+        public static List<Entity> HitHere(Faction attackerFaction, List<Vector2Int> posList, int dmg) {
             ReturnDistinctPosList(posList); // Remove any duplicates 
+
+            List<Entity> hitEntities = new List<Entity>(); // Hold all entities that are hit
 
             foreach (Entity entity in GetEntitiesOnMap(attackerFaction)) {
                 if (IsEntityHere(entity, posList)) { 
@@ -141,8 +144,12 @@ public class World_Grid : MonoBehaviour {
 
                         turnsHandler.HasEncounterEnded(); // Check if encounter has ended
                     }
+                    
+                    hitEntities.Add(entity);
                 }
             }
+
+            return hitEntities;
         }
 
         // Returns a valid pos list that is relative to the origin point

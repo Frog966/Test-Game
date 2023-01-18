@@ -2774,7 +2774,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &652856510
 RectTransform:
@@ -3688,6 +3688,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 855825867}
     m_Modifications:
+    - target: {fileID: 2103609597263872907, guid: d8c6d8122b028824993572c9b46e9cb3, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2103609597263872907, guid: d8c6d8122b028824993572c9b46e9cb3, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7591618910962617702, guid: d8c6d8122b028824993572c9b46e9cb3, type: 3}
       propertyPath: m_Name
       value: Enemy - Dummy
@@ -4580,13 +4588,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2124547565}
     m_Modifications:
+    - target: {fileID: 4409817662587975747, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409817662587975747, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5285410845664753326, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
       propertyPath: m_Name
       value: Player Obj
-      objectReference: {fileID: 0}
-    - target: {fileID: 5285410845664753326, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5285410845664753327, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
       propertyPath: m_Pivot.x
@@ -6702,12 +6714,13 @@ GameObject:
   - component: {fileID: 1614269405}
   - component: {fileID: 1614269406}
   - component: {fileID: 1614269407}
+  - component: {fileID: 1614269408}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &1614269398
 RectTransform:
@@ -6868,6 +6881,35 @@ MonoBehaviour:
   cardStockPrefab: {fileID: 8641045023111578953, guid: a8539174feeedc543bb6faba20c85cfc, type: 3}
   cardPool: {fileID: 1852841032}
   cardParent: {fileID: 1901470230}
+--- !u!114 &1614269408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614269397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f3e55b862bf644dbc4f8ff8ff64a9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 5361912872559528363, guid: c742dd01e897d594fbf1298c625a1162, type: 3}
+  statusEffectList:
+  - isStackable: 1
+    id: 0
+    sprite: {fileID: 21300000, guid: ed2cb61a23c184c4a81efcfbd8a51a21, type: 3}
+  - isStackable: 1
+    id: 1
+    sprite: {fileID: 21300000, guid: ed2cb61a23c184c4a81efcfbd8a51a21, type: 3}
+  - isStackable: 1
+    id: 2
+    sprite: {fileID: 21300000, guid: ed2cb61a23c184c4a81efcfbd8a51a21, type: 3}
+  - isStackable: 1
+    id: 3
+    sprite: {fileID: 21300000, guid: ed2cb61a23c184c4a81efcfbd8a51a21, type: 3}
+  - isStackable: 0
+    id: 4
+    sprite: {fileID: 21300000, guid: e9320d4a54424c545844a1687295024f, type: 3}
 --- !u!224 &1615982852 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2901374645005651321, guid: 2b990ac7206a7cc4cb8795a2b2d2b9b7, type: 3}
@@ -7482,41 +7524,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b990ac7206a7cc4cb8795a2b2d2b9b7, type: 3}
---- !u!1 &1780319132 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5285410845664753326, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
-  m_PrefabInstance: {fileID: 1126903520}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1780319133 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5285410845664753327, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
   m_PrefabInstance: {fileID: 1126903520}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1780319134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1780319132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9616b2643970f4f4d8f85962d99d5040, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health_T: {fileID: 0}
-  faction: 0
-  healthMax: 0
-  health: 0
 --- !u!114 &1780319135 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2427261571569231752, guid: 8e93be321ae4f3d4ea685693da21fe5c, type: 3}
   m_PrefabInstance: {fileID: 1126903520}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1780319132}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9616b2643970f4f4d8f85962d99d5040, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e2fb84ad56108342b2a2bb35d39083e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1788185434
