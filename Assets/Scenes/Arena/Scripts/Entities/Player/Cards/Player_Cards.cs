@@ -395,16 +395,21 @@ public class Player_Cards : MonoBehaviour {
     void Start() {
         // Testing only!
         Deck.SetDeck(new List<string>() {
-            "Cannon",
-            "Cannon",
-            "Cannon",
-            "Cannon",
-            "Minigun",
-            "Minigun",
-            "Minigun",
-            "Minigun",
-            "LookItUp",
-            "LookItUp",
+            // "Cannon",
+            // "Cannon",
+            // "Cannon",
+            // "Cannon",
+            // "Minigun",
+            // "Minigun",
+            // "Minigun",
+            // "Minigun",
+            // "LookItUp",
+            // "LookItUp",
+            "Test",
+            "Test",
+            "Test",
+            "Test",
+            "Test",
         });
 
         ResetCards();

@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Right: 5
     m_Top: 5
     m_Bottom: 5
-  m_ChildAlignment: 7
+  m_ChildAlignment: 6
   m_StartCorner: 2
   m_StartAxis: 0
   m_CellSize: {x: 18, y: 18}
@@ -169,7 +169,6 @@ MonoBehaviour:
   statusEffectParent: {fileID: 4579064732601412952}
   healthMax: 0
   health: 0
-  statusEffect_List: []
 --- !u!1 &6779954261484465797
 GameObject:
   m_ObjectHideFlags: 0

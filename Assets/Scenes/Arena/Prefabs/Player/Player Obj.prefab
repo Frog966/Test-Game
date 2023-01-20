@@ -160,6 +160,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_Spacing.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_Spacing.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_ChildAlignment
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 340867520911581954, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4579064732601412952, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0

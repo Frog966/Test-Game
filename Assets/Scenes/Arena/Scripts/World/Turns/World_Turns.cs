@@ -106,9 +106,12 @@ public class World_Turns : MonoBehaviour {
     // Perform certain buff/debuff updates here
     private IEnumerator StartTurn() {
         World_Turn currTurn = turnList[0];
+        Entity currEntity = currTurn.GetOwner();
+
+        currEntity.StartTurn(); // Perform actions that all entities must do at start of turn
 
         // Only end the turn if currTurn's owner is not a Player script
-        if (currTurn.GetOwner() != player.GetEntity()) { 
+        if (currEntity != player.GetEntity()) {
             yield return currTurn.Execute();
 
             EndTurn(); 

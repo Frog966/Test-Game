@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Unit;
@@ -13,13 +14,22 @@ public class Entity : MonoBehaviour {
     [Header("Entity Stats")]
     public int healthMax; // Allow get and set
     [SerializeField] private int health; // Only allow get
-    public List<StatusEffect_Info> statusEffect_List = new List<StatusEffect_Info>();
+    public List<IStatusEffect> statusEffect_List = new List<IStatusEffect>();
 
     private Stack<Action> todo_OnDeath = new Stack<Action>();
 
     // Getters
     public int GetHealth() { return health; }
     public Faction GetFaction() { return faction; }
+    public Transform GetSEParent() { return statusEffectParent; }
+
+    public IEnumerator StartTurn() {
+        foreach (IStatusEffect se in statusEffect_List) {
+            se.StartOfTurn();
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 
     public virtual void OnHit(int baseDmg) {
         health -= baseDmg;

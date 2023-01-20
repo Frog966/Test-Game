@@ -26,7 +26,7 @@ public class Card_UI : MonoBehaviour {
     public float GetHeight() { 
         if (!rectTrans) rectTrans = this.GetComponent<RectTransform>(); // Sanity check
         return rectTrans.rect.height; 
-    } 
+    }
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Constructor
