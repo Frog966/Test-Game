@@ -12,7 +12,6 @@ public class Card_Test : MonoBehaviour, ICardEffect {
         Debug.Log(this + " is being played!");
 
         List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(cardStats.Player.GetEntity()), false);
-
         List<Entity> hitEntities = World_Grid.Combat.HitHere(Faction.ALLY, posList, cardStats.Dmg);
 
         yield return World_Grid.Combat.FlashHere(posList);
