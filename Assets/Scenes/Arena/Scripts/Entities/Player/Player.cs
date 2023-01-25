@@ -37,32 +37,30 @@ public class Player : MonoBehaviour {
 
     // Player's start turn function
     // Contains anything that triggers at start of turn
-    public void StartTurn() {
+    public IEnumerator StartTurn() {
         Debug.Log("Player starts turn!");
-
-        // Debug.Log("Player starting turn!");
 
         _energyHandler.ResetEnergy();
         _movementHandler.ResetMoveCost();
 
-        StartCoroutine(CardsHandler().Draw(5));
+        yield return CardsHandler().Draw(5);
+
+        World_AnimHandler.isAnimating = false; //! The game will not stop animating until the player's turn
     }
 
     // Player's end turn function
-    // Contains anything that triggers at end of turn
-    // Also used at the "End Turn" button
+    // Used at the "End Turn" button
     public void EndTurn() { StartCoroutine(EndTurn_Anim()); }
 
     private IEnumerator EndTurn_Anim() {
         if (!World_AnimHandler.isAnimating) {
             World_AnimHandler.isAnimating = true;
-
+            
             Debug.Log("Player ends turn!");
 
             yield return _cardsHandler.DiscardHand(); // Discard player's hand
-            turnsHandler.EndTurn();
-            
-            World_AnimHandler.isAnimating = false;
+
+            StartCoroutine(turnsHandler.EndTurn());
         }
     }
 

@@ -23,6 +23,8 @@ public class World_Turns : MonoBehaviour {
 
     // Setup the encounter
     public void StartEncounter(World_MapNode currMapNode) {
+        World_AnimHandler.isAnimating = true;
+
         // Set up units
         //-----------------------------------------------------------------------------------------------------------------------------------------------
         World_Grid.Movement.SetGridPos(player.GetEntity(), Vector2Int.one); // Reset player pos
@@ -54,8 +56,8 @@ public class World_Turns : MonoBehaviour {
             //-----------------------------------------------------------------------------------------------------------------------------------------------
 
             cardHandler.Shuffle(); // Shuffle player's deck before start of encounter
-
             cardHandler.CardUI_Enter();
+            
             StartCoroutine(StartTurn()); // Start 1st turn
         }
     }
@@ -91,14 +93,19 @@ public class World_Turns : MonoBehaviour {
 
     // End current turn
     // Perform certain buff/debuff updates here
-    public void EndTurn() {
-        CreateTurn(turnList[0].GetOwner()); // Recreate the current turn. If enemy, possibly progress it's pattern
-        RemoveTurn();
-        
+    public IEnumerator EndTurn() {
         // Only start turn if there's a player and enemy
         if (turnList.Find((turn) => turn.GetOwner() == player.GetEntity()) && turnList.Find((turn) => turn.GetOwner() != player.GetEntity())) {
-            StartCoroutine(StartTurn()); // Start the next turn which is the new current
+            Entity currEntity = turnList[0].GetOwner();
+
+            yield return currEntity.EndTurn(); // Perform actions that all entities must do at end of turn
+
+            CreateTurn(turnList[0].GetOwner()); // Recreate the current turn. If enemy, progress it's pattern if needed
+            RemoveTurn();
+
+            yield return StartTurn(); // Start the next turn which is the new current
         }
+        else { World_AnimHandler.isAnimating = false; } // Stop animating if 1 faction is gone
     }
 
     // Start current turn
@@ -108,17 +115,14 @@ public class World_Turns : MonoBehaviour {
         World_Turn currTurn = turnList[0];
         Entity currEntity = currTurn.GetOwner();
 
-        currEntity.StartTurn(); // Perform actions that all entities must do at start of turn
+        yield return currEntity.StartTurn(); // Perform actions that all entities must do at start of turn
 
         // Only end the turn if currTurn's owner is not a Player script
         if (currEntity != player.GetEntity()) {
-            yield return currTurn.Execute();
-
-            EndTurn(); 
+            yield return currTurn.Execute(); // Execute the non-player entity's behaviour
+            yield return EndTurn(); // End non-player entity's turn
         }
-        else {
-            player.StartTurn();
-        }
+        else { yield return player.StartTurn(); } //! The game will not stop animating until the player's turn
     }
 
     // Remove turn obj from turnParent as well as update turnList

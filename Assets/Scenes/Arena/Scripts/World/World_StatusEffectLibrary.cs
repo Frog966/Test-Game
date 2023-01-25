@@ -5,8 +5,7 @@ using UnityEngine;
 //! Contains all status effects
 public class World_StatusEffectLibrary : MonoBehaviour {
     [SerializeField] private Transform statusEffectPool;
-
-    // private List<IStatusEffect> childLog = new List<IStatusEffect>(); // Contains all children in statusEffectPool. Is 
+    public static Transform StatusEffectPool { get => inst.statusEffectPool; }
 
     private static World_StatusEffectLibrary inst; // A private instance of this script just to get the static functions to work
     private static Dictionary<StatusEffect_ID, IStatusEffect> library = new Dictionary<StatusEffect_ID, IStatusEffect>();
@@ -20,7 +19,6 @@ public class World_StatusEffectLibrary : MonoBehaviour {
         if (se != null && stackScript != null) { stackScript.AddCounter(); } // If entity receives the same stackable status effect, increase it by 1
         else {
             World_StatusEffectLibrary _this = World_StatusEffectLibrary.inst;
-
             Transform newSE = null;
 
             // Try to find a already instantiated SE from pool first
@@ -34,8 +32,13 @@ public class World_StatusEffectLibrary : MonoBehaviour {
             // If cannot find an SE from pool, instantiate a deep copy from library into pool
             if (!newSE)  { newSE = GameObject.Instantiate(library[id].GameObject, _this.statusEffectPool).transform; }
 
-            newSE.GetComponent<StatusEffect_UI>().SetSprite(newSE.GetComponent<IStatusEffect>().Sprite);
+            IStatusEffect newSEScript = newSE.GetComponent<IStatusEffect>();
+            newSEScript.Entity = target;
+            target.statusEffect_List.Add(newSEScript); // Add the new SE into the target's SE list
+
+            newSE.GetComponent<StatusEffect_UI>().SetSprite(newSEScript.Sprite);
             newSE.SetParent(target.GetSEParent());
+            newSE.localScale = Vector3.one;
         }
     }
 

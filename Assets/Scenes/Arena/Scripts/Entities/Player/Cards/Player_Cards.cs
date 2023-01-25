@@ -47,64 +47,62 @@ public class Player_Cards : MonoBehaviour {
     }
 
     public IEnumerator Draw(int num = 1) {
-        float tweenDur = 0.2f;
-        float tweenDelay = 0.1f;
+        if (num < 1) { yield return null; } // Don't do anything if number of cards to draw < 1
+        else {
+            float tweenDur = 0.2f;
+            float tweenDelay = 0.1f;
 
-        // Debug.Log("Player draws " + num + " card" + (num != 1 ? "s" : "") + "!");
+            // Debug.Log("Player draws " + num + " card" + (num != 1 ? "s" : "") + "!");
 
-        for (int i = 0; i < num; i++) {
-            // If deck has no cards, shuffle GY into deck
-            if (deck.Count < 1) {
-                // If GY has cards, shuffle GY into deck
-                // else (deck and GY have no cards at this point), break loop since you can't draw any more cards
-                //! Only shuffle GY into deck when the deck is empty which means you have to draw cards 1 by 1 until deck is empty first
-                if (gy.Count > 0) {
-                    // Add each card listed in gy to deck then clear gy 
-                    foreach (Card_Stats card in gy) {
-                        deck.Add(card);
-                        card.transform.SetParent(cardParent_Deck);
-                        card.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
+            for (int i = 0; i < num; i++) {
+                // If deck has no cards, shuffle GY into deck
+                if (deck.Count < 1) {
+                    // If GY has cards, shuffle GY into deck
+                    // else (deck and GY have no cards at this point), break loop since you can't draw any more cards
+                    //! Only shuffle GY into deck when the deck is empty which means you have to draw cards 1 by 1 until deck is empty first
+                    if (gy.Count > 0) {
+                        // Add each card listed in gy to deck then clear gy 
+                        foreach (Card_Stats card in gy) {
+                            deck.Add(card);
+                            card.transform.SetParent(cardParent_Deck);
+                            card.transform.localPosition = Vector3.zero; // Reset card pos when moved to deck
+                        }
+
+                        gy.Clear();
+                        UpdateNoOfCards_GY(); // Update GY count
+
+                        Shuffle(); // Shuffle the deck
+                        UpdateNoOfCards_Deck(); // Update deck count
                     }
-
-                    gy.Clear();
-                    UpdateNoOfCards_GY(); // Update GY count
-
-                    Shuffle(); // Shuffle the deck
-
-                    yield return World_AnimHandler.WaitForSeconds(0.2f); //! TODO: Play shuffle anim here
-
-                    UpdateNoOfCards_Deck(); // Update deck count
-
-                    yield return World_AnimHandler.WaitForSeconds(0.2f);
+                    else { break; }
                 }
-                else { break; }
+
+                // We're updating the deck and hand lists as we move cards between them each time we draw a card
+                // Therefore, only the top card of the deck (deck[0]) is accessed
+                Card_Stats currCard = deck[0]; 
+
+                hand.Add(currCard);
+                deck.RemoveAt(0);
+
+                currCard.transform.SetParent(cardParent_Hand);
+                currCard.gameObject.SetActive(true);
+
+                // Debug.Log("Draw " + (i + 1));
+
+                // Card position in hand
+                Vector2 newPos = GetCardHandPos(currCard.transform, cardParent_Hand.childCount - 1);
+
+                currCard.transform.DOLocalMove(newPos, tweenDur);
+                currCard.EventHandler.SetCardLocalStartPos(newPos);
+
+                UpdateNoOfCards_Hand();
+                UpdateNoOfCards_Deck();
+
+                yield return World_AnimHandler.WaitForSeconds(tweenDelay);
             }
 
-            // We're updating the deck and hand lists as we move cards between them each time we draw a card
-            // Therefore, only the top card of the deck (deck[0]) is accessed
-            Card_Stats currCard = deck[0]; 
-
-            hand.Add(currCard);
-            deck.RemoveAt(0);
-
-            currCard.transform.SetParent(cardParent_Hand);
-            currCard.gameObject.SetActive(true);
-
-            // Debug.Log("Draw " + (i + 1));
-
-            // Card position in hand
-            Vector2 newPos = GetCardHandPos(currCard.transform, cardParent_Hand.childCount - 1);
-
-            currCard.transform.DOLocalMove(newPos, tweenDur);
-            currCard.EventHandler.SetCardLocalStartPos(newPos);
-
-            UpdateNoOfCards_Hand();
-            UpdateNoOfCards_Deck();
-
-            yield return World_AnimHandler.WaitForSeconds(tweenDelay);
+            yield return World_AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
         }
-
-        yield return World_AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
     }
 
     // Discard cards
@@ -236,7 +234,7 @@ public class Player_Cards : MonoBehaviour {
         cardUI.DOLocalMoveY(-100, tweenDur);
 
         yield return World_AnimHandler.WaitForSeconds(tweenDur);
-        
+
         World_AnimHandler.isAnimating = false;
     }
 

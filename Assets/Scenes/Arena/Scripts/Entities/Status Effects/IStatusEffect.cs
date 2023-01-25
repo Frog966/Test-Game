@@ -4,13 +4,19 @@ public interface IStatusEffect {
     StatusEffect_ID ID { get; }
     StatusEffect_UI UI { get; } // The UI this SE is attached to
     Sprite Sprite { get; }
-    Entity Entity { get; } // The entity this SE is attached to
+    Entity Entity { get; set; } // The entity this SE is attached to
     GameObject GameObject { get; } // The GO this SE is attached to
 
-    void RemoveThisSE() { Entity.statusEffect_List.Remove(this); }
-
     // Remove self from entity's SE list
-    void StartOfTurn() { RemoveThisSE(); }
+    void RemoveThisSE() { 
+        // Debug.Log("RemoveThisSE: " + Entity);
+
+        UI.transform.SetParent(World_StatusEffectLibrary.StatusEffectPool); // Move the UI obj back to pool
+        Entity.statusEffect_List.Remove(this); // Remove this SE from the entity's list
+    }
+
+    void StartOfTurn() { }
+    void EndOfTurn() { }
 }
 
 public interface IStatusEffect_Stackable : IStatusEffect {
@@ -31,7 +37,7 @@ public interface IStatusEffect_Stackable : IStatusEffect {
 
     // Reduce stack. If <= 0, remove self from entity's SE list
     // This is an Explicit Interface Implementation overriding the StartOfTurn() from IStatusEffect
-    void IStatusEffect.StartOfTurn() {
+    void IStatusEffect.EndOfTurn() {
         MinusCounter();
 
         if (Counter <= 0) { RemoveThisSE(); }
@@ -60,7 +66,7 @@ public interface IStatusEffect_Timer : IStatusEffect {
 
     // Reduce timer. If <= 0, perform an action then remove self from entity's SE list
     // This is an Explicit Interface Implementation overriding the StartOfTurn() from IStatusEffect
-    void IStatusEffect.StartOfTurn() {
+    void IStatusEffect.EndOfTurn() {
         MinusTimer(Timer - 1);
         
         if (Timer <= 0) {

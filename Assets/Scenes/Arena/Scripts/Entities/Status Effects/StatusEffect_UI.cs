@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class StatusEffect_UI : MonoBehaviour {
     [SerializeField] private IStatusEffect thisSE; // The SE that is attached to this GO
 
     [Header("UI Stuff")]
     [SerializeField] private Image icon;
-    [SerializeField] private Text counter;
+    [SerializeField] private TMP_Text counter;
 
     public void SetSprite(Sprite sprite) { icon.sprite = sprite; }
     public void UpdateCounter(int i) { counter.text = i.ToString(); }

@@ -10,7 +10,7 @@ public class SE_AttackUp : MonoBehaviour, IStatusEffect_Stackable {
     public StatusEffect_ID ID { get => id; }
     public StatusEffect_UI UI { get => ui; } // The UI this SE is attached to
     public Sprite Sprite { get => sprite; }
-    public Entity Entity { get => entity; } // The entity this SE is attached to
+    public Entity Entity { get => entity; set => entity = value; } // The entity this SE is attached to
     public int Counter { get => counter; set => counter = value; }
     public GameObject GameObject { get => this.gameObject; }
 

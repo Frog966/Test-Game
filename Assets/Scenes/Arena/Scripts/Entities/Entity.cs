@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,10 +25,20 @@ public class Entity : MonoBehaviour {
     public Transform GetSEParent() { return statusEffectParent; }
 
     public IEnumerator StartTurn() {
-        foreach (IStatusEffect se in statusEffect_List) {
+        // Create a duplicate statusEffect_List to iterate through it
+        foreach (IStatusEffect se in statusEffect_List.ToList()) {
             se.StartOfTurn();
 
-            yield return new WaitForSeconds(0.1f);
+            yield return World_AnimHandler.WaitForSeconds(0.1f);
+        }
+    }
+
+    public IEnumerator EndTurn() {
+        // Create a duplicate statusEffect_List to iterate through it
+        foreach (IStatusEffect se in statusEffect_List.ToList()) {
+            se.EndOfTurn();
+
+            yield return World_AnimHandler.WaitForSeconds(0.1f);
         }
     }
 

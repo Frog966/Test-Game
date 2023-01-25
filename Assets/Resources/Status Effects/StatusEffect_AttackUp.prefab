@@ -41,11 +41,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9104662412926067725, guid: c742dd01e897d594fbf1298c625a1162, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 15
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9104662412926067725, guid: c742dd01e897d594fbf1298c625a1162, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 15
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9104662412926067725, guid: c742dd01e897d594fbf1298c625a1162, type: 3}
       propertyPath: m_LocalPosition.x
@@ -102,7 +102,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5361912872559528363, guid: c742dd01e897d594fbf1298c625a1162, type: 3}
   m_PrefabInstance: {fileID: 8928688903178787902}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5746199182419087728
+--- !u!114 &5031065455970999843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +116,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   ui: {fileID: 9093684074901066810}
-  sprite: {fileID: 21300000, guid: ed2cb61a23c184c4a81efcfbd8a51a21, type: 3}
+  sprite: {fileID: 21300000, guid: 6338e0515d1e42344958be726b930070, type: 3}
+  counter: 1
 --- !u!114 &9093684074901066810 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 421739933165373444, guid: c742dd01e897d594fbf1298c625a1162, type: 3}
