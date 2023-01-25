@@ -84,8 +84,6 @@ public class World_Grid : MonoBehaviour {
         public static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
 
         public static IEnumerator TelegraphHere(List<Vector2Int> posList) {
-            World_AnimHandler.isAnimating = true;
-            
             ReturnDistinctPosList(posList); // Remove any duplicates 
 
             for (int i = 0; i < posList.Count; i++) { 
@@ -96,13 +94,9 @@ public class World_Grid : MonoBehaviour {
                 // Begin waiting at the last pos
                 if (i >= posList.Count - 1) yield return World_AnimHandler.WaitForCurrentAnim(currNode.GetAnimator());
             }
-
-            World_AnimHandler.isAnimating = false;
         }
 
         public static IEnumerator FlashHere(List<Vector2Int> posList, float delay = 0.25f) {
-            World_AnimHandler.isAnimating = true;
-            
             ReturnDistinctPosList(posList); // Remove any duplicates 
 
             for (int i = 0; i < posList.Count; i++) { 
@@ -119,8 +113,6 @@ public class World_Grid : MonoBehaviour {
 
                 currNode.StopAnim_Flash();
             }
-
-            World_AnimHandler.isAnimating = false;
         }
 
         // Returns list of hit entities
