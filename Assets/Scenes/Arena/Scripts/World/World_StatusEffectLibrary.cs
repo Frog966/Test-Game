@@ -66,68 +66,10 @@ public class World_StatusEffectLibrary : MonoBehaviour {
     }
 }
 
-// A class that contains a status effect's info
-// You will clone a copy of the status effect you want from the dictionary when you call AddStatusEffect()
-//! Does not actually contain a status effect's functionality as player and enemies use them differently
-// [System.Serializable]
-// public class StatusEffect_Info {
-//     public bool isStackable;
-//     public StatusEffect_ID id;
-//     public Sprite sprite;
-    
-//     // These are private so it doesn't show up on inspector and possibly edited by another dev
-//     private int stackCounter;
-//     private StatusEffect_UI ui;
-
-//     // Getters
-//     //-----------------------------------------------------------------------------------------------------------------------------------------------------
-//     public StatusEffect_UI GetUI() { return ui; }
-//     public int GetStackCounter() { return stackCounter; }
-//     //-----------------------------------------------------------------------------------------------------------------------------------------------------
-
-//     // Setters
-//     //-----------------------------------------------------------------------------------------------------------------------------------------------------
-//     public void SetUI(StatusEffect_UI newUI) {
-//         ui = newUI;
-//         ui.Setup(this);
-//     }
-
-//     public void SetStackCounter(int i) {
-//         stackCounter = i;
-//         ui.UpdateCounter();
-//     }
-
-//     public void AddStackCounter(int i) {
-//         stackCounter += i;
-//         ui.UpdateCounter();
-//     }
-
-//     public void MinusStackCounter(int i) {
-//         stackCounter -= i;
-//         if (stackCounter < 0) { stackCounter = 0; }
-
-//         ui.UpdateCounter();
-//     }
-//     //-----------------------------------------------------------------------------------------------------------------------------------------------------
-
-//     // Private constructor
-//     // Only used by Clone()
-//     private StatusEffect_Info (StatusEffect_Info _ref, StatusEffect_UI _ui, int _stackCounter = 1) {
-//         isStackable = _ref.isStackable;
-//         id = _ref.id;
-//         sprite = _ref.sprite;
-
-//         SetUI(_ui);
-//         SetStackCounter(_stackCounter);
-//     }
-
-//     public StatusEffect_Info Clone(StatusEffect_UI newUI, int newStackCounter = 1) { return new StatusEffect_Info(this, newUI, newStackCounter); }
-// }
-
 // An enum that holds every status effect (buff/debuff)
 public enum StatusEffect_ID {
-    ATTACK_UP,
-    ATTACK_DOWN,
+    ATT_UP,
+    ATT_DOWN,
     DEF_UP,
     DEF_DOWN,
     STUN
