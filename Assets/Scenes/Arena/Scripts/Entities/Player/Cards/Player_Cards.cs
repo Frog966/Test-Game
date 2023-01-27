@@ -136,6 +136,12 @@ public class Player_Cards : MonoBehaviour {
 
     public IEnumerator DiscardHand() { yield return Discard(hand); }
 
+    // Update card UIs
+    // Called by World_StatusEffectLibrary.cs
+    public void UpdateCardUI() {
+        foreach (Card_Stats card in hand) { card.UpdateUI(); }
+    }
+
     // Adds a card prefab to cardParent_Deck + Registers card to deck card list
     // Returns the card that was created
     public Card_Stats CreateCard_Deck(string id) {

@@ -16,11 +16,13 @@ public class Card_Test : MonoBehaviour, ICardEffect {
 
         yield return World_Grid.Combat.FlashHere(posList);
 
-        if (hitEntities.Count > 0) { World_StatusEffectLibrary.AddStatusEffect(cardStats.Player.GetEntity(), StatusEffect_ID.ATT_UP); }
+        if (hitEntities.Count > 0) { 
+            World_StatusEffectLibrary.AddStatusEffect(cardStats.Player.GetEntity(), StatusEffect_ID.ATTACK);
+        }
 
         // On-hit effects here
         foreach (Entity entity in hitEntities) {
-            World_StatusEffectLibrary.AddStatusEffect(entity, StatusEffect_ID.ATT_UP);
+            World_StatusEffectLibrary.AddStatusEffect(entity, StatusEffect_ID.DEFENCE);
         }
     }
 

@@ -28,19 +28,17 @@ public interface IStatusEffect_Stackable : IStatusEffect {
     }
     
     void MinusCounter(int i = 1) {
-        Counter -= i;
-
-        if (Counter <= 0) Counter = 0;
-        
+        Counter -= i;        
         UI.UpdateCounter(Counter);
     }
 
     // Reduce stack. If <= 0, remove self from entity's SE list
     // This is an Explicit Interface Implementation overriding the StartOfTurn() from IStatusEffect
     void IStatusEffect.EndOfTurn() {
-        MinusCounter();
+        if (Counter > 0) { MinusCounter(); }
+        else { AddCounter(); }
 
-        if (Counter <= 0) { RemoveThisSE(); }
+        if (Counter == 0) { RemoveThisSE(); }
     }
 }
 
@@ -57,7 +55,7 @@ public interface IStatusEffect_Timer : IStatusEffect {
     void MinusTimer(int i = 1) {
         Timer -= i;
         
-        if (Timer <= 0) Timer = 0;
+        if (Timer <= 0) { Timer = 0; }
         
         UI.UpdateCounter(Timer);
     }

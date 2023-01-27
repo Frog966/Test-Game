@@ -26,11 +26,10 @@ public class Player_CardLibrary : MonoBehaviour {
     public List<Card_Stats> GetLibrary_Legendary() { return library.Values.ToList().Where((card) => card.Rarity == CardRarity.LEGENDARY).ToList(); }
 
     private void InitLibrary() {
+        Card_Stats.Setup(player); // Setup player ref for all cards
+
         foreach (Card_Stats card in Resources.LoadAll("Cards", typeof(Card_Stats)).Cast<Card_Stats>().ToArray()) {
-            if (!library.ContainsKey(card.ID)) {
-                card.Setup(player); // Setup card as we're adding it to the library
-                library.Add(card.ID, card);
-            }
+            if (!library.ContainsKey(card.ID)) { library.Add(card.ID, card); }
             else { Debug.LogWarning("There is a duplicate card ID '" + card.ID + "' found in the Resources folder!"); }
         }
     }

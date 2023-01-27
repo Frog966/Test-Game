@@ -19,7 +19,8 @@ public class Card_Stats : MonoBehaviour {
     [SerializeField] private bool isUpgraded;
     [SerializeField] private Sprite image;
     [SerializeField] private string id, desc;
-    [SerializeField] private int cost, dmg, noOfHits = 1;
+    [SerializeField] private int cost, dmg, noOfHits = 1; // The base stats
+    private int _cost, _dmg, _noOfHits; // The derived stats after math
 
     // Properties
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -34,19 +35,29 @@ public class Card_Stats : MonoBehaviour {
     public bool IsUpgraded { get => isUpgraded; }
     public string ID { get => id; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     public string Desc { get => desc; }
-    public int Dmg { get => dmg; }
-    public int Cost { get => cost; }
-    public int NoOfHits { get => noOfHits; }
+    public int Dmg { get => _dmg; }
+    public int Cost { get => _cost; }
+    public int NoOfHits { get => _noOfHits; }
     public Sprite Image { get => image; }
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------
     
-    // Constructor
-    public void Setup(Player _player) {
+    // Sets up static stuff for Card_Stats
+    public static void Setup(Player _player) {
         if (!player) player = _player;
         if (!cardHandler) cardHandler = player.CardsHandler();
         if (!energyHandler) energyHandler = player.EnergyHandler();
+    }
 
-        uiHandler.Setup(this);
+    // Preferably called after Awake()
+    public void UpdateUI() {
+        int modifier_Att = player.GetEntity().GetStackableSECounter(StatusEffect_ID.ATTACK) * 10;
+        int finalDmg = dmg + modifier_Att;
+        
+        _dmg = finalDmg > 0 ? finalDmg : 0;
+        _cost = cost;
+        _noOfHits = noOfHits;
+
+        uiHandler.UpdateText();
     }
 
     // Copy the card passed except CardType as param then setup
@@ -60,8 +71,6 @@ public class Card_Stats : MonoBehaviour {
         cost = cardStats.Cost;
         noOfHits = cardStats.NoOfHits;
         image = cardStats.Image;
-
-        Setup(player);
     }
 
     public IEnumerator Effect() {
@@ -69,9 +78,13 @@ public class Card_Stats : MonoBehaviour {
         else yield return null;
     }
 
-    private void Awake() {
+    void Awake() {
         if (!uiHandler) uiHandler = this.GetComponent<Card_UI>();
-        if (!eventHandler) eventHandler = this.GetComponent<Card_Events>();
         if (effect == null) effect = this.GetComponent<ICardEffect>();
+        if (!eventHandler) eventHandler = this.GetComponent<Card_Events>();
+    }
+
+    void Start() {
+        UpdateUI();
     }
 }

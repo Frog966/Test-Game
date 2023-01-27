@@ -11,6 +11,7 @@ public class Card_UI : MonoBehaviour {
     [SerializeField] private Text dmg_T;
     [SerializeField] private Text cost_T;
 
+    private Card_Stats card;
     private RectTransform rectTrans;
 
     // Getters
@@ -18,7 +19,6 @@ public class Card_UI : MonoBehaviour {
     // Returns card width
     public float GetWidth() { 
         if (!rectTrans) rectTrans = this.GetComponent<RectTransform>(); // Sanity check
-
         return rectTrans.rect.width; 
     }
 
@@ -29,19 +29,20 @@ public class Card_UI : MonoBehaviour {
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // Constructor
-    public void Setup(Card_Stats card) {
-        // Debug.Log("Card_UI Setup: " + card.ID);
-
-        spriteHolder.sprite = card.Image;
-
-        id_T.text = card.ID;
-        desc_T.text = card.Desc;
+    // Called by Card_Stats.UpdateUI()
+    // Preferably called after Awake()
+    public void UpdateText() {
         cost_T.text = card.Cost.ToString();
         dmg_T.text = card.Dmg.ToString() + (card.NoOfHits > 1 ? "x" + card.NoOfHits : "");
     }
 
     void Awake() {
+        card = this.GetComponent<Card_Stats>();
         rectTrans = this.GetComponent<RectTransform>();
+
+        spriteHolder.sprite = card.Image;
+
+        id_T.text = card.ID;
+        desc_T.text = card.Desc;
     }
 }

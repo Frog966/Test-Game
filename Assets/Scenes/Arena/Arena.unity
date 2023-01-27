@@ -7422,6 +7422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64f3e55b862bf644dbc4f8ff8ff64a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 652856511}
   statusEffectPool: {fileID: 1877861981}
 --- !u!224 &1615982852 stripped
 RectTransform:

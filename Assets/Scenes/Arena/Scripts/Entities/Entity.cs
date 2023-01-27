@@ -20,9 +20,16 @@ public class Entity : MonoBehaviour {
     private Stack<Action> todo_OnDeath = new Stack<Action>();
 
     // Getters
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     public int GetHealth() { return health; }
     public Faction GetFaction() { return faction; }
     public Transform GetSEParent() { return statusEffectParent; }
+    public int GetStackableSECounter(StatusEffect_ID id) { 
+        IStatusEffect_Stackable se = (IStatusEffect_Stackable)statusEffect_List.Find((el) => el.ID == id);
+
+        return se != null ? se.Counter : 0; 
+    }
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public IEnumerator StartTurn() {
         // Create a duplicate statusEffect_List to iterate through it
@@ -43,7 +50,12 @@ public class Entity : MonoBehaviour {
     }
 
     public virtual void OnHit(int baseDmg) {
-        health -= baseDmg;
+        int modifier_Def = GetStackableSECounter(StatusEffect_ID.DEFENCE) * 10;
+        int finalDmg = baseDmg - modifier_Def;
+        
+        // Debug.Log("OnHit: " + baseDmg + ", " + finalDmg);
+
+        health -= finalDmg > 0 ? finalDmg : 0;
 
         health_T.text = health.ToString(); // Update health text
     }
