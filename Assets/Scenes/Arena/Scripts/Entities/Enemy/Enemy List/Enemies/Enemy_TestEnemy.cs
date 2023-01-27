@@ -28,8 +28,8 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
                 //     break;
                 case 0: {
                     List<Vector2Int> posList = World_Grid.Combat.ReturnRelativePosList(
-                        // new Vector2Int(1, 1),
-                        new Vector2Int(0, 0),
+                        new Vector2Int(1, 1),
+                        // new Vector2Int(0, 0),
                         new List<Vector2Int>() { 
                             new Vector2Int(-1, 0),
                             new Vector2Int(1, 0),
@@ -38,16 +38,20 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
                         }
                     );
 
+                    IEnumerator Attack() {
+                        List<Entity> hitEntities = World_Grid.Combat.HitHere(entity.GetFaction(), posList, entity.GetFinalDamage(10));
+
+                        yield return World_Grid.Combat.FlashHere(posList);
+
+                        if (hitEntities.Count > 0) {
+                            World_StatusEffectLibrary.AddStatusEffect(entity, StatusEffect_ID.ATTACK, 2);
+                        }
+                    }
+
                     // AddToTurnQueue(new IEnumerator[] { World_Grid.TelegraphHere(posList) });
                     AddToTurnQueue(new IEnumerator[] { Attack() });
                     
                     return turnQueue.Dequeue();
-
-                    IEnumerator Attack() {
-                        World_Grid.Combat.HitHere(entity.GetFaction(), posList, 1000);
-
-                        yield return World_Grid.Combat.FlashHere(posList);
-                    }
                 }
                 default:
                     Debug.LogError(this.gameObject.name + " pattern randomizer went out of bounds!");

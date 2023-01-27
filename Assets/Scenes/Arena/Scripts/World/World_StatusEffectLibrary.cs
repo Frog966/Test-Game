@@ -60,7 +60,7 @@ public class World_StatusEffectLibrary : MonoBehaviour {
         }
 
         // Depending on the SE, update player cards' UI
-        if (target == _this.player.GetEntity() && id == StatusEffect_ID.ATTACK) { _this.player.CardsHandler().UpdateCardUI(); }
+        if (target == _this.player.GetEntity() && id == StatusEffect_ID.ATTACK) { _this.player.CardsHandler().UpdateHandCardUI(); }
     }
 
     public static void AddStatusEffect(List<Entity> targets, StatusEffect_ID id, int stackChange = 0) {

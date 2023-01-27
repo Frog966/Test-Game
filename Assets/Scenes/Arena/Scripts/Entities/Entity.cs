@@ -24,12 +24,25 @@ public class Entity : MonoBehaviour {
     public int GetHealth() { return health; }
     public Faction GetFaction() { return faction; }
     public Transform GetSEParent() { return statusEffectParent; }
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
     public int GetStackableSECounter(StatusEffect_ID id) { 
         IStatusEffect_Stackable se = (IStatusEffect_Stackable)statusEffect_List.Find((el) => el.ID == id);
 
         return se != null ? se.Counter : 0; 
     }
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    // Calculates the final dmg that will be dealt by this entity by including SEs
+    public int GetFinalDamage(int baseDmg) { 
+        int modifier_Att = GetStackableSECounter(StatusEffect_ID.ATTACK) * 10;
+        int finalDmg = baseDmg + modifier_Att;
+
+        // Debug.Log("baseDmg: " + baseDmg);
+        // Debug.Log("modifier_Att: " + modifier_Att);
+        // Debug.Log("GetFinalDamage: " + finalDmg);
+
+        return finalDmg > 0 ? finalDmg : 0;
+    }
 
     public IEnumerator StartTurn() {
         // Create a duplicate statusEffect_List to iterate through it
@@ -57,7 +70,7 @@ public class Entity : MonoBehaviour {
 
         health -= finalDmg > 0 ? finalDmg : 0;
 
-        health_T.text = health.ToString(); // Update health text
+        UpdateHealthUI();
     }
 
     // Adds a new action that the entity will perform on death
@@ -69,7 +82,13 @@ public class Entity : MonoBehaviour {
         this.gameObject.SetActive(false);
     }
 
+    // Update health text
+    private void UpdateHealthUI() { health_T.text = health.ToString(); }
+
     void Awake() {
         while (statusEffectParent.childCount > 0) { Destroy(statusEffectParent.GetChild(0).gameObject); }
+        
+        health = healthMax;
+        UpdateHealthUI();
     }
 }

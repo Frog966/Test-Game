@@ -50,10 +50,7 @@ public class Card_Stats : MonoBehaviour {
 
     // Preferably called after Awake()
     public void UpdateUI() {
-        int modifier_Att = player.GetEntity().GetStackableSECounter(StatusEffect_ID.ATTACK) * 10;
-        int finalDmg = dmg + modifier_Att;
-        
-        _dmg = finalDmg > 0 ? finalDmg : 0;
+        _dmg = player.GetEntity().GetFinalDamage(dmg);
         _cost = cost;
         _noOfHits = noOfHits;
 

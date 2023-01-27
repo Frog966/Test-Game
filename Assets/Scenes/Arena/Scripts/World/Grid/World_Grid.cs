@@ -148,7 +148,7 @@ public class World_Grid : MonoBehaviour {
         // relativePosList MUST be values that are relative to origin point
         // eg. origin: (0, 0), relativePosList: [(-1, 0)] means the post list will be the left of origin
         // If you add origin, it'll be included in the returned list
-        public static List<Vector2Int> ReturnRelativePosList(Vector2Int origin, List<Vector2Int> relativePosList, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnRelativePosList(Vector2Int origin, List<Vector2Int> relativePosList, bool includeOrigin = true) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
             // Calculate and add any pos that are within the grid
@@ -190,7 +190,7 @@ public class World_Grid : MonoBehaviour {
         }
 
         // Returns a straight horizontal line on the same row as origin
-        public static List<Vector2Int> ReturnPosList_Horizontal(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnPosList_Horizontal(Vector2Int origin, bool isPiercing = true, bool includeOrigin = true) {
             // Combines left and right pos lists while also checking for piercing in both
             List<Vector2Int> validPosList = ReturnPosList_Left(origin, isPiercing, includeOrigin).Concat(ReturnPosList_Right(origin, isPiercing, includeOrigin)).ToList();
 
@@ -226,7 +226,7 @@ public class World_Grid : MonoBehaviour {
         }
 
         // Returns a straight line below origin
-        public static List<Vector2Int> ReturnPosList_Vertical(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
+        public static List<Vector2Int> ReturnPosList_Vertical(Vector2Int origin, bool isPiercing = true, bool includeOrigin = true) {
             // Combines up and down pos lists while also checking for piercing in both
             List<Vector2Int> validPosList = ReturnPosList_Up(origin, isPiercing, includeOrigin).Concat(ReturnPosList_Down(origin, isPiercing, includeOrigin)).ToList();
 

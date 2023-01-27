@@ -54,6 +54,7 @@ public class Player_Cards : MonoBehaviour {
 
             // Debug.Log("Player draws " + num + " card" + (num != 1 ? "s" : "") + "!");
 
+            // List out new hand first
             for (int i = 0; i < num; i++) {
                 // If deck has no cards, shuffle GY into deck
                 if (deck.Count < 1) {
@@ -84,6 +85,12 @@ public class Player_Cards : MonoBehaviour {
                 hand.Add(currCard);
                 deck.RemoveAt(0);
 
+            }
+
+            UpdateHandCardUI(); // Update hand cards' UI
+
+            // Begin tweening hand cards into hand
+            foreach (Card_Stats currCard in hand) {
                 currCard.transform.SetParent(cardParent_Hand);
                 currCard.gameObject.SetActive(true);
 
@@ -138,7 +145,7 @@ public class Player_Cards : MonoBehaviour {
 
     // Update card UIs
     // Called by World_StatusEffectLibrary.cs
-    public void UpdateCardUI() {
+    public void UpdateHandCardUI() {
         foreach (Card_Stats card in hand) { card.UpdateUI(); }
     }
 
