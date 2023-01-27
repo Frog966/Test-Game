@@ -167,7 +167,7 @@ MonoBehaviour:
   health_T: {fileID: 2200649676582278844}
   faction: 0
   statusEffectParent: {fileID: 4579064732601412952}
-  healthMax: 0
+  healthMax: 100
   health: 0
 --- !u!1 &6779954261484465797
 GameObject:
