@@ -92,7 +92,7 @@ public class World_Grid : MonoBehaviour {
                 currNode.PlayAnim_Flicker(); 
                 
                 // Begin waiting at the last pos
-                if (i >= posList.Count - 1) yield return World_AnimHandler.WaitForCurrentAnim(currNode.GetAnimator());
+                if (i >= posList.Count - 1) yield return AnimHandler.WaitForCurrentAnim(currNode.GetAnimator());
             }
         }
 
@@ -105,7 +105,7 @@ public class World_Grid : MonoBehaviour {
                 currNode.PlayAnim_Flash(); 
                 
                 // Begin waiting at the last pos
-                if (i >= posList.Count - 1) yield return World_AnimHandler.WaitForSeconds(delay);
+                if (i >= posList.Count - 1) yield return AnimHandler.WaitForSeconds(delay);
             }
 
             for (int i = 0; i < posList.Count; i++) { 

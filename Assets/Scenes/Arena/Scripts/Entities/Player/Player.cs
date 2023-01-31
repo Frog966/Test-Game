@@ -45,7 +45,7 @@ public class Player : MonoBehaviour {
 
         yield return CardsHandler().Draw(5);
 
-        World_AnimHandler.isAnimating = false; //! The game will not stop animating until the player's turn
+        AnimHandler.isAnimating = false; //! The game will not stop animating until the player's turn
     }
 
     // Player's end turn function
@@ -53,8 +53,8 @@ public class Player : MonoBehaviour {
     public void EndTurn() { StartCoroutine(EndTurn_Anim()); }
 
     private IEnumerator EndTurn_Anim() {
-        if (!World_AnimHandler.isAnimating) {
-            World_AnimHandler.isAnimating = true;
+        if (!AnimHandler.isAnimating) {
+            AnimHandler.isAnimating = true;
             
             Debug.Log("Player ends turn!");
 

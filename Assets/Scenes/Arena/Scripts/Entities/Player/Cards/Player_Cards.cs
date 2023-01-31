@@ -105,10 +105,10 @@ public class Player_Cards : MonoBehaviour {
                 UpdateNoOfCards_Hand();
                 UpdateNoOfCards_Deck();
 
-                yield return World_AnimHandler.WaitForSeconds(tweenDelay);
+                yield return AnimHandler.WaitForSeconds(tweenDelay);
             }
 
-            yield return World_AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
+            yield return AnimHandler.WaitForSeconds(tweenDur - tweenDelay);
         }
     }
 
@@ -131,7 +131,7 @@ public class Player_Cards : MonoBehaviour {
                 cardTrans.DOLocalMove(Vector2.zero, tweenDur);
             }
             
-            yield return World_AnimHandler.WaitForSeconds(tweenDur);
+            yield return AnimHandler.WaitForSeconds(tweenDur);
 
             foreach (Card_Stats card in discardedCards) { card.gameObject.SetActive(false); }
 
@@ -240,19 +240,19 @@ public class Player_Cards : MonoBehaviour {
     }
 
     public IEnumerator CardUI_Exit() {
-        World_AnimHandler.isAnimating = true;
+        AnimHandler.isAnimating = true;
 
         float tweenDur = 0.2f;
 
         cardUI.DOLocalMoveY(-100, tweenDur);
 
-        yield return World_AnimHandler.WaitForSeconds(tweenDur);
+        yield return AnimHandler.WaitForSeconds(tweenDur);
 
-        World_AnimHandler.isAnimating = false;
+        AnimHandler.isAnimating = false;
     }
 
     private IEnumerator ResolveCard_Anim(Card_Stats playedCard) {
-        World_AnimHandler.isAnimating = true;
+        AnimHandler.isAnimating = true;
         
         playedCard.EventHandler.SetCanvasOverrideSorting(false); // Disable card's override sorting just in case
 
@@ -269,7 +269,7 @@ public class Player_Cards : MonoBehaviour {
         hand.RemoveAt(hand.FindIndex((card) => playedCard == card)); // Remove from hand list as card is tweening to cardParent_Play
         UpdateNoOfCards_Hand();
 
-        yield return World_AnimHandler.WaitForSeconds(tweenDur1);
+        yield return AnimHandler.WaitForSeconds(tweenDur1);
 
         ArrangeCardsInHand(); // Arrange cards in hand after moving played card out of hand
         //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ public class Player_Cards : MonoBehaviour {
             cardTrans.SetParent(cardParent_Exile);
             cardTrans.DOLocalMove(Vector2.zero, tweenDur3);
 
-            yield return World_AnimHandler.WaitForSeconds(tweenDur3);
+            yield return AnimHandler.WaitForSeconds(tweenDur3);
 
             exile.Add(playedCard); // Add to exile list
 
@@ -300,7 +300,7 @@ public class Player_Cards : MonoBehaviour {
             cardTrans.SetParent(cardParent_GY);
             cardTrans.DOLocalMove(Vector2.zero, tweenDur2);
             
-            yield return World_AnimHandler.WaitForSeconds(tweenDur2);
+            yield return AnimHandler.WaitForSeconds(tweenDur2);
 
             gy.Add(playedCard); // Add to GY list
 
@@ -312,7 +312,7 @@ public class Player_Cards : MonoBehaviour {
         //--------------------------------------------------------------------------------------------------------------------------------------------------
         cardTrans.gameObject.SetActive(false); // Disable card after card effect
 
-        World_AnimHandler.isAnimating = false;
+        AnimHandler.isAnimating = false;
         //--------------------------------------------------------------------------------------------------------------------------------------------------
     }
 

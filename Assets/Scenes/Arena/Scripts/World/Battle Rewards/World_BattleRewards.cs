@@ -97,7 +97,7 @@ public class World_BattleRewards : MonoBehaviour {
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((data) => { 
-                if (!currCard.isPlayable && !World_AnimHandler.isAnimating) { 
+                if (!currCard.isPlayable && !AnimHandler.isAnimating) { 
                     Player_Cards.Deck.AddCardToDeck(currCard.ID);
                     
                     cardUI.gameObject.SetActive(false);

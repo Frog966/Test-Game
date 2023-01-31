@@ -11,7 +11,7 @@ public class Player_Movement : MonoBehaviour {
 
     // World_Grid.Movement.SetGridPos() but with restrictions
     public void MoveTo(Vector2Int vec2) {
-        if (!World_AnimHandler.isAnimating) {
+        if (!AnimHandler.isAnimating) {
             World_GridNode node = World_Grid.GetNode(vec2);
 
             // Player must have enough energy to move and can only move onto player-controlled nodes 

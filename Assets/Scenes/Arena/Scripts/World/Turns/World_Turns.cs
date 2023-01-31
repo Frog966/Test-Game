@@ -23,7 +23,7 @@ public class World_Turns : MonoBehaviour {
 
     // Setup the encounter
     public void StartEncounter(World_MapNode currMapNode) {
-        World_AnimHandler.isAnimating = true;
+        AnimHandler.isAnimating = true;
 
         // Set up units
         //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public class World_Turns : MonoBehaviour {
 
             yield return StartTurn(); // Start the next turn which is the new current
         }
-        else { World_AnimHandler.isAnimating = false; } // Stop animating if 1 faction is gone
+        else { AnimHandler.isAnimating = false; } // Stop animating if 1 faction is gone
     }
 
     // Start current turn

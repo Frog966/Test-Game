@@ -92,7 +92,7 @@ public class World_Shop : MonoBehaviour {
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((data) => { 
-                if (!currCardScript.isPlayable && !World_AnimHandler.isAnimating) { 
+                if (!currCardScript.isPlayable && !AnimHandler.isAnimating) { 
                     if (player.GetBits() >= currShopCard.GetPrice()) {
                         Player_Cards.Deck.AddCardToDeck(currCardScript.ID);
                         

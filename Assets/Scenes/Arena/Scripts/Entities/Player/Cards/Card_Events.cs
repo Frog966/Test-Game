@@ -23,12 +23,12 @@ public class Card_Events : EventTrigger {
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Pointer down event
     public override void OnPointerDown(PointerEventData data) {
-        if (cardScript.isPlayable && !World_AnimHandler.isAnimating) mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
+        if (cardScript.isPlayable && !AnimHandler.isAnimating) mousePosOffset = (Vector2)this.transform.position - GetMouseWorldPos();
     }
 
     // Pointer enter event
     public override void OnPointerEnter(PointerEventData data) {
-        if (!World_AnimHandler.isAnimating) {
+        if (!AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(true);
 
             if (cardScript.isPlayable) { this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f); }
@@ -38,7 +38,7 @@ public class Card_Events : EventTrigger {
 
     // Pointer enter event
     public override void OnPointerExit(PointerEventData data) {
-        if (!World_AnimHandler.isAnimating) {
+        if (!AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(false);
             
             if (cardScript.isPlayable) { this.transform.DOLocalMove(startLocalPos, 0.1f); }
@@ -48,7 +48,7 @@ public class Card_Events : EventTrigger {
 
     // Drag event
     public override void OnDrag(PointerEventData data) {
-        if (cardScript.isPlayable && !World_AnimHandler.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
+        if (cardScript.isPlayable && !AnimHandler.isAnimating) this.transform.position = GetMouseWorldPos() + mousePosOffset;
     }
 
     // Drag end event
@@ -65,20 +65,20 @@ public class Card_Events : EventTrigger {
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     private void PlayCard() {
-        if (!World_AnimHandler.isAnimating) {
+        if (!AnimHandler.isAnimating) {
             if (cardScript.EnergyHandler.CanPayEnergyCost(cardScript.Cost)) { cardScript.CardHandler.ResolveCard(cardScript); }
             else { cardScript.EnergyHandler.NotEnoughEnergy(); }
         }
     }
     
     private IEnumerator ReturnToHandPos() {
-        World_AnimHandler.isAnimating = true;
+        AnimHandler.isAnimating = true;
 
         this.transform.DOLocalMove(startLocalPos, tweenDur);
 
-        yield return World_AnimHandler.WaitForSeconds(tweenDur);
+        yield return AnimHandler.WaitForSeconds(tweenDur);
 
-        World_AnimHandler.isAnimating = false;
+        AnimHandler.isAnimating = false;
     }
 
     private Vector2 GetMouseWorldPos() { return Camera.main.ScreenToWorldPoint(Input.mousePosition); }
@@ -95,7 +95,7 @@ public class Card_Events : EventTrigger {
         entry.eventID = EventTriggerType.PointerClick;
         entry.callback.AddListener((eventData) => {
             // Double click event if playable
-            if (cardScript.isPlayable && ((PointerEventData)eventData).clickCount == 2 && !World_AnimHandler.isAnimating) { PlayCard(); }
+            if (cardScript.isPlayable && ((PointerEventData)eventData).clickCount == 2 && !AnimHandler.isAnimating) { PlayCard(); }
         });
 
         this.triggers.Add(entry);

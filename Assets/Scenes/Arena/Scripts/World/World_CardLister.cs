@@ -36,7 +36,7 @@ public class World_CardLister : MonoBehaviour {
 
     private void DisplayPile(ListType listType) {
         // Do not display card list when an animation is playing as player could be using a card which would affect the card lists
-        if (!World_AnimHandler.isAnimating) {            
+        if (!AnimHandler.isAnimating) {            
             // Determine which card list we're getting from Player_Cards.cs
             //-----------------------------------------------------------------------------------------------------------------------------------------------------------
             List<Card_Stats> cardList;

@@ -2,7 +2,7 @@ using System.Collections;
 
 // Contains a static bool (isAnimating) that is used to determine if any important animations are playing
 // Also contains some functions for waiting for animations to finish
-public static class World_AnimHandler {
+public static class AnimHandler {
     public static bool isAnimating = false;
 
     // A simple coroutine that waits for seconds in float

@@ -49,7 +49,7 @@ public class Entity : MonoBehaviour {
         foreach (IStatusEffect se in statusEffect_List.ToList()) {
             se.StartOfTurn();
 
-            yield return World_AnimHandler.WaitForSeconds(0.1f);
+            yield return AnimHandler.WaitForSeconds(0.1f);
         }
     }
 
@@ -58,7 +58,7 @@ public class Entity : MonoBehaviour {
         foreach (IStatusEffect se in statusEffect_List.ToList()) {
             se.EndOfTurn();
 
-            yield return World_AnimHandler.WaitForSeconds(0.1f);
+            yield return AnimHandler.WaitForSeconds(0.1f);
         }
     }
 
