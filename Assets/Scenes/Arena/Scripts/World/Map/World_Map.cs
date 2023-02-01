@@ -27,11 +27,13 @@ public class World_Map : MonoBehaviour {
 
     // Getters
     public World_MapNode GetCurrMapNode() { return currMapNode; }
-    // public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
+    public World_MapNode GetMapNode(int x, int y) { return map[x][y]; }
 
     // Used as button function
     public void EnableMap() {
         UpdateMapUI();
+
+        AudioHandler.PlayBGM_Map();
 
         mapParent.SetActive(true);
     }
@@ -124,12 +126,8 @@ public class World_Map : MonoBehaviour {
 
         // Returns a random node type
         NodeType RandomizeNodeType(int currX, List<World_MapNode> nextNodes) {
-            if (currX >= map.Count - 1) { // Final node is always boss
-                return NodeType.BOSS;
-            }
-            else if (currX <= 0) { // Final node is always enemy
-                return NodeType.ENEMY;
-            }
+            if (currX >= map.Count - 1) { return NodeType.BOSS; } // Final node is always boss
+            else if (currX <= 0) { return NodeType.ENEMY; } // First node is always enemy
             else {
                 List<NodeType> EnumValues = Enum.GetValues(typeof(NodeType)).Cast<NodeType>().ToList();
 
@@ -139,7 +137,8 @@ public class World_Map : MonoBehaviour {
                 foreach (World_MapNode node in nextNodes) {
                     NodeType nodeType = node.GetNodeType();
 
-                    if ((nodeType == NodeType.SHOP || nodeType == NodeType.MINI_BOSS) && EnumValues.Contains(nodeType)) {
+                    if (nodeType == NodeType.SHOP && EnumValues.Contains(nodeType)) {
+                    // if ((nodeType == NodeType.SHOP || nodeType == NodeType.MINI_BOSS) && EnumValues.Contains(nodeType)) {
                         EnumValues.Remove(nodeType);
                     }
                 }
@@ -215,6 +214,19 @@ public class World_Map : MonoBehaviour {
         currLayer++;
 
         turnsHandler.StartEncounter(newNode); // Setup the encounter first before disabling map UI
+
+        switch (newNode.GetNodeType()) {
+            case NodeType.BOSS:
+                AudioHandler.PlayBGM_Boss();
+            break;
+            case NodeType.SHOP:
+                AudioHandler.PlayBGM_Shop();
+            break;
+            default:
+                AudioHandler.PlayBGM_Enemy();
+            break;
+        }
+
         mapParent.SetActive(false);
     }
 
@@ -249,5 +261,7 @@ public class World_Map : MonoBehaviour {
 
     void Start() {
         GenerateMap();
+
+        AudioHandler.PlayBGM_Map();
     }
 }

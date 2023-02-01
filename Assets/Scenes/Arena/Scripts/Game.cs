@@ -25,7 +25,7 @@ namespace Game {
         public enum NodeType {
             BOSS = 0,
             ENEMY,
-            MINI_BOSS,
+            // MINI_BOSS,
             SHOP,
         }
 

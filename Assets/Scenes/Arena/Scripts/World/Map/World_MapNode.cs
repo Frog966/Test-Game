@@ -64,19 +64,19 @@ public class World_MapNode : MonoBehaviour {
         switch (nodeType) {
             case NodeType.ENEMY:
                 icon.sprite = icon_Fight;
-                break;
-            case NodeType.MINI_BOSS:
-                icon.sprite = icon_MiniBoss;
-                break;
+            break;
+            // case NodeType.MINI_BOSS:
+            //     icon.sprite = icon_MiniBoss;
+            // break;
             case NodeType.BOSS:
                 icon.sprite = icon_Boss;
-                break;
+            break;
             case NodeType.SHOP:
                 icon.sprite = icon_Shop;
-                break;
+            break;
             default:
                 icon.sprite = null;
-                break;
+            break;
         }
 
         // Setup the lines between nodes

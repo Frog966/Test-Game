@@ -53,7 +53,7 @@ public class World_EnemyLibrary : MonoBehaviour {
 
     void Awake() {
         enemies = Resources.LoadAll("Enemies", typeof(IEnemy)).Cast<IEnemy>().ToArray();
-        minibosses = Resources.LoadAll("MiniBosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
+        // minibosses = Resources.LoadAll("MiniBosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
         bosses = Resources.LoadAll("Bosses", typeof(IEnemy)).Cast<IEnemy>().ToArray();
 
         // A huge declaration of encounterDict
@@ -72,14 +72,14 @@ public class World_EnemyLibrary : MonoBehaviour {
                         }
                     },
                     // All minibosses of MapLocale.TEST
-                    {
-                        NodeType.MINI_BOSS,
-                        new List<List<EncounterEnemyDetails>>() {
-                            new List<EncounterEnemyDetails>() {
-                                new EncounterEnemyDetails(ReturnMiniBossById("Test Miniboss"), new Vector2Int(4, 1)),
-                            }
-                        }
-                    },
+                    // {
+                    //     NodeType.MINI_BOSS,
+                    //     new List<List<EncounterEnemyDetails>>() {
+                    //         new List<EncounterEnemyDetails>() {
+                    //             new EncounterEnemyDetails(ReturnMiniBossById("Test Miniboss"), new Vector2Int(4, 1)),
+                    //         }
+                    //     }
+                    // },
                     // All bosses of MapLocale.TEST
                     {
                         NodeType.BOSS,
