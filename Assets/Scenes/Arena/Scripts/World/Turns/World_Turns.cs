@@ -41,7 +41,6 @@ public class World_Turns : MonoBehaviour {
                 GameObject newEnemyObj = GameObject.Instantiate(details.enemy.Entity.gameObject, enemyParent);
                 World_Grid.Movement.SetGridPos(newEnemyObj.GetComponent<Entity>(), details.gridPos);
             }
-            //-----------------------------------------------------------------------------------------------------------------------------------------------
 
             // Set up turns
             //-----------------------------------------------------------------------------------------------------------------------------------------------
