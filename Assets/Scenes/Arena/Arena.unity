@@ -1087,6 +1087,7 @@ MonoBehaviour:
   bgm_Shop: {fileID: 8300000, guid: 1c490374aeda9e54cbbe15a21bad5ebf, type: 3}
   bgm_Enemy: {fileID: 8300000, guid: 1225533a0f3a4a94cbca3b8d036cc594, type: 3}
   bgm_Boss: {fileID: 8300000, guid: 33c12188ba5d9724f81726520b4f6544, type: 3}
+  se_ButtonClick: {fileID: 8300000, guid: beb18372910cf5447944092b554ce49e, type: 3}
 --- !u!1 &209839829
 GameObject:
   m_ObjectHideFlags: 0
@@ -3077,6 +3078,7 @@ MonoBehaviour:
   textHand: {fileID: 1472892850}
   textGY: {fileID: 1293532220}
   textExile: {fileID: 460994026}
+  audio_CardShift: {fileID: 0}
 --- !u!114 &652856516
 MonoBehaviour:
   m_ObjectHideFlags: 0
