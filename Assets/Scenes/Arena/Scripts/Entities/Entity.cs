@@ -25,6 +25,17 @@ public class Entity : MonoBehaviour {
     public Faction GetFaction() { return faction; }
     public Transform GetSEParent() { return statusEffectParent; }
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Setters
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    public int SetHealth(int newHealth) { 
+        health = newHealth > healthMax ? healthMax : newHealth;
+
+        UpdateHealthUI();
+        
+        return health; 
+    }
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     
     public int GetStackableSECounter(StatusEffect_ID id) { 
         IStatusEffect_Stackable se = (IStatusEffect_Stackable)statusEffect_List.Find((el) => el.ID == id);
@@ -68,7 +79,7 @@ public class Entity : MonoBehaviour {
         
         // Debug.Log("OnHit: " + baseDmg + ", " + finalDmg);
 
-        health -= finalDmg > 0 ? finalDmg : 0;
+        health -= (finalDmg > 0 ? finalDmg : 0);
 
         UpdateHealthUI();
     }
@@ -88,7 +99,6 @@ public class Entity : MonoBehaviour {
     void Awake() {
         while (statusEffectParent.childCount > 0) { Destroy(statusEffectParent.GetChild(0).gameObject); }
         
-        health = healthMax;
-        UpdateHealthUI();
+        SetHealth(healthMax);
     }
 }

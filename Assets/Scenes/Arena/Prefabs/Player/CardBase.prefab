@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 4970521528452964976}
   - component: {fileID: -4320761964939618296}
   - component: {fileID: -3443500318000398889}
+  - component: {fileID: 4743617925558123916}
   m_Layer: 0
   m_Name: CardBase
   m_TagString: Untagged
@@ -194,7 +195,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 90, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &-9194511798215820773
 MonoBehaviour:
@@ -210,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiHandler: {fileID: 6259406796654572790}
   eventHandler: {fileID: 4970521528452964976}
+  canvasGroup: {fileID: 4743617925558123916}
   isPlayable: 1
   rarity: 0
   isExiled: 0
@@ -288,6 +290,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &4743617925558123916
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027003960344860399}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4609684452935062085
 GameObject:
   m_ObjectHideFlags: 0
