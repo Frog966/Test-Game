@@ -10,6 +10,7 @@ public class Card_Stats : MonoBehaviour {
     [Header("Card Scripts")]
     [SerializeField] private Card_UI uiHandler;
     [SerializeField] private Card_Events eventHandler;
+    [SerializeField] private CanvasGroup canvasGroup; // Used to change the entire card's alpha
     [SerializeField] private ICardEffect effect;
 
     [Header("Card Stats")]
@@ -29,6 +30,7 @@ public class Card_Stats : MonoBehaviour {
     public Player_Energy EnergyHandler { get => energyHandler; }
     public Card_UI UIHandler { get => uiHandler; }
     public Card_Events EventHandler { get => eventHandler; }
+    public CanvasGroup CanvasGroup { get => canvasGroup; }
 
     public CardRarity Rarity { get => rarity; }
     public bool IsExiled { get => isExiled; }

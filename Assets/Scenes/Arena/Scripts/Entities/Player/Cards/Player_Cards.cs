@@ -280,14 +280,19 @@ public class Player_Cards : MonoBehaviour {
         if (playedCard.IsExiled) {
             // Move card to cardParent_Exile
             //--------------------------------------------------------------------------------------------------------------------------------------------------
+            yield return AnimHandler.WaitForSeconds(0.2f);
+
             float tweenDur3 = 0.2f;
 
             cardTrans.SetParent(cardParent_Exile);
-            cardTrans.DOLocalMove(Vector2.zero, tweenDur3);
+            playedCard.CanvasGroup.DOFade(0.0f, tweenDur3);
 
             yield return AnimHandler.WaitForSeconds(tweenDur3);
 
             exile.Add(playedCard); // Add to exile list
+
+            cardTrans.localPosition = Vector3.zero; // Set card pos to 0 in cardParent_Exile
+            playedCard.CanvasGroup.alpha = 1; // Reset card alpha
 
             UpdateNoOfCards_Exile();
             //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -416,11 +421,17 @@ public class Player_Cards : MonoBehaviour {
             // "Minigun",
             // "LookItUp",
             // "LookItUp",
-            "Test",
-            "Test",
-            "Test",
-            "Test",
-            "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            // "Test",
+            "Cleaver",
+            "Cleaver",
+            "Cleaver",
+            "Cleaver",
+            "Cleaver",
+            "Heal 50"
         });
 
         ResetCards();
