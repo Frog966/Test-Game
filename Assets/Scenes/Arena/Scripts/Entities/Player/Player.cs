@@ -58,6 +58,8 @@ public class Player : MonoBehaviour {
             
             Debug.Log("Player ends turn!");
 
+            AudioHandler.PlayClip_Button();
+
             yield return _cardsHandler.DiscardHand(); // Discard player's hand
 
             StartCoroutine(turnsHandler.EndTurn());

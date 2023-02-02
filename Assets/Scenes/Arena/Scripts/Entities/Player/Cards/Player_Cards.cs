@@ -19,6 +19,9 @@ public class Player_Cards : MonoBehaviour {
     [Header("Text Fields")]
     [SerializeField] private Text textDeck;
     [SerializeField] private Text textHand, textGY, textExile;
+    
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip audio_CardShift;
 
     private List<Card_Stats> gy = new List<Card_Stats>(); // Lists all card prefabs in GY
     private List<Card_Stats> deck = new List<Card_Stats>(); // Lists all card prefabs in deck
@@ -101,6 +104,8 @@ public class Player_Cards : MonoBehaviour {
 
                 currCard.transform.DOLocalMove(newPos, tweenDur);
                 currCard.EventHandler.SetCardLocalStartPos(newPos);
+
+                AudioHandler.PlayClip(audio_CardShift);
 
                 UpdateNoOfCards_Hand();
                 UpdateNoOfCards_Deck();
@@ -245,6 +250,7 @@ public class Player_Cards : MonoBehaviour {
         float tweenDur = 0.2f;
 
         cardUI.DOLocalMoveY(-100, tweenDur);
+        AudioHandler.PlayClip(audio_CardShift);
 
         yield return AnimHandler.WaitForSeconds(tweenDur);
 
@@ -264,6 +270,8 @@ public class Player_Cards : MonoBehaviour {
 
         cardTrans.SetParent(cardParent_Play); // Store the played card here temporarily
         cardTrans.DOLocalMove(Vector2.zero, tweenDur1);
+        
+        AudioHandler.PlayClip(audio_CardShift);
 
         energyHandler.DecreaseEnergy(playedCard.Cost); // Reduce player's energy based on played card's cost
         hand.RemoveAt(hand.FindIndex((card) => playedCard == card)); // Remove from hand list as card is tweening to cardParent_Play
@@ -305,6 +313,8 @@ public class Player_Cards : MonoBehaviour {
             cardTrans.SetParent(cardParent_GY);
             cardTrans.DOLocalMove(Vector2.zero, tweenDur2);
             
+            AudioHandler.PlayClip(audio_CardShift);
+
             yield return AnimHandler.WaitForSeconds(tweenDur2);
 
             gy.Add(playedCard); // Add to GY list

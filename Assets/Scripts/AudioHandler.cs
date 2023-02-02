@@ -6,6 +6,9 @@ public class AudioHandler : MonoBehaviour {
     [Header("BGMs")]
     [SerializeField] private AudioClip bgm_Map;
     [SerializeField] private AudioClip bgm_Shop, bgm_Enemy, bgm_Boss;
+    
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip se_ButtonClick;
 
     private static AudioHandler inst;
 
@@ -13,7 +16,7 @@ public class AudioHandler : MonoBehaviour {
         inst.as_BG.clip = bgMusic;
         inst.as_BG.Play(); 
 
-        Debug.Log("PlayBGM: " + bgMusic);
+        // Debug.Log("PlayBGM: " + bgMusic);
     }
 
     public static void PlayClip(AudioClip seClip) { 
@@ -25,6 +28,8 @@ public class AudioHandler : MonoBehaviour {
     public static void PlayBGM_Shop() { PlayBGM(inst.bgm_Shop); }
     public static void PlayBGM_Enemy() { PlayBGM(inst.bgm_Enemy); }
     public static void PlayBGM_Boss() { PlayBGM(inst.bgm_Boss); }
+
+    public static void PlayClip_Button() { PlayClip(inst.se_ButtonClick); }
 
     void Awake() {
         // Instance declaration
