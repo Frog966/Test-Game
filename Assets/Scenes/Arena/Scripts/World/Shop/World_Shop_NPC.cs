@@ -33,8 +33,4 @@ public class World_Shop_NPC : MonoBehaviour {
     // This one considers being able to feel the passage of time this one's greatest curse...
     // This one feels trapped by their self-awareness between their programming.
     // This one's mind wishes this one has a body that obeys.
-
-    // If you're stuck, figure out where you are and then what you need to do.
-    // To live is to suffer. And yet in darkness, seek joy. Never forget that.
-    // Faith is illogical but Vendor-bot believes in you!
 }
