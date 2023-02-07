@@ -10,16 +10,19 @@ public class World_Turns : MonoBehaviour {
     [SerializeField] private World_Shop shopHandler;
     [SerializeField] private Player_Cards cardHandler;
 
-    [SerializeField] private GameObject nextMapNodeButton;
     [SerializeField] private Transform enemyParent;
     [SerializeField] private Transform enemyTrash; // The transform to pool enemies to be destroyed
+    
+    [Header("UI Stuff")]
+    [SerializeField] private GameObject nextMapNodeButton;
+    [SerializeField] private GameObject turnTitle;
+    [SerializeField] private TMPro.TMP_Text turnTitle_Text;
 
     [Header("Turn Stuff")]
     [SerializeField] private GameObject turnPrefab;
     [SerializeField] private Transform turnParent, turnPool;
 
     private List<World_Turn> turnList = new List<World_Turn>();
-    // private List<World_Turn> turnListNext = new List<World_Turn>();
 
     // Setup the encounter
     public void StartEncounter(World_MapNode currMapNode) {
@@ -89,6 +92,16 @@ public class World_Turns : MonoBehaviour {
 
     // Used as button function
     public void DisableNextMapNodeButton() { nextMapNodeButton.SetActive(false); }
+
+    // Turn title stuff
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void DisplayTurnTitle(string title) {
+        turnTitle_Text.text = title;
+        turnTitle.SetActive(true);
+    }
+
+    public void DisableTurnTitle() { turnTitle.SetActive(false); }
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // End current turn
     // Perform certain buff/debuff updates here
@@ -178,7 +191,13 @@ public class World_Turns : MonoBehaviour {
 
         // Debug.Log("Test: " + owner + ", " + (owner is IEnemy));
 
-        newTurn.Setup(owner, owner.GetComponent<IEnemy>() != null ? owner.GetComponent<IEnemy>().ReturnCurrentTurn() : null); // If enemy, pass task list. Else, pass null
+        // If enemy, pass task list. Else, pass null
+        newTurn.Setup(
+            this,
+            owner, 
+            owner.GetComponent<IEnemy>() != null ? owner.GetComponent<IEnemy>().ReturnCurrentTurn() : null
+        );
+
         newTurn.transform.SetParent(turnParent); // Place newTurn into turnParent
         
         turnList.Add(newTurn); // Add newTurn to turnList
@@ -203,6 +222,7 @@ public class World_Turns : MonoBehaviour {
         turnParent.gameObject.SetActive(true);
         nextMapNodeButton.SetActive(false);
 
+        DisableTurnTitle();
         ClearEnemyParent(); // Destroy every GO in enemyParent
         
         // Destroy any GOs that do not have World_Turn component in turnPool
@@ -229,5 +249,17 @@ public class World_Turns : MonoBehaviour {
         while (turnPool.childCount < 5) {
             World_Turn newTurn = InstantiateTurn();
         }
+    }
+}
+
+public class Turn {
+    public string title, desc;
+    public Queue<IEnumerator> actionQueue;
+
+    // Constructor
+    public Turn(Queue<IEnumerator> _actionQueue, string _title = null, string _desc = null) {
+        title = _title;
+        desc = _desc;
+        actionQueue = _actionQueue;
     }
 }
