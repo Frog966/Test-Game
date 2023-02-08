@@ -22,11 +22,16 @@ public class World_Turns : MonoBehaviour {
     [SerializeField] private GameObject turnPrefab;
     [SerializeField] private Transform turnParent, turnPool;
 
+    [Header("Lose Screen Stuff")]
+    [SerializeField] private World_LoseScreen loseScript;
+
     private List<World_Turn> turnList = new List<World_Turn>();
 
     // Setup the encounter
     public void StartEncounter(World_MapNode currMapNode) {
         AnimHandler.isAnimating = true;
+
+        World_Grid.ClearEntitiesPos(); // Clear entitiesPos before start of encounter
 
         // Set up units
         //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -79,6 +84,8 @@ public class World_Turns : MonoBehaviour {
         }
         else { // If player died
             Debug.Log("Player Lost!");
+
+            loseScript.EnableScreen();
         }
     }
 
@@ -218,9 +225,9 @@ public class World_Turns : MonoBehaviour {
         if (!player) Debug.LogError("World_Turns does not have Player.cs!"); 
         if (!cardHandler) Debug.LogError("World_Turns does not have Player_Cards.cs!"); 
 
+        nextMapNodeButton.SetActive(false);
         turnPool.gameObject.SetActive(false);
         turnParent.gameObject.SetActive(true);
-        nextMapNodeButton.SetActive(false);
 
         DisableTurnTitle();
         ClearEnemyParent(); // Destroy every GO in enemyParent

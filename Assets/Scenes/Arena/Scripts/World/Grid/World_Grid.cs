@@ -20,6 +20,7 @@ public class World_Grid : MonoBehaviour {
     private static Dictionary<Entity, Vector2Int> entitiesPos = new Dictionary<Entity, Vector2Int>(); // Contains all entities on grid and their position
 
     // Getters
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------
     public static int GetRow() { return row; }
     public static int GetCol() { return col; }
     public static World_GridNode GetNode(int x, int y) { return isCoorInGrid(x, y) ? grid[x, y] : null; }
@@ -34,13 +35,18 @@ public class World_Grid : MonoBehaviour {
     // Overloaded functions to check if there is an entity on specfic grid pos
     public static bool IsThereAnEntity(Vector2Int here) { return entitiesPos.Values.ToList().Contains(here); }
     public static bool IsThereAnEntity(int hereX, int hereY) { return IsThereAnEntity(new Vector2Int(hereX, hereY)); }
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Setters
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public static void ClearEntitiesPos() { entitiesPos.Clear(); }
+
     public static World_GridNode RecordNode(World_GridNode node, int x, int y) { 
         grid[x, y] = node; 
 
         return grid[x, y]; // Returns recorded node
     }
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     private static bool isCoorInGrid(int x, int y) { return (x >= 0 && x < row && y >= 0 && y < col); }
     private static bool isCoorInGrid(Vector2Int vec2) { return isCoorInGrid(vec2.x, vec2.y); }
@@ -258,6 +264,8 @@ public class World_Grid : MonoBehaviour {
         
         // Sanity checks
         if (!turnsHandler) turnsHandler = this.GetComponent<World_Turns>();
+        
+        ClearEntitiesPos(); // Clear entitiesPos
 
         // Store/Init all grid nodes into "grid" 2d array
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------

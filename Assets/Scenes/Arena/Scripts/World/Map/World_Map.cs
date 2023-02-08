@@ -21,6 +21,9 @@ public class World_Map : MonoBehaviour {
     [SerializeField] private GameObject mapNodePrefab; // Sprite holder and clickable object
     [SerializeField] private Transform nodePool, nodeParent;
 
+    [Header("Win Screen Stuff")]
+    [SerializeField] private World_WinScreen winScript;
+
     // A 2D array that represents an array of "layers" each containing an array of map nodes the player can traverse
     // Each player can only go to MapNodes on the next layer from where they are currently on but only certain nodes are valid
     private List<List<World_MapNode>> map;
@@ -31,11 +34,16 @@ public class World_Map : MonoBehaviour {
 
     // Used as button function
     public void EnableMap() {
-        UpdateMapUI();
+        if (currLayer <= map.Count - 1) {
+            UpdateMapUI();
 
-        AudioHandler.PlayBGM_Map();
+            AudioHandler.PlayBGM_Map();
 
-        mapParent.SetActive(true);
+            mapParent.SetActive(true);
+        }
+        else {
+            winScript.EnableScreen(); // If player gets past the boss node (final node), they win
+        }
     }
     
     private void UpdateMapUI() {
@@ -65,6 +73,7 @@ public class World_Map : MonoBehaviour {
 
         // Randomizing num. of layers
         map = new List<List<World_MapNode>>(new List<World_MapNode>[UnityEngine.Random.Range(5, 5)]);
+        // map = new List<List<World_MapNode>>(new List<World_MapNode>[2]);
 
         // Debug.Log("Layer Count: " + map.Count);
 

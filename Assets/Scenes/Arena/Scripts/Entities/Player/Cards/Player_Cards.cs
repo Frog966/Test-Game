@@ -444,7 +444,7 @@ public class Player_Cards : MonoBehaviour {
             "Heal 50"
         });
 
-        ResetCards();
         Deck.InstantiateDeck(); // Instantiate the deck
+        ResetCards();
     }
 }
