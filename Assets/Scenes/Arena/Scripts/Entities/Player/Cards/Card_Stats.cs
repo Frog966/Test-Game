@@ -60,16 +60,17 @@ public class Card_Stats : MonoBehaviour {
     }
 
     // Copy the card passed except CardType as param then setup
+    // Used when generating card rewards
     public void Copy(Card_Stats cardStats) {        
-        rarity = cardStats.Rarity;
-        isExiled = cardStats.IsExiled;
-        isUpgraded = cardStats.IsUpgraded;
-        id = cardStats.ID;
-        desc = cardStats.Desc;
-        dmg = cardStats.Dmg;
-        cost = cardStats.Cost;
-        noOfHits = cardStats.NoOfHits;
-        image = cardStats.Image;
+        rarity = cardStats.rarity;
+        isExiled = cardStats.isExiled;
+        isUpgraded = cardStats.isUpgraded;
+        id = cardStats.id;
+        desc = cardStats.desc;
+        image = cardStats.image;
+        dmg = cardStats.dmg;
+        cost = cardStats.cost;
+        noOfHits = cardStats.noOfHits;
     }
 
     public IEnumerator Effect() {
