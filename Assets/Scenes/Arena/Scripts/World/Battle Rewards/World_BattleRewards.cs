@@ -20,6 +20,8 @@ public class World_BattleRewards : MonoBehaviour {
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform buttonPool, buttonParent;
 
+    private Transform cardButton; // The button that enables the card UI
+
     // Button functions
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void CloseRewards() {
@@ -35,6 +37,8 @@ public class World_BattleRewards : MonoBehaviour {
             currCard.SetParent(cardPool); 
         }
     }
+
+    public void CloseCardUI() { cardUI.gameObject.SetActive(false); }
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public void DisplayRewards() {
@@ -77,7 +81,7 @@ public class World_BattleRewards : MonoBehaviour {
         if (cardList.Count > cardPool.childCount) { InstantiateCardsIntoPool(cardList.Count - cardPool.childCount); }
 
         // Adding cards to content
-        // Positioning will be handled by content's GridLayoutGroup component     
+        // Positioning will be handled by content's GridLayoutGroup component
         foreach (Card_Stats card in cardList) {
             Transform currCard = cardPool.GetChild(0);
 
@@ -100,6 +104,7 @@ public class World_BattleRewards : MonoBehaviour {
                 if (!currCard.isPlayable && !AnimHandler.isAnimating) { 
                     Player_Cards.Deck.AddCardToDeck(currCard.ID);
                     
+                    cardButton.SetParent(buttonPool); // The card reward button will only return to the button pool when a card is selected
                     cardUI.gameObject.SetActive(false);
                 }
             });
@@ -128,11 +133,12 @@ public class World_BattleRewards : MonoBehaviour {
                 });
             break;
             default: 
+                cardButton = button; // The card reward button will only return to the button pool when a card is selected
+
                 buttonScript.GetButton().onClick.AddListener(() => {
                     Debug.Log("Player receives a new card!");
 
                     cardUI.gameObject.SetActive(true);
-                    button.SetParent(buttonPool);
                 });
             break;
         }
