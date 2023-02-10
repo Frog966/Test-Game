@@ -150,6 +150,9 @@ public class World_Grid : MonoBehaviour {
             return hitEntities;
         }
 
+        public static bool AreTheySameRow(Entity target1, Entity target2) { return entitiesPos[target1].y == entitiesPos[target2].y; }
+        public static bool AreTheySameCol(Entity target1, Entity target2) { return entitiesPos[target1].x == entitiesPos[target2].x; }
+
         // Returns a valid pos list that is relative to the origin point
         // relativePosList MUST be values that are relative to origin point
         // eg. origin: (0, 0), relativePosList: [(-1, 0)] means the post list will be the left of origin
@@ -171,11 +174,11 @@ public class World_Grid : MonoBehaviour {
         public static List<Vector2Int> ReturnPosList_Left(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
-            for (int i = origin.x; i > 0; i--) { 
+            for (int i = origin.x; i >= 0; i--) { 
                 Vector2Int newCoor = new Vector2Int(i, origin.y);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-                if (!isPiercing && i != origin.x && IsThereAnEntity(newCoor)) { break; } // Stop moving left if not piercing and entity is found
+                if (!isPiercing && newCoor != origin && IsThereAnEntity(newCoor)) { break; } // Stop moving left if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
@@ -189,7 +192,7 @@ public class World_Grid : MonoBehaviour {
                 Vector2Int newCoor = new Vector2Int(i, origin.y);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-                if (!isPiercing && i != origin.x && IsThereAnEntity(newCoor)) { break; } // Stop moving right if not piercing and entity is found
+                if (!isPiercing && newCoor != origin && IsThereAnEntity(newCoor)) { break; } // Stop moving right if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
@@ -207,11 +210,11 @@ public class World_Grid : MonoBehaviour {
         public static List<Vector2Int> ReturnPosList_Up(Vector2Int origin, bool isPiercing = true, bool includeOrigin = false) {
             List<Vector2Int> validPosList = new List<Vector2Int>();
 
-            for (int i = origin.y; i > 0; i--) { 
+            for (int i = origin.y; i >= 0; i--) { 
                 Vector2Int newCoor = new Vector2Int(origin.x, i);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-                if (!isPiercing && i != origin.y && IsThereAnEntity(newCoor)) { break; } // Stop moving up if not piercing and entity is found
+                if (!isPiercing && newCoor != origin && IsThereAnEntity(newCoor)) { break; } // Stop moving up if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
@@ -225,7 +228,7 @@ public class World_Grid : MonoBehaviour {
                 Vector2Int newCoor = new Vector2Int(origin.x, i);
 
                 if (isCoorInGrid(newCoor)) { validPosList.Add(newCoor); }
-                if (!isPiercing && i != origin.y && IsThereAnEntity(newCoor)) { break; } // Stop moving down if not piercing and entity is found
+                if (!isPiercing && newCoor != origin && IsThereAnEntity(newCoor)) { break; } // Stop moving down if not piercing and entity is found
             }
 
             return ReturnFinishedPosList(origin, validPosList, includeOrigin);
