@@ -387,14 +387,11 @@ public class Player_Cards : MonoBehaviour {
 
             deckIDs.Add(cardID);
             deckCards.Add(cardsHandler.CreateCard_Deck(cardID)); // Creates a new card into deck and adds said card into deckCards so it's a permanent card
-            
         }
 
         // The only way to permanently remove a card from deck
         // No need to remove the card from any lists as ResetCards() will handle that if called on start of encounter
-        public static void RemoveCardFromDeck(Card_Stats card) {
-            deckIDs.Remove(card.ID);
-        }
+        public static void RemoveCardFromDeck(Card_Stats card) { deckIDs.Remove(card.ID); }
 
         // Just to define cardsHandler and cardLibrary
         public static void Setup(Player_Cards _handler, Player_CardLibrary _library) { 
