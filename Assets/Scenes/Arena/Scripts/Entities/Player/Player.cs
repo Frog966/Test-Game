@@ -6,6 +6,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private Entity entity; // The player object
     [SerializeField] private UnityEngine.UI.Text health_T;
 
+    private static Player Inst;
+
     [Header("Non-player Handler Scripts")]
     [SerializeField] private World_Turns turnsHandler;
 
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour {
 
     // Getters
     public int GetBits() { return bits; }
-    public Entity GetEntity() { return entity; }
+    public static Entity GetEntity() { return Inst.entity; }
 
     // Setters
     public void SetBits(int newBits) { 
@@ -69,6 +71,10 @@ public class Player : MonoBehaviour {
     private void UpdateBitsText() { bitsText.text = bits.ToString(); }
 
     void Awake() {
+        // Instance declaration
+        if (Inst != null && Inst != this) { Destroy(this); }
+        else { Inst = this; }
+
         // Non-player handlers sanity checks
         if (turnsHandler == null) { turnsHandler = this.transform.parent.GetComponentInChildren(typeof(World_Turns)) as World_Turns; }
 

@@ -25,7 +25,7 @@ public class Card_Stats : MonoBehaviour {
 
     // Properties
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public Player Player { get => player; }
+    // public Player Player { get => player; }
     public Player_Cards CardHandler { get => cardHandler; }
     public Player_Energy EnergyHandler { get => energyHandler; }
     public Card_UI UIHandler { get => uiHandler; }
@@ -52,7 +52,7 @@ public class Card_Stats : MonoBehaviour {
 
     // Preferably called after Awake()
     public void UpdateUI() {
-        _dmg = player.GetEntity().GetFinalDamage(dmg);
+        _dmg = Player.GetEntity().GetFinalDamage(dmg);
         _cost = cost;
         _noOfHits = noOfHits;
 

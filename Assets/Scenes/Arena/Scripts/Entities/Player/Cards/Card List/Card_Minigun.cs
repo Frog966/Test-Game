@@ -11,7 +11,7 @@ public class Card_Minigun : MonoBehaviour, ICardEffect {
     public IEnumerator Effect() {
         Debug.Log(this + " is being played!");
 
-        List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(cardStats.Player.GetEntity()), false);
+        List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
 
         for (int i = 0; i < cardStats.NoOfHits; i++) {
             World_Grid.Combat.HitHere(Faction.ALLY, posList, cardStats.Dmg);

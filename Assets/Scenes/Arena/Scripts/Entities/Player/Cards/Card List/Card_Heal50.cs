@@ -11,7 +11,7 @@ public class Card_Heal50 : MonoBehaviour, ICardEffect {
     public IEnumerator Effect() {
         Debug.Log(this + " is being played!");
 
-        Entity player = cardStats.Player.GetEntity();
+        Entity player = Player.GetEntity();
         player.SetHealth(player.GetHealth() + 50);
 
         yield return null;

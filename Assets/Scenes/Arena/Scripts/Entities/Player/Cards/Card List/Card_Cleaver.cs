@@ -13,7 +13,7 @@ public class Card_Cleaver : MonoBehaviour, ICardEffect {
         Debug.Log(this + " is being played!");
 
         List<Vector2Int> posList = World_Grid.Combat.ReturnRelativePosList(
-            World_Grid.GetEntityGridPos(cardStats.Player.GetEntity()),
+            World_Grid.GetEntityGridPos(Player.GetEntity()),
             new List<Vector2Int>() { 
                 new Vector2Int(1, 0),
                 new Vector2Int(1, 1),

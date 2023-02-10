@@ -35,7 +35,7 @@ public class World_Turns : MonoBehaviour {
 
         // Set up units
         //-----------------------------------------------------------------------------------------------------------------------------------------------
-        World_Grid.Movement.SetGridPos(player.GetEntity(), Vector2Int.one); // Reset player pos
+        World_Grid.Movement.SetGridPos(Player.GetEntity(), Vector2Int.one); // Reset player pos
 
         ClearEnemyParent(); // Destroy every GO in enemyParent
         cardHandler.ResetCards(); // Reset player cards
@@ -54,7 +54,7 @@ public class World_Turns : MonoBehaviour {
             //-----------------------------------------------------------------------------------------------------------------------------------------------
             // Set up first turn for player and enemy
             // Player always first
-            CreateTurn(player.GetEntity());
+            CreateTurn(Player.GetEntity());
             
             // Create turns for enemies
             foreach (Transform child in enemyParent) { CreateTurn(child.GetComponent<Entity>()); }
@@ -72,7 +72,7 @@ public class World_Turns : MonoBehaviour {
     // End the encounter if possible
     public void HasEncounterEnded() {
         // If all enemies died
-        if (!(turnList.Find((turn) => turn.GetOwner() != player.GetEntity()))) {
+        if (!(turnList.Find((turn) => turn.GetOwner() != Player.GetEntity()))) {
             Debug.Log("Player Won!");
 
             foreach (Transform enemy in enemyParent) { Destroy(enemy.gameObject); } // Destroy all enemies if player won
@@ -114,7 +114,7 @@ public class World_Turns : MonoBehaviour {
     // Perform certain buff/debuff updates here
     public IEnumerator EndTurn() {
         // Only start turn if there's a player and enemy
-        if (turnList.Find((turn) => turn.GetOwner() == player.GetEntity()) && turnList.Find((turn) => turn.GetOwner() != player.GetEntity())) {
+        if (turnList.Find((turn) => turn.GetOwner() == Player.GetEntity()) && turnList.Find((turn) => turn.GetOwner() != Player.GetEntity())) {
             Entity currEntity = turnList[0].GetOwner();
 
             yield return currEntity.EndTurn(); // Perform actions that all entities must do at end of turn
@@ -137,7 +137,7 @@ public class World_Turns : MonoBehaviour {
         yield return currEntity.StartTurn(); // Perform actions that all entities must do at start of turn
 
         // Only end the turn if currTurn's owner is not a Player script
-        if (currEntity != player.GetEntity()) {
+        if (currEntity != Player.GetEntity()) {
             yield return currTurn.Execute(); // Execute the non-player entity's behaviour
             yield return EndTurn(); // End non-player entity's turn
         }
