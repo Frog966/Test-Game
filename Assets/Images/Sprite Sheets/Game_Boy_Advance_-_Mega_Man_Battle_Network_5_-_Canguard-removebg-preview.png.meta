@@ -1,0 +1,674 @@
+fileFormatVersion: 2
+guid: 0f09cd27908e45c4faf154fde6be13ef
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 172
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a492560dc97c1804db23e03cfb942e2a
+      internalID: -2127819776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 172
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 777260ccf0f526842843f6e0a6decc00
+      internalID: -270109996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 172
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a7a688430b147b4cae770a1f5880100
+      internalID: 1899754625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d67e413877aa9a8438d4f5ad2ae6e37a
+      internalID: -7296637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_4
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a54dea61919887b4ea8a9a9e9f0e2f94
+      internalID: -1604289324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d20e5902436bc5942b8d28b1f67aa13f
+      internalID: -574406656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_6
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 894e32ce3b5ab0f408223dab476532b4
+      internalID: -1770636105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_7
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af9c84a2fbad7714692f6666ad4d7550
+      internalID: 2026152169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_8
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cef19fa9b9cbe014399c15f40dd9cd39
+      internalID: -1198479912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_9
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 117
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6bb8937999cea84a93a4b1df59466a6
+      internalID: 687296075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f56c87c01cef3740bc518480df29aea
+      internalID: 750001907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_11
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 945709dc13a6a064c8ea6e1c16f7dcc6
+      internalID: -1477041607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_12
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97f46b1db9e35ee4bb41efdce20473d6
+      internalID: 149526359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_13
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6323716a0c13fa44d8c97b9d2084859e
+      internalID: -1743389843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_14
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa023a11189246342af8330e106a6c85
+      internalID: 1919267833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_15
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e2117e4b6c590b4fb2917276f124fa2
+      internalID: -1244486394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_16
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 62
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77b77575a91f3b544b9f1ad6c408c157
+      internalID: 273696281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e6697a3c375636498d0f425b91d3db8
+      internalID: 1082500370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_18
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8747d25a0f85ee040973c7911514c7e9
+      internalID: -231890135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_19
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31348c661699ec04abb47e804d380836
+      internalID: 1250495872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_20
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 266a9d29043329b45845c17c9357ac72
+      internalID: -1976110030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_21
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57291da94f6b24947b078947ac74af14
+      internalID: -947440716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_22
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7687121dd580b44f97054589b8b502c
+      internalID: 1682740963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_23
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 7
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae779b70a79e1014eb4e9227673d9871
+      internalID: 1396339512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_20: -1976110030
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_12: 149526359
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_22: 1682740963
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_23: 1396339512
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_10: 750001907
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_4: -1604289324
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_6: -1770636105
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_2: 1899754625
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_9: 687296075
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_15: -1244486394
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_3: -7296637
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_21: -947440716
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_16: 273696281
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_17: 1082500370
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_13: -1743389843
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_18: -231890135
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_19: 1250495872
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_0: -2127819776
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_8: -1198479912
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_1: -270109996
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_14: 1919267833
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_7: 2026152169
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_5: -574406656
+      Game_Boy_Advance_-_Mega_Man_Battle_Network_5_-_Canguard-removebg-preview_11: -1477041607
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
