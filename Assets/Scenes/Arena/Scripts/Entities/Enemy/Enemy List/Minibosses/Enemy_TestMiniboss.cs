@@ -5,12 +5,15 @@ using UnityEngine;
 // C# does not allow multiple inheritance so we're attaching an IEnemy interface (which inherits Entity) to Enemy script so that we can use a single type to handle turns
 public class Enemy_TestMiniboss : MonoBehaviour, IEnemy {
     [SerializeField] private Entity entity;
+    [SerializeField] private Animator animator;
+
     private string id = "Test Miniboss";
     private Queue<Turn> turnQueue = new Queue<Turn>();
 
     // Properties
     public string ID { get => id; }
     public Entity Entity { get => entity; }
+    public Animator Animator { get => animator; }
     public Queue<Turn> TurnQueue { get => turnQueue; }
 
     // The enemy's AI

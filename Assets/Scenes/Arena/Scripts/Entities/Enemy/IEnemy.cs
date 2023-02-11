@@ -7,6 +7,7 @@ public interface IEnemy {
     // Properties
     string ID { get; }
     Entity Entity { get; } // The entity the AI belongs to. Also used to get any entity-related properties
+    UnityEngine.Animator Animator { get; } // The entity the AI belongs to. Also used to get any entity-related properties
 
     // Turn queue stuff
     // Just defining functions for consistency between enemies
