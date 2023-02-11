@@ -64,11 +64,11 @@ public class World_Turn : MonoBehaviour {
     public IEnumerator Execute() {
         Debug.Log(owner.gameObject.name + " performs turn!");
 
-        turnsHandler.DisplayTurnTitle(title);
+        World_Turns.DisplayTurnTitle(title);
 
         while (actionQueue.Count > 0) { yield return actionQueue.Dequeue(); }
 
-        turnsHandler.DisableTurnTitle();
+        World_Turns.DisableTurnTitle();
 
         Debug.Log(owner.gameObject.name + " ends turn!");
     }

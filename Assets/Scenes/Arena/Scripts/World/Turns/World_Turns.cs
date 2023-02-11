@@ -4,6 +4,8 @@ using UnityEngine;
 
 // In charge of turn creation, order and execution
 public class World_Turns : MonoBehaviour {
+    private static World_Turns inst; // A private instance of this script just to get the static functions to work
+
     // Handlers
     [SerializeField] private Player player;
     [SerializeField] private World_Map mapHandler;
@@ -71,8 +73,12 @@ public class World_Turns : MonoBehaviour {
 
     // End the encounter if possible
     public void HasEncounterEnded() {
-        // If all enemies died
-        if (!(turnList.Find((turn) => turn.GetOwner() != Player.GetEntity()))) {
+        if (turnList.Find((turn) => turn.GetOwner() == Player.GetEntity()) == null) { // If a turn owned by player is not found, player lost
+            Debug.Log("Player Lost!");
+
+            loseScript.EnableScreen();
+        }
+        else if (turnList.Find((turn) => turn.GetOwner().GetFaction() == Game.Unit.Faction.ENEMY) == null) { // If enemy-owned turn is not found, player won
             Debug.Log("Player Won!");
 
             foreach (Transform enemy in enemyParent) { Destroy(enemy.gameObject); } // Destroy all enemies if player won
@@ -81,11 +87,6 @@ public class World_Turns : MonoBehaviour {
             StartCoroutine(cardHandler.CardUI_Exit());
 
             nextMapNodeButton.SetActive(true);
-        }
-        else { // If player died
-            Debug.Log("Player Lost!");
-
-            loseScript.EnableScreen();
         }
     }
 
@@ -102,12 +103,14 @@ public class World_Turns : MonoBehaviour {
 
     // Turn title stuff
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void DisplayTurnTitle(string title) {
-        turnTitle_Text.text = title;
-        turnTitle.SetActive(true);
+    public static void DisplayTurnTitle(string title) {
+        if (title != null && title != "") {
+            inst.turnTitle_Text.text = title;
+            inst.turnTitle.SetActive(true);
+        }
     }
 
-    public void DisableTurnTitle() { turnTitle.SetActive(false); }
+    public static void DisableTurnTitle() { inst.turnTitle.SetActive(false); }
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // End current turn
@@ -219,6 +222,10 @@ public class World_Turns : MonoBehaviour {
     }
 
     void Awake() {
+        // Instance declaration
+        if (inst != null && inst != this) { Destroy(this); }
+        else { inst = this; }
+
         //! Sanity Checks
         if (!mapHandler) mapHandler = this.GetComponent<World_Map>();
         if (!shopHandler) shopHandler = this.GetComponent<World_Shop>();
