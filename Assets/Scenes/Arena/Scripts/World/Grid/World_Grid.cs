@@ -69,6 +69,7 @@ public class World_Grid : MonoBehaviour {
                 // Move entity to new grid position
                 // Use world position for accuracy
                 entity.transform.position = targetNode.gameObject.transform.position;
+                entity.GetCanvas().sortingOrder = vec2.y + 1; // Update entity's canvas sort order
             }
             else {
                 Debug.LogWarning("Node is out of bounds or does not have component attached!");

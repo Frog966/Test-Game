@@ -8,6 +8,7 @@ using Game.Unit;
 // The base script for entities
 // Contains anything an entity has that would be interacted with by other scripts
 public class Entity : MonoBehaviour {
+    [SerializeField] private Canvas canvas;
     [SerializeField] private UnityEngine.UI.Text health_T;
     [SerializeField] private Faction faction;
     [SerializeField] private Transform statusEffectParent;
@@ -22,6 +23,7 @@ public class Entity : MonoBehaviour {
     // Getters
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     public int GetHealth() { return health; }
+    public Canvas GetCanvas() { return canvas; }
     public Faction GetFaction() { return faction; }
     public Transform GetSEParent() { return statusEffectParent; }
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -97,6 +99,8 @@ public class Entity : MonoBehaviour {
     private void UpdateHealthUI() { health_T.text = health.ToString(); }
 
     void Awake() {
+        if (!canvas) { canvas = this.GetComponent<Canvas>(); }
+
         while (statusEffectParent.childCount > 0) { Destroy(statusEffectParent.GetChild(0).gameObject); }
         
         SetHealth(healthMax);
