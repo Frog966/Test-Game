@@ -33,6 +33,7 @@ public class World_Turns : MonoBehaviour {
     public void StartEncounter(World_MapNode currMapNode) {
         AnimHandler.isAnimating = true;
 
+        turnList.Clear(); // Clear turn list
         World_Grid.ClearEntitiesPos(); // Clear entitiesPos before start of encounter
 
         // Set up units
@@ -72,7 +73,14 @@ public class World_Turns : MonoBehaviour {
     }
 
     // End the encounter if possible
-    public void HasEncounterEnded() {
+    public bool HasEncounterEnded() {
+        return (
+            turnList.Find((turn) => turn.GetOwner() == Player.GetEntity()) == null ||
+            turnList.Find((turn) => turn.GetOwner().GetFaction() == Game.Unit.Faction.ENEMY) == null
+        );
+    }
+
+    public void EndEncounter() {
         if (turnList.Find((turn) => turn.GetOwner() == Player.GetEntity()) == null) { // If a turn owned by player is not found, player lost
             Debug.Log("Player Lost!");
 
@@ -116,8 +124,8 @@ public class World_Turns : MonoBehaviour {
     // End current turn
     // Perform certain buff/debuff updates here
     public IEnumerator EndTurn() {
-        // Only start turn if there's a player and enemy
-        if (turnList.Find((turn) => turn.GetOwner() == Player.GetEntity()) && turnList.Find((turn) => turn.GetOwner() != Player.GetEntity())) {
+        // Only start turn if encounter hasn't ended
+        if (!HasEncounterEnded()) {
             Entity currEntity = turnList[0].GetOwner();
 
             yield return currEntity.EndTurn(); // Perform actions that all entities must do at end of turn
@@ -127,24 +135,31 @@ public class World_Turns : MonoBehaviour {
 
             yield return StartTurn(); // Start the next turn which is the new current
         }
-        else { AnimHandler.isAnimating = false; } // Stop animating if 1 faction is gone
+        else { 
+            AnimHandler.isAnimating = false; 
+
+            // EndEncounter();
+        }
     }
 
     // Start current turn
     // If enemy, perform turn's task list then end the turn. If player, turn will continue until player ends turn manually
     // Perform certain buff/debuff updates here
     private IEnumerator StartTurn() {
-        World_Turn currTurn = turnList[0];
-        Entity currEntity = currTurn.GetOwner();
+        if (!HasEncounterEnded()) {
+            World_Turn currTurn = turnList[0];
+            Entity currEntity = currTurn.GetOwner();
 
-        yield return currEntity.StartTurn(); // Perform actions that all entities must do at start of turn
+            yield return currEntity.StartTurn(); // Perform actions that all entities must do at start of turn
 
-        // Only end the turn if currTurn's owner is not a Player script
-        if (currEntity != Player.GetEntity()) {
-            yield return currTurn.Execute(); // Execute the non-player entity's behaviour
-            yield return EndTurn(); // End non-player entity's turn
+            // Only end the turn if currTurn's owner is not a Player script
+            if (currEntity != Player.GetEntity()) {
+                yield return currTurn.Execute(); // Execute the non-player entity's behaviour
+                yield return EndTurn(); // End non-player entity's turn
+            }
+            else { yield return player.StartTurn(); } //! The game will not stop animating until the player's turn
         }
-        else { yield return player.StartTurn(); } //! The game will not stop animating until the player's turn
+        else { yield return null; }
     }
 
     // Remove turn obj from turnParent as well as update turnList

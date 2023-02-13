@@ -140,8 +140,8 @@ public class World_Grid : MonoBehaviour {
                         
                         entitiesPos.Remove(entity); // Remove entity from the library
                         turnsHandler.RemoveAllTurnsByEntity(entity); // Remove all turns by said entity
-
-                        turnsHandler.HasEncounterEnded(); // Check if encounter has ended
+                        
+                        if (turnsHandler.HasEncounterEnded()) { turnsHandler.EndEncounter(); }
                     }
                     
                     hitEntities.Add(entity);
