@@ -21,6 +21,7 @@ public class World_BattleRewards : MonoBehaviour {
     [SerializeField] private Transform buttonPool, buttonParent;
 
     private Transform cardButton; // The button that enables the card UI
+    [SerializeField] private List<GameObject> button_List; // Keeps a list of reward buttons so we know when to auto-close the rewards UI
 
     // Button functions
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -42,6 +43,8 @@ public class World_BattleRewards : MonoBehaviour {
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public void DisplayRewards() {
+        button_List.Clear();
+
         GenerateRewards_Coins();
         GenerateRewards_Cards();
         
@@ -87,6 +90,8 @@ public class World_BattleRewards : MonoBehaviour {
 
             currCard.SetParent(cardParent);
             currCard.GetComponent<Card_Stats>().Copy(card);
+
+            mapHandler.EnableMap();
         }
     }
 
@@ -103,9 +108,9 @@ public class World_BattleRewards : MonoBehaviour {
             entry.callback.AddListener((data) => { 
                 if (!currCard.isPlayable && !AnimHandler.isAnimating) { 
                     Player_Cards.Deck.AddCardToDeck(currCard.ID);
-                    
-                    cardButton.SetParent(buttonPool); // The card reward button will only return to the button pool when a card is selected
                     cardUI.gameObject.SetActive(false);
+                    
+                    RemoveButton(cardButton.gameObject); // The card reward button will only return to the button pool when a card is selected
                 }
             });
 
@@ -129,7 +134,8 @@ public class World_BattleRewards : MonoBehaviour {
                     Debug.Log("Player receives " + coinReward + " coins!");
 
                     player.SetBits(player.GetBits() + coinReward);
-                    button.SetParent(buttonPool);
+
+                    RemoveButton(button.gameObject);
                 });
             break;
             default: 
@@ -141,6 +147,19 @@ public class World_BattleRewards : MonoBehaviour {
                     cardUI.gameObject.SetActive(true);
                 });
             break;
+        }
+
+        button_List.Add(button.gameObject);
+    }
+
+    private void RemoveButton(GameObject button) {
+        button.transform.SetParent(buttonPool);
+        button_List.Remove(button);
+
+        // Auto-close rewards UI when all rewards claimed
+        if (button_List.Count < 1) { 
+            CloseCardUI();
+            CloseRewards(); 
         }
     }
 
