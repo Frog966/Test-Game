@@ -90,8 +90,6 @@ public class World_BattleRewards : MonoBehaviour {
 
             currCard.SetParent(cardParent);
             currCard.GetComponent<Card_Stats>().Copy(card);
-
-            mapHandler.EnableMap();
         }
     }
 
@@ -160,6 +158,8 @@ public class World_BattleRewards : MonoBehaviour {
         if (button_List.Count < 1) { 
             CloseCardUI();
             CloseRewards(); 
+
+            mapHandler.EnableMap();
         }
     }
 
