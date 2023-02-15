@@ -123,14 +123,14 @@ public class World_Grid : MonoBehaviour {
         }
 
         // Returns list of hit entities
-        public static List<Entity> HitHere(Faction attackerFaction, List<Vector2Int> posList, int dmg) {
+        public static List<Entity> HitHere(Entity attacker, List<Vector2Int> posList, int dmg) {
             ReturnDistinctPosList(posList); // Remove any duplicates 
 
-            List<Entity> hitEntities = new List<Entity>(); // Hold all entities that are hit
+            List<Entity> hitEntities = new List<Entity>(); // Holds all entities that are hit
 
-            foreach (Entity entity in GetEntitiesOnMap(attackerFaction)) {
+            foreach (Entity entity in GetEntitiesOnMap(attacker.GetFaction())) {
                 if (IsEntityHere(entity, posList)) { 
-                    entity.OnHit(dmg); 
+                    entity.OnHit(attacker.GetFinalDamage(dmg)); 
 
                     // Entity dies here
                     if (entity.GetHealth() <= 0) {

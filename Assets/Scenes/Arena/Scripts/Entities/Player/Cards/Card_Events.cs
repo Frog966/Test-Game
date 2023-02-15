@@ -66,7 +66,7 @@ public class Card_Events : EventTrigger {
 
     private void PlayCard() {
         if (!AnimHandler.isAnimating) {
-            if (cardScript.EnergyHandler.CanPayEnergyCost(cardScript.Cost)) { cardScript.CardHandler.ResolveCard(cardScript); }
+            if (cardScript.EnergyHandler.CanPayEnergyCost(cardScript.Cost_Final)) { cardScript.CardHandler.ResolveCard(cardScript); }
             else { cardScript.EnergyHandler.NotEnoughEnergy(); }
         }
     }

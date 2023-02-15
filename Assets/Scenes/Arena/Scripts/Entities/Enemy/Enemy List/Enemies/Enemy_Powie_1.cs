@@ -50,7 +50,7 @@ public class Enemy_Powie_1 : MonoBehaviour, IEnemy {
 
                     yield return AnimHandler.WaitForCurrentAnim(animator);
 
-                    List<Entity> hitEntities = World_Grid.Combat.HitHere(entity.GetFaction(), posList, entity.GetFinalDamage(50));
+                    List<Entity> hitEntities = World_Grid.Combat.HitHere(entity, posList, 50);
 
                     yield return World_Grid.Combat.FlashHere(posList);
                     yield return AnimHandler.WaitForSeconds(0.5f);

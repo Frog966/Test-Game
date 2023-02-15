@@ -34,7 +34,7 @@ public class Enemy_TestEnemy : MonoBehaviour, IEnemy {
                     );
 
                     IEnumerator Attack() {
-                        List<Entity> hitEntities = World_Grid.Combat.HitHere(entity.GetFaction(), posList, entity.GetFinalDamage(10));
+                        List<Entity> hitEntities = World_Grid.Combat.HitHere(entity, posList, 10);
 
                         yield return World_Grid.Combat.FlashHere(posList);
 

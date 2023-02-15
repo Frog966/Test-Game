@@ -32,8 +32,8 @@ public class Card_UI : MonoBehaviour {
     // Called by Card_Stats.UpdateUI()
     // Preferably called after Awake()
     public void UpdateText() {
-        cost_T.text = card.Cost.ToString();
-        dmg_T.text = card.Dmg.ToString() + (card.NoOfHits > 1 ? "x" + card.NoOfHits : "");
+        cost_T.text = card.Cost_Final.ToString();
+        dmg_T.text = card.Dmg_Final.ToString() + (card.NoOfHits_Final > 1 ? "x" + card.NoOfHits_Final : "");
     }
 
     void Awake() {

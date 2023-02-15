@@ -24,7 +24,7 @@ public class Enemy_Canguard_1 : MonoBehaviour, IEnemy {
                 List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Left(World_Grid.GetEntityGridPos(entity));
 
                 IEnumerator Attack() {
-                    List<Entity> hitEntities = World_Grid.Combat.HitHere(entity.GetFaction(), posList, entity.GetFinalDamage(50));
+                    List<Entity> hitEntities = World_Grid.Combat.HitHere(entity, posList, 50);
 
                     yield return World_Grid.Combat.FlashHere(posList);
                 }

@@ -32,15 +32,19 @@ public class Card_Stats : MonoBehaviour {
     public Card_Events EventHandler { get => eventHandler; }
     public CanvasGroup CanvasGroup { get => canvasGroup; }
 
+    public Sprite Image { get => image; }
     public CardRarity Rarity { get => rarity; }
     public bool IsExiled { get => isExiled; }
     public bool IsUpgraded { get => isUpgraded; }
     public string ID { get => id; } // Doubles as card name. Please ensure there are no duplicates or Player_CardLibrary will not instantiate properly
     public string Desc { get => desc; }
-    public int Dmg { get => _dmg; }
-    public int Cost { get => _cost; }
-    public int NoOfHits { get => _noOfHits; }
-    public Sprite Image { get => image; }
+    
+    public int Dmg_Base { get => dmg; }
+    public int Cost_Base { get => cost; }
+    public int NoOfHits_Base { get => noOfHits; }
+    public int Dmg_Final { get => _dmg; }
+    public int Cost_Final { get => _cost; }
+    public int NoOfHits_Final { get => _noOfHits; }
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     // Sets up static stuff for Card_Stats

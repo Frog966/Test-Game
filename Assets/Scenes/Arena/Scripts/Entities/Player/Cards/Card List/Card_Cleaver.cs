@@ -25,7 +25,7 @@ public class Card_Cleaver : MonoBehaviour, ICardEffect {
             false
         );
 
-        World_Grid.Combat.HitHere(Faction.ALLY, posList, cardStats.Dmg);
+        World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
         AudioHandler.PlayClip(audio_Slash);
 
         yield return World_Grid.Combat.FlashHere(posList);

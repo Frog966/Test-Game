@@ -273,7 +273,7 @@ public class Player_Cards : MonoBehaviour {
         
         AudioHandler.PlayClip(audio_CardShift);
 
-        energyHandler.DecreaseEnergy(playedCard.Cost); // Reduce player's energy based on played card's cost
+        energyHandler.DecreaseEnergy(playedCard.Cost_Final); // Reduce player's energy based on played card's cost
         hand.RemoveAt(hand.FindIndex((card) => playedCard == card)); // Remove from hand list as card is tweening to cardParent_Play
         UpdateNoOfCards_Hand();
 
