@@ -303,6 +303,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 120481796723809344}
+  animator: {fileID: 7782287786285980172}
+  audio_Slash: {fileID: 8300000, guid: bd04ab20255d566408e642d9cb003eb8, type: 3}
+--- !u!95 &7782287786285980172 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5673870703377659103, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
+  m_PrefabInstance: {fileID: 2503331607721406163}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8669489102086020519 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6552078516572713844, guid: aa5fb25f73f8a2d48a231a7a8d91c161, type: 3}
