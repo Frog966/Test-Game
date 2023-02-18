@@ -87,20 +87,22 @@ public class Player_Cards : MonoBehaviour {
 
                 hand.Add(currCard);
                 deck.RemoveAt(0);
-
             }
 
             UpdateHandCardUI(); // Update hand cards' UI
 
             // Begin tweening hand cards into hand
-            foreach (Card_Stats currCard in hand) {
+            // foreach (Card_Stats currCard in hand) {
+            for (int i = 0; i < hand.Count; i ++) {
+                Card_Stats currCard = hand[i];
+
                 currCard.transform.SetParent(cardParent_Hand);
                 currCard.gameObject.SetActive(true);
 
                 // Debug.Log("Draw " + (i + 1));
 
                 // Card position in hand
-                Vector2 newPos = GetCardHandPos(currCard.transform, cardParent_Hand.childCount - 1);
+                Vector2 newPos = GetCardHandPos(currCard.transform, i);
 
                 currCard.transform.DOLocalMove(newPos, tweenDur);
                 currCard.EventHandler.SetCardLocalStartPos(newPos);
