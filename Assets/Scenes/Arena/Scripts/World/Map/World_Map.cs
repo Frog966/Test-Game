@@ -83,7 +83,7 @@ public class World_Map : MonoBehaviour {
             // Debug.Log("Layer " + x + " - Map Node Count: " + map[x].Count);
 
             // Randomizing num. of nodes in current layer except final node
-            map[x] = new List<World_MapNode>(new World_MapNode[x != map.Count - 1 ? UnityEngine.Random.Range(3, 6) : 1]);
+            map[x] = new List<World_MapNode>(new World_MapNode[x != map.Count - 1 ? UnityEngine.Random.Range(3, 5) : 1]);
 
             for (int y = 0; y < map[x].Count; y++) {
                 GameObject currMapNodeObj;
