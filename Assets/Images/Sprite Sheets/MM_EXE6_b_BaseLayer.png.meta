@@ -131,10 +131,10 @@ TextureImporter:
       name: Default
       rect:
         serializedVersion: 2
-        x: 10
-        y: 1176
-        width: 35
-        height: 44
+        x: 137
+        y: 997
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,10 +152,10 @@ TextureImporter:
       name: Damaged 1
       rect:
         serializedVersion: 2
-        x: 8
+        x: 0
         y: 1119
-        width: 28
-        height: 48
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,10 +173,10 @@ TextureImporter:
       name: Damaged 2
       rect:
         serializedVersion: 2
-        x: 238
+        x: 234
         y: 1119
-        width: 38
-        height: 40
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -194,9 +194,9 @@ TextureImporter:
       name: Move 1
       rect:
         serializedVersion: 2
-        x: 14
+        x: 7
         y: 998
-        width: 31
+        width: 46
         height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -215,10 +215,10 @@ TextureImporter:
       name: Move 2
       rect:
         serializedVersion: 2
-        x: 57
+        x: 51
         y: 997
-        width: 35
-        height: 51
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,10 +236,10 @@ TextureImporter:
       name: Move 3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 94
         y: 997
-        width: 35
-        height: 46
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -257,10 +257,10 @@ TextureImporter:
       name: Push 1
       rect:
         serializedVersion: 2
-        x: 98
-        y: 754
-        width: 38
-        height: 40
+        x: 215
+        y: 806
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,7 +281,7 @@ TextureImporter:
         x: 53
         y: 488
         width: 46
-        height: 44
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -299,10 +299,10 @@ TextureImporter:
       name: Shoot 1
       rect:
         serializedVersion: 2
-        x: 141
+        x: 267
         y: 702
-        width: 38
-        height: 44
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -320,10 +320,10 @@ TextureImporter:
       name: Shoot 2
       rect:
         serializedVersion: 2
-        x: 185
+        x: 181
         y: 702
-        width: 38
-        height: 44
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -341,10 +341,10 @@ TextureImporter:
       name: Swing 1
       rect:
         serializedVersion: 2
-        x: 9
+        x: 3
         y: 118
-        width: 35
-        height: 48
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,10 +362,10 @@ TextureImporter:
       name: Swing 2
       rect:
         serializedVersion: 2
-        x: 55
+        x: 51
         y: 118
-        width: 37
-        height: 50
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -383,10 +383,10 @@ TextureImporter:
       name: Swing 3
       rect:
         serializedVersion: 2
-        x: 101
+        x: 97
         y: 118
-        width: 38
-        height: 40
+        width: 46
+        height: 54
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -404,10 +404,10 @@ TextureImporter:
       name: Swing 4
       rect:
         serializedVersion: 2
-        x: 144
+        x: 140
         y: 118
-        width: 39
-        height: 38
+        width: 46
+        height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
