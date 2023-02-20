@@ -13,11 +13,16 @@ public class Card_Minigun : MonoBehaviour, ICardEffect {
 
         List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
 
+        Player.GetEntity().PlayAnimation("Shoot Start");
+        
+        yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());
+
         for (int i = 0; i < cardStats.NoOfHits_Final; i++) {
             World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
 
+            Player.GetEntity().PlayAnimation("Shoot End");
+            
             yield return World_Grid.Combat.FlashHere(posList, 0.1f);
-            yield return AnimHandler.WaitForSeconds(0.1f); // Add a slight delay so animation looks nice
         }
     }
 

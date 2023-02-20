@@ -24,6 +24,12 @@ public class Card_Cleaver : MonoBehaviour, ICardEffect {
             false
         );
 
+        Player.GetEntity().PlayAnimation("Swing Start");
+        
+        yield return AnimHandler.WaitForSeconds(0.2f);
+
+        Player.GetEntity().PlayAnimation("Swing End");
+
         World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
         AudioHandler.PlayClip(audio_Slash);
 

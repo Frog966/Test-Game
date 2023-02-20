@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Movement : MonoBehaviour {
@@ -18,6 +16,8 @@ public class Player_Movement : MonoBehaviour {
             if (energyHandler.CanPayEnergyCost(moveCost) && node && node.IsPlayerControlled() && !World_Grid.IsThereAnEntity(vec2)) {
                 World_Grid.Movement.MoveToPos(Player.GetEntity(), vec2);
                 energyHandler.DecreaseEnergy(moveCost); // Each move lowers energy
+
+                Player.GetEntity().PlayAnimation("Move");
             }
             else {
                 if (!energyHandler.CanPayEnergyCost(moveCost)) { energyHandler.NotEnoughEnergy(); }

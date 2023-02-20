@@ -13,9 +13,17 @@ public class Card_Cannon : MonoBehaviour, ICardEffect {
 
         List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
 
+        Player.GetEntity().PlayAnimation("Shoot Start");
+        
+        yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());
+
         World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
 
         yield return World_Grid.Combat.FlashHere(posList);
+        
+        Player.GetEntity().PlayAnimation("Shoot End");
+
+        yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());
     }
 
     void Awake() {

@@ -14,10 +14,15 @@ public class Card_PunchRush : MonoBehaviour, ICardEffect {
         List<Vector2Int> posList = World_Grid.Combat.ReturnRelativePosList(World_Grid.GetEntityGridPos(Player.GetEntity()), new List<Vector2Int> { new Vector2Int(1, 0) }, false);
 
         for (int i = 0; i < cardStats.NoOfHits_Final; i++) {
+            Player.GetEntity().PlayAnimation("Punch Start");
+            
+            yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());
+
+            Player.GetEntity().PlayAnimation("Punch End");
+
             World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
 
             yield return World_Grid.Combat.FlashHere(posList, 0.1f);
-            yield return AnimHandler.WaitForSeconds(0.1f); // Add a slight delay so animation looks nice
         }
     }
 

@@ -421,6 +421,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Punch 1
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 806
+        width: 46
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: effc61eacc9db364caeab347e50383bf
+      internalID: -337356696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Punch 2
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 872
+        width: 46
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dd9ccc64b7ca4745812d19e174b34d7
+      internalID: -752583606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -436,12 +478,14 @@ TextureImporter:
       Damaged 1: 619301818
       Move 2: -1379013169
       Swing 1: -433592857
+      Punch 2: -752583606
       Push 1: 181588312
       Swing 4: -1074095226
       Push 2: -1943791265
       Shoot 2: -4426707
       Shoot 1: -1665487718
       Move 3: -1015776783
+      Punch 1: -337356696
       Default: -124502430
       Swing 2: 1240352465
       Move 1: -970972338

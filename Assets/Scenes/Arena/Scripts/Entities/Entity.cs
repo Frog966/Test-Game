@@ -9,10 +9,10 @@ using Game.Unit;
 // Contains anything an entity has that would be interacted with by other scripts
 public class Entity : MonoBehaviour {
     [SerializeField] private Canvas canvas;
+    [SerializeField] private Animator animator;
     [SerializeField] private TMPro.TMP_Text health_T;
     [SerializeField] private Faction faction;
     [SerializeField] private Transform statusEffectParent;
-    [SerializeField] private Animator animator;
     
     [Header("Entity Stats")]
     public int healthMax; // Allow get and set
@@ -26,6 +26,7 @@ public class Entity : MonoBehaviour {
     public int GetHealth() { return health; }
     public Canvas GetCanvas() { return canvas; }
     public Faction GetFaction() { return faction; }
+    public Animator GetAnimator() { return animator; }
     public Transform GetSEParent() { return statusEffectParent; }
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
