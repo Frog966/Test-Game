@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Game.Unit;
 
 public class Card_AttackUp : MonoBehaviour, ICardEffect {
     [SerializeField] private Card_Stats cardStats;
