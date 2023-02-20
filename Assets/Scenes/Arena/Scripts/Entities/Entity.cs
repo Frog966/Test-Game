@@ -9,7 +9,7 @@ using Game.Unit;
 // Contains anything an entity has that would be interacted with by other scripts
 public class Entity : MonoBehaviour {
     [SerializeField] private Canvas canvas;
-    [SerializeField] private UnityEngine.UI.Text health_T;
+    [SerializeField] private TMPro.TMP_Text health_T;
     [SerializeField] private Faction faction;
     [SerializeField] private Transform statusEffectParent;
     
