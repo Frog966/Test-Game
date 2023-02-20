@@ -12,6 +12,7 @@ public class Entity : MonoBehaviour {
     [SerializeField] private TMPro.TMP_Text health_T;
     [SerializeField] private Faction faction;
     [SerializeField] private Transform statusEffectParent;
+    [SerializeField] private Animator animator;
     
     [Header("Entity Stats")]
     public int healthMax; // Allow get and set
@@ -75,7 +76,11 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public virtual void OnHit(int baseDmg) {
+    public void PlayAnimation(string animName) {
+        if (animator) { animator.Play(animName); }
+    }
+
+    public void OnHit(int baseDmg) {
         int modifier_Def = GetStackableSECounter(StatusEffect_ID.DEFENCE) * 10;
         int finalDmg = baseDmg - modifier_Def;
         
@@ -84,6 +89,8 @@ public class Entity : MonoBehaviour {
         health -= (finalDmg > 0 ? finalDmg : 0);
 
         UpdateHealthUI();
+
+        if (animator) { animator.Play("Damaged"); }
     }
 
     // Adds a new action that the entity will perform on death
@@ -100,6 +107,7 @@ public class Entity : MonoBehaviour {
 
     void Awake() {
         if (!canvas) { canvas = this.GetComponent<Canvas>(); }
+        if (!animator) { animator = this.GetComponent<Animator>(); }
 
         while (statusEffectParent.childCount > 0) { Destroy(statusEffectParent.GetChild(0).gameObject); }
         

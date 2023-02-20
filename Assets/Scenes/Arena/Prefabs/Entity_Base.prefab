@@ -224,6 +224,7 @@ MonoBehaviour:
   health_T: {fileID: 5927420930748740796}
   faction: 0
   statusEffectParent: {fileID: 4579064732601412952}
+  animator: {fileID: 5673870703377659103}
   healthMax: 100
   health: 0
 --- !u!1 &6779954261484465797
