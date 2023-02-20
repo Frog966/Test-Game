@@ -77,8 +77,8 @@ public class World_Grid : MonoBehaviour {
         }
 
         // SetGridPos() with a "entities cannot move to a grid node with another entity on it" restriction
-        public static void MoveToPos(Entity entity, Vector2Int gridCoor) {
-            if (!entitiesPos.Values.ToList().Contains(gridCoor)) { SetGridPos(entity, gridCoor); }
+        public static void MoveToPos(Entity entity, Vector2Int gridCoor, bool ignoreUnit = false) {
+            if (!entitiesPos.Values.ToList().Contains(gridCoor) || ignoreUnit) { SetGridPos(entity, gridCoor); }
         }
 
         // Some overloaded functions in case you just want to pass 2 ints instead

@@ -45,7 +45,7 @@ public class Enemy_Powie_1 : MonoBehaviour, IEnemy {
                 IEnumerator Attack() {
                     prevPos = World_Grid.GetEntityGridPos(entity);
 
-                    World_Grid.Movement.MoveToPos(entity, targetOrigin);
+                    World_Grid.Movement.MoveToPos(entity, targetOrigin, true);
                     animator.Play("Hard");
 
                     yield return AnimHandler.WaitForCurrentAnim(animator);
