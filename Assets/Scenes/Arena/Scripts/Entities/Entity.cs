@@ -91,7 +91,7 @@ public class Entity : MonoBehaviour {
 
         UpdateHealthUI();
 
-        if (animator) { animator.Play("Damaged"); }
+        if (animator && animator.runtimeAnimatorController) { animator.Play("Damaged"); }
     }
 
     // Adds a new action that the entity will perform on death
