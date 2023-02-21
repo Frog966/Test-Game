@@ -89,7 +89,7 @@ public class World_Grid : MonoBehaviour {
 
     public static class Combat {
         // Returns a pos list without any duplicates
-        public static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
+        private static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
 
         public static IEnumerator TelegraphHere(List<Vector2Int> posList) {
             ReturnDistinctPosList(posList); // Remove any duplicates 
