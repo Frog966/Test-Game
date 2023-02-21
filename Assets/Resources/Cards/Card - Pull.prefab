@@ -9,15 +9,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: id
-      value: Punch Rush
+      value: Pull
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: dmg
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: cost
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: desc
@@ -25,11 +25,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: rarity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: noOfHits
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3499660516013516670, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: m_Pivot.x
@@ -117,7 +117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4027003960344860399, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: m_Name
-      value: Card - Punch Rush
+      value: Card - Pull
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
@@ -126,7 +126,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4027003960344860399, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
   m_PrefabInstance: {fileID: 8086147858864651789}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-8896677478895702139
+--- !u!114 &-1137689805221637062
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5176059181162817762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01026e10620b45b44ba15743166c3df1, type: 3}
+  m_Script: {fileID: 11500000, guid: 03e0e10270696714882c016a136ba1eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardStats: {fileID: 8093334226866045974}
