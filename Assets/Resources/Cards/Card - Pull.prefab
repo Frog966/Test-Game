@@ -21,7 +21,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: desc
-      value: 
+      value: Pull all enemies closer
       objectReference: {fileID: 0}
     - target: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}
       propertyPath: rarity
