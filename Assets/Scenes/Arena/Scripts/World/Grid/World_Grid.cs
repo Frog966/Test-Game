@@ -23,6 +23,7 @@ public class World_Grid : MonoBehaviour {
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------
     public static int GetRow() { return row; }
     public static int GetCol() { return col; }
+    public static Dictionary<Entity, Vector2Int>.KeyCollection GetAllEntities() { return entitiesPos.Keys; }
     public static World_GridNode GetNode(int x, int y) { return isCoorInGrid(x, y) ? grid[x, y] : null; }
     public static World_GridNode GetNode(Vector2Int vec2) { return isCoorInGrid(vec2) ? grid[vec2.x, vec2.y] : null; }
     public static Vector2Int GetEntityGridPos(Entity entity) { return entitiesPos.ContainsKey(entity) ? entitiesPos[entity] : new Vector2Int(); }
