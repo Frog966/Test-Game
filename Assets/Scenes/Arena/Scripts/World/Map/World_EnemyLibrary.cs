@@ -67,9 +67,22 @@ public class World_EnemyLibrary : MonoBehaviour {
                         NodeType.ENEMY,
                         new List<List<EncounterEnemyDetails>>() {
                             new List<EncounterEnemyDetails>() {
-                                // new EncounterEnemyDetails(ReturnEnemyById("Test Enemy"), new Vector2Int(4, 1)),
-                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(3, 1)),
-                                new EncounterEnemyDetails(ReturnEnemyById("Powie 1"), new Vector2Int(3, 2)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Powie 1"), new Vector2Int(4, 1)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(5, 1)),
+                            },
+                            new List<EncounterEnemyDetails>() {
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(5, 0)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(5, 1)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(5, 2)),
+                            },
+                            new List<EncounterEnemyDetails>() {
+                                new EncounterEnemyDetails(ReturnEnemyById("Powie 1"), new Vector2Int(4, 1)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(5, 0)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(5, 2)),
+                            },
+                            new List<EncounterEnemyDetails>() {
+                                new EncounterEnemyDetails(ReturnEnemyById("Canguard 1"), new Vector2Int(4, 1)),
+                                new EncounterEnemyDetails(ReturnEnemyById("Powie 1"), new Vector2Int(5, 1)),
                             }
                         }
                     },
