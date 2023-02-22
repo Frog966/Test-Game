@@ -57,8 +57,8 @@ public class World_Shop : MonoBehaviour {
                 else { newReward = GetRandomCard(cardLibrary.GetLibrary_Common()); }
 
                 // Do not allow duplicate rewards
-                // if (!cardList.Contains(newReward)) { cardList.Add(newReward); }
-                cardList.Add(newReward);
+                if (!cardList.Contains(newReward)) { cardList.Add(newReward); }
+                // cardList.Add(newReward);
             }
         }
         
