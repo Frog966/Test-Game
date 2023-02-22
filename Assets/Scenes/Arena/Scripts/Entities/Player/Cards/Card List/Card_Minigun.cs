@@ -10,13 +10,12 @@ public class Card_Minigun : MonoBehaviour, ICardEffect {
     public IEnumerator Effect() {
         Debug.Log(this + " is being played!");
 
-        List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
-
         Player.GetEntity().PlayAnimation("Shoot Start");
         
         yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());
 
         for (int i = 0; i < cardStats.NoOfHits_Final; i++) {
+            List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
             World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
 
             Player.GetEntity().PlayAnimation("Shoot End");
