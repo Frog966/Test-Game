@@ -23,6 +23,9 @@ public class World_Turns : MonoBehaviour {
     [Header("Turn Stuff")]
     [SerializeField] private GameObject turnPrefab;
     [SerializeField] private Transform turnParent, turnPool;
+    
+    [Header("Turn Stuff")]
+    [SerializeField] private GameObject turnArrow;
 
     [Header("Lose Screen Stuff")]
     [SerializeField] private World_LoseScreen loseScript;
@@ -154,7 +157,15 @@ public class World_Turns : MonoBehaviour {
 
             // Only end the turn if currTurn's owner is not a Player script
             if (currEntity != Player.GetEntity()) {
+                turnArrow.transform.SetParent(currEntity.transform);
+                turnArrow.transform.localPosition = Vector3.zero;
+                
+                turnArrow.SetActive(true);
+
                 yield return currTurn.Execute(); // Execute the non-player entity's behaviour
+                
+                turnArrow.SetActive(false);
+
                 yield return EndTurn(); // End non-player entity's turn
             }
             else { yield return player.StartTurn(); } //! The game will not stop animating until the player's turn
@@ -247,6 +258,7 @@ public class World_Turns : MonoBehaviour {
         if (!player) Debug.LogError("World_Turns does not have Player.cs!"); 
         if (!cardHandler) Debug.LogError("World_Turns does not have Player_Cards.cs!"); 
 
+        turnArrow.SetActive(false);
         nextMapNodeButton.SetActive(false);
         turnPool.gameObject.SetActive(false);
         turnParent.gameObject.SetActive(true);
