@@ -429,8 +429,8 @@ TextureImporter:
         y: 806
         width: 46
         height: 54
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -450,8 +450,8 @@ TextureImporter:
         y: 872
         width: 46
         height: 54
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -488,6 +488,7 @@ TextureImporter:
       Punch 1: -337356696
       Default: -124502430
       Swing 2: 1240352465
+      MM_EXE6_b_BaseLayer_0: -2139664412
       Move 1: -970972338
       Swing 3: -190697959
   spritePackingTag: 

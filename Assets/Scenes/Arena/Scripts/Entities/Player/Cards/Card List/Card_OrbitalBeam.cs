@@ -11,8 +11,13 @@ public class Card_OrbitalBeam : MonoBehaviour, ICardEffect {
         Debug.Log(this + " is being played!");
 
         List<Vector2Int> posList = World_Grid.Combat.ReturnRelativePosList(World_Grid.GetEntityGridPos(Player.GetEntity()), new List<Vector2Int> { new Vector2Int(3, 0) }, false);
+        World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
+        
+        Player.GetEntity().PlayAnimation("Cast");
 
         yield return World_Grid.Combat.FlashHere(posList);
+        
+        Player.GetEntity().PlayAnimation("Idle");
     }
 
     void Awake() {
