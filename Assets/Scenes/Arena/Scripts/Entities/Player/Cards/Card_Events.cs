@@ -36,7 +36,7 @@ public class Card_Events : EventTrigger {
         }
     }
 
-    // Pointer enter event
+    // Pointer exit event
     public override void OnPointerExit(PointerEventData data) {
         if (!AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(false);
