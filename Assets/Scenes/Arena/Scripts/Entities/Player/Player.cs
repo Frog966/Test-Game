@@ -4,7 +4,6 @@ using UnityEngine;
 // C# does not allow multiple inheritance so we're attaching an Entity interface to Player script so that we can use a single type to handle turns
 public class Player : MonoBehaviour {
     [SerializeField] private Entity entity; // The player object
-    [SerializeField] private UnityEngine.UI.Text health_T;
 
     private static Player Inst;
 
