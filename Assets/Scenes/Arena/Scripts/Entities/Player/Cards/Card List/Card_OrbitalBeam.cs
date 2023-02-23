@@ -14,9 +14,11 @@ public class Card_OrbitalBeam : MonoBehaviour, ICardEffect {
         World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
         
         Player.GetEntity().PlayAnimation("Cast");
+        Player_Effects.PlaceEffect_Beam(posList);
 
         yield return World_Grid.Combat.FlashHere(posList);
         
+        Player_Effects.ReturnEffect_Beam();
         Player.GetEntity().PlayAnimation("Idle");
     }
 
