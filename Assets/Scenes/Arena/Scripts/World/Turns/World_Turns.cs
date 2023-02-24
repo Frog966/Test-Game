@@ -107,6 +107,7 @@ public class World_Turns : MonoBehaviour {
         foreach (World_Turn turn in removableTurns) { turn.transform.SetParent(turnPool); } // Move turn obj back to pool
 
         turnList.RemoveAll((turn) => removableTurns.Contains(turn)); // Remove said turns from turn list
+        ArrangeTurnObjs();
     }
 
     // Used as button function
