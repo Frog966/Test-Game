@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Card_Cannon : MonoBehaviour, ICardEffect {
     [SerializeField] private Card_Stats cardStats;
+    [SerializeField] private AudioClip audio_Shoot;
 
     // Do not call Effect(). Card_Events will call it instead
     // Does not require AnimHandler.isAnimating as Card_Events will handle that
@@ -21,8 +22,10 @@ public class Card_Cannon : MonoBehaviour, ICardEffect {
         yield return World_Grid.Combat.FlashHere(posList);
         
         Player.GetEntity().PlayAnimation("Shoot End");
+        AudioHandler.PlayClip(audio_Shoot);
 
         yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());
+        // yield return AnimHandler.WaitForSeconds(5.0f);
     }
 
     void Awake() {

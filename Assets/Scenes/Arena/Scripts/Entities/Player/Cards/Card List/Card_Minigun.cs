@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Card_Minigun : MonoBehaviour, ICardEffect {
     [SerializeField] private Card_Stats cardStats;
+    [SerializeField] private AudioClip audio_Shoot;
 
     // Do not call Effect(). Card_Events will call it instead
     // Does not require AnimHandler.isAnimating as Card_Events will handle that
@@ -19,6 +20,7 @@ public class Card_Minigun : MonoBehaviour, ICardEffect {
             World_Grid.Combat.HitHere(Player.GetEntity(), posList, cardStats.Dmg_Base);
 
             Player.GetEntity().PlayAnimation("Shoot End");
+            AudioHandler.PlayClip(audio_Shoot);
             
             yield return World_Grid.Combat.FlashHere(posList, 0.1f);
         }

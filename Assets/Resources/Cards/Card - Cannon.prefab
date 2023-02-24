@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardStats: {fileID: 8093334226866045974}
+  audio_Shoot: {fileID: 8300000, guid: d2863e3b338551247b53ee9c6cf1a2bf, type: 3}
 --- !u!114 &8093334226866045974 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -9194511798215820773, guid: 6970473e9ecf2a5448baab2ddd24a496, type: 3}

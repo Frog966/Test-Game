@@ -21,7 +21,7 @@ public class AudioHandler : MonoBehaviour {
 
     public static void PlayClip(AudioClip seClip) { 
         inst.as_SE.clip = seClip;
-        inst.as_SE.Play(); 
+        inst.as_SE.PlayOneShot(seClip); 
     }
 
     public static void PlayBGM_Map() { PlayBGM(inst.bgm_Map); }
