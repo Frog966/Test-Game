@@ -84,6 +84,8 @@ public class World_Turns : MonoBehaviour {
     }
 
     public void EndEncounter() {
+        turnArrow.transform.SetParent(enemyParent.parent); // Set turn arrow's parent to avoid a crash
+
         if (turnList.Find((turn) => turn.GetOwner() == Player.GetEntity()) == null) { // If a turn owned by player is not found, player lost
             Debug.Log("Player Lost!");
 
