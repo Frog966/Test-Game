@@ -34,8 +34,6 @@ public class World_Turns : MonoBehaviour {
 
     // Setup the encounter
     public void StartEncounter(World_MapNode currMapNode) {
-        AnimHandler.isAnimating = true;
-
         turnList.Clear(); // Clear turn list
         World_Grid.ClearEntitiesPos(); // Clear entitiesPos before start of encounter
 
@@ -50,6 +48,8 @@ public class World_Turns : MonoBehaviour {
             shopHandler.OpenShop();
         }
         else {
+            AnimHandler.isAnimating = true;
+            
             // Instantiate and set enemies' pos
             foreach (Game.Map.EncounterEnemyDetails details in currMapNode.GetEncounter()) {
                 GameObject newEnemyObj = GameObject.Instantiate(details.enemy.Entity.gameObject, enemyParent);
