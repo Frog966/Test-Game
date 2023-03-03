@@ -6,13 +6,23 @@ public class Card_Cannon : MonoBehaviour, ICardEffect {
     [SerializeField] private Card_Stats cardStats;
     [SerializeField] private AudioClip audio_Shoot;
 
+    private List<Vector2Int> posList;
+
+    public void DisplayRange() { 
+        posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
+
+        World_Grid.Combat.FlashHere_Start(posList); 
+    }
+
+    public void StopDisplayRange() { World_Grid.Combat.FlashHere_Stop(posList); }
+
     // Do not call Effect(). Card_Events will call it instead
     // Does not require AnimHandler.isAnimating as Card_Events will handle that
     public IEnumerator Effect() {
         Debug.Log(this + " is being played!");
 
-        List<Vector2Int> posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
-
+        posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
+        
         Player.GetEntity().PlayAnimation("Shoot Start");
         
         yield return AnimHandler.WaitForCurrentAnim(Player.GetEntity().GetAnimator());

@@ -31,7 +31,11 @@ public class Card_Events : EventTrigger {
         if (!AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(true);
 
-            if (cardScript.isPlayable) { this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f); }
+            if (cardScript.isPlayable) { 
+                this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f); 
+                
+                if (cardScript.EffectHandler != null) { cardScript.EffectHandler.DisplayRange(); }
+            }
             else { this.transform.DOScale(1.3f, 0.1f); }
         }
     }
@@ -41,7 +45,11 @@ public class Card_Events : EventTrigger {
         if (!AnimHandler.isAnimating) {
             SetCanvasOverrideSorting(false);
             
-            if (cardScript.isPlayable) { this.transform.DOLocalMove(startLocalPos, 0.1f); }
+            if (cardScript.isPlayable) { 
+                this.transform.DOLocalMove(startLocalPos, 0.1f); 
+                
+                if (cardScript.EffectHandler != null) { cardScript.EffectHandler.StopDisplayRange(); }
+            }
             else { this.transform.DOScale(1.0f, 0.1f); }
         }
     }

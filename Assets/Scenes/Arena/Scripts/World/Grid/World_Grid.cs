@@ -104,23 +104,32 @@ public class World_Grid : MonoBehaviour {
             }
         }
 
-        public static IEnumerator FlashHere(List<Vector2Int> posList, float delay = 0.25f) {
+        public static void FlashHere_Start(List<Vector2Int> posList) {
             ReturnDistinctPosList(posList); // Remove any duplicates 
 
             for (int i = 0; i < posList.Count; i++) { 
                 World_GridNode currNode = grid[posList[i][0], posList[i][1]];
 
                 currNode.PlayAnim_Flash(); 
-                
-                // Begin waiting at the last pos
-                if (i >= posList.Count - 1) yield return AnimHandler.WaitForSeconds(delay);
             }
+        }
+
+        public static void FlashHere_Stop(List<Vector2Int> posList) {
+            ReturnDistinctPosList(posList); // Remove any duplicates 
 
             for (int i = 0; i < posList.Count; i++) { 
                 World_GridNode currNode = grid[posList[i][0], posList[i][1]];
 
                 currNode.StopAnim_Flash();
             }
+        }
+
+        public static IEnumerator FlashHere(List<Vector2Int> posList, float delay = 0.25f) {
+            FlashHere_Start(posList);
+            
+            yield return AnimHandler.WaitForSeconds(delay);
+
+            FlashHere_Stop(posList);
         }
 
         // Returns list of hit entities

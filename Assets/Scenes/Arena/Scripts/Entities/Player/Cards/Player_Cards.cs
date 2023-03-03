@@ -262,6 +262,7 @@ public class Player_Cards : MonoBehaviour {
     private IEnumerator ResolveCard_Anim(Card_Stats playedCard) {
         AnimHandler.isAnimating = true;
         
+        playedCard.EffectHandler.StopDisplayRange();
         playedCard.EventHandler.SetCanvasOverrideSorting(false); // Disable card's override sorting just in case
 
         Transform cardTrans = playedCard.transform;
@@ -285,7 +286,7 @@ public class Player_Cards : MonoBehaviour {
         //--------------------------------------------------------------------------------------------------------------------------------------------------
 
         // Play card's effect
-        yield return playedCard.Effect();
+        yield return playedCard.PlayEffect();
 
         if (playedCard.IsExiled) {
             // Move card to cardParent_Exile
@@ -346,7 +347,7 @@ public class Player_Cards : MonoBehaviour {
     private Vector2 GetCardHandPos(Transform card, int multiplier) {
         Card_Stats cardScript = card.GetComponent<Card_Stats>();
 
-        return new Vector2((-(cardScript.UIHandler.GetWidth() / 2.0f * multiplier) - (cardScript.UIHandler.GetWidth() / 2.0f)), 0.0f);
+        return new Vector2((-((cardScript.UIHandler.GetWidth() / 2.0f + 5.0f) * multiplier) - (cardScript.UIHandler.GetWidth() / 2.0f)), 0.0f);
     }
     
     private void UpdateNoOfCards_GY() { textGY.text = gy.Count.ToString(); }

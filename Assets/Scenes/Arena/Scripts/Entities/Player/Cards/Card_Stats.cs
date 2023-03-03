@@ -31,6 +31,7 @@ public class Card_Stats : MonoBehaviour {
     public Card_UI UIHandler { get => uiHandler; }
     public Card_Events EventHandler { get => eventHandler; }
     public CanvasGroup CanvasGroup { get => canvasGroup; }
+    public ICardEffect EffectHandler { get => effect; }
 
     public Sprite Image { get => image; }
     public CardRarity Rarity { get => rarity; }
@@ -77,7 +78,7 @@ public class Card_Stats : MonoBehaviour {
         noOfHits = cardStats.noOfHits;
     }
 
-    public IEnumerator Effect() {
+    public IEnumerator PlayEffect() {
         if (effect != null) { yield return effect.Effect(); }
         else yield return null;
     }
