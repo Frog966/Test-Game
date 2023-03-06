@@ -13,7 +13,11 @@ public class Card_Test : MonoBehaviour, ICardEffect {
         World_Grid.Combat.FlashHere_Start(posList); 
     }
 
-    public void StopDisplayRange() { World_Grid.Combat.FlashHere_Stop(posList); }
+    public void StopDisplayRange() { 
+        posList = World_Grid.Combat.ReturnPosList_Right(World_Grid.GetEntityGridPos(Player.GetEntity()), false);
+        
+        World_Grid.Combat.FlashHere_Stop(posList); 
+    }
 
     // Do not call Effect(). Card_Events will call it instead
     // Does not require AnimHandler.isAnimating as Card_Events will handle that

@@ -89,7 +89,7 @@ public class World_Grid : MonoBehaviour {
 
     public static class Combat {
         // Returns a pos list without any duplicates
-        private static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList.Distinct().ToList(); }
+        private static List<Vector2Int> ReturnDistinctPosList(List<Vector2Int> posList) { return posList != null && posList.Count > 0 ? posList.Distinct().ToList() : new List<Vector2Int>(); }
 
         public static IEnumerator TelegraphHere(List<Vector2Int> posList) {
             ReturnDistinctPosList(posList); // Remove any duplicates 
@@ -121,6 +121,12 @@ public class World_Grid : MonoBehaviour {
                 World_GridNode currNode = grid[posList[i][0], posList[i][1]];
 
                 currNode.StopAnim_Flash();
+            }
+        }
+
+        public static void FlashHere_StopAll() {
+            for (int x = 0; x < row; x++) { 
+                for (int y = 0; y < col; y++) { grid[x, y].StopAnim_Flash(); }
             }
         }
 

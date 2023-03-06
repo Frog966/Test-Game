@@ -23,6 +23,8 @@ public class Player_Cards : MonoBehaviour {
     [Header("Sound Effects")]
     [SerializeField] private AudioClip audio_CardShift;
 
+    [HideInInspector] public ICardEffect currHoveredCard;
+
     private List<Card_Stats> gy = new List<Card_Stats>(); // Lists all card prefabs in GY
     private List<Card_Stats> deck = new List<Card_Stats>(); // Lists all card prefabs in deck
     private List<Card_Stats> hand = new List<Card_Stats>(); // Lists all card prefabs in hand

@@ -7,6 +7,7 @@ public class Player_Energy : MonoBehaviour {
     [Header("UI Stuff")]
     [SerializeField] private Text energyText, energyMaxText;
     [SerializeField] private Image fill;
+    [SerializeField] private Animator animator;
 
     public void ResetEnergy() {
         energy = energyMax = energyMaxTrue;
@@ -39,6 +40,8 @@ public class Player_Energy : MonoBehaviour {
     // Contains the animation that plays to tell the player they don't have enough energy
     public void NotEnoughEnergy() { 
         Debug.Log("Player does not have enough energy to play the card!");
+
+        animator.Play("Energy UI Red");
     }
 
     private void UpdateUI() {

@@ -34,7 +34,10 @@ public class Card_Events : EventTrigger {
             if (cardScript.isPlayable) { 
                 this.transform.DOLocalMoveY(cardScript.UIHandler.GetHeight() / 2.0f, 0.1f); 
                 
-                if (cardScript.EffectHandler != null) { cardScript.EffectHandler.DisplayRange(); }
+                if (cardScript.EffectHandler != null) { 
+                    cardScript.CardHandler.currHoveredCard = cardScript.EffectHandler;
+                    cardScript.EffectHandler.DisplayRange(); 
+                }
             }
             else { this.transform.DOScale(1.3f, 0.1f); }
         }
@@ -48,7 +51,10 @@ public class Card_Events : EventTrigger {
             if (cardScript.isPlayable) { 
                 this.transform.DOLocalMove(startLocalPos, 0.1f); 
                 
-                if (cardScript.EffectHandler != null) { cardScript.EffectHandler.StopDisplayRange(); }
+                if (cardScript.EffectHandler != null) { 
+                    if (cardScript.CardHandler.currHoveredCard == cardScript.EffectHandler) { cardScript.CardHandler.currHoveredCard = null; }
+                    cardScript.EffectHandler.StopDisplayRange(); 
+                }
             }
             else { this.transform.DOScale(1.0f, 0.1f); }
         }

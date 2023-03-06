@@ -121,7 +121,7 @@ public class World_BattleRewards : MonoBehaviour {
         Transform button = buttonPool.GetChild(0);
         World_BattleRewards_Button buttonScript = button.GetComponent<World_BattleRewards_Button>();
 
-        int coinReward = Random.Range(30, 50);
+        int coinReward = Random.Range(45, 55);
 
         button.SetParent(buttonParent);
         buttonScript.Setup(rewardType, coinReward);

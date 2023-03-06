@@ -14,10 +14,14 @@ public class Player_Movement : MonoBehaviour {
 
             // Player must have enough energy to move and can only move onto player-controlled nodes 
             if (energyHandler.CanPayEnergyCost(moveCost) && node && node.IsPlayerControlled() && !World_Grid.IsThereAnEntity(vec2)) {
+                World_Grid.Combat.FlashHere_StopAll(); 
                 World_Grid.Movement.MoveToPos(Player.GetEntity(), vec2);
+                
                 energyHandler.DecreaseEnergy(moveCost); // Each move lowers energy
 
                 Player.GetEntity().PlayAnimation("Move");
+
+                if (player.CardsHandler().currHoveredCard != null) { player.CardsHandler().currHoveredCard.DisplayRange(); } 
             }
             else {
                 if (!energyHandler.CanPayEnergyCost(moveCost)) { energyHandler.NotEnoughEnergy(); }

@@ -9,23 +9,40 @@ public class Card_Cleaver : MonoBehaviour, ICardEffect {
     List<Vector2Int> posList;
 
     public void DisplayRange() { 
-        posList = World_Grid.Combat.ReturnRelativePosList(
-            World_Grid.GetEntityGridPos(Player.GetEntity()),
-            new List<Vector2Int>() { 
-                new Vector2Int(1, 0),
-                new Vector2Int(1, 1),
-                new Vector2Int(1, -1),
-                new Vector2Int(2, 0),
-                new Vector2Int(2, 1),
-                new Vector2Int(2, -1),
-            },
-            false
-        );
+        posList = 
+            World_Grid.Combat.ReturnRelativePosList(
+                World_Grid.GetEntityGridPos(Player.GetEntity()),
+                new List<Vector2Int>() { 
+                    new Vector2Int(1, 0),
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(2, 0),
+                    new Vector2Int(2, 1),
+                    new Vector2Int(2, -1),
+                },
+                false
+            );
 
         World_Grid.Combat.FlashHere_Start(posList); 
     }
 
-    public void StopDisplayRange() { World_Grid.Combat.FlashHere_Stop(posList); }
+    public void StopDisplayRange() { 
+        posList = 
+            World_Grid.Combat.ReturnRelativePosList(
+                World_Grid.GetEntityGridPos(Player.GetEntity()),
+                new List<Vector2Int>() { 
+                    new Vector2Int(1, 0),
+                    new Vector2Int(1, 1),
+                    new Vector2Int(1, -1),
+                    new Vector2Int(2, 0),
+                    new Vector2Int(2, 1),
+                    new Vector2Int(2, -1),
+                },
+                false
+            );
+
+        World_Grid.Combat.FlashHere_Stop(posList); 
+    }
 
     // Do not call Effect(). Card_Events will call it instead
     // Does not require AnimHandler.isAnimating as Card_Events will handle that
