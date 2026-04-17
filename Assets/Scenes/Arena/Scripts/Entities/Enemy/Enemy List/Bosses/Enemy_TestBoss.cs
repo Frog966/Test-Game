@@ -22,7 +22,7 @@ public class Enemy_TestBoss : MonoBehaviour, IEnemy {
     // The enemy's AI
     public Turn ReturnCurrentTurn() {
         if (turnQueue.Count > 0) { return turnQueue.Dequeue(); }
-        else {            
+        else {
             // This switch case contains every pattern under this AI
             switch(UnityEngine.Random.Range(0, 2)) {
             // switch (1) {
@@ -149,7 +149,7 @@ public class Enemy_TestBoss : MonoBehaviour, IEnemy {
                             return ReturnTurn(posListList);
                         }
                         default: {
-                            Debug.LogError(this.gameObject.name + " pattern randomizer went out of bounds 1!");
+                            Debug.LogError(gameObject.name + " pattern randomizer went out of bounds 1!");
 
                             return null;
                         }
@@ -176,7 +176,6 @@ public class Enemy_TestBoss : MonoBehaviour, IEnemy {
                     }
 
                     IEnumerator Attack() {
-
                         List<Entity> hitEntities = World_Grid.Combat.HitHere(entity, posList, 100);
                         AudioHandler.PlayClip(audio_Slash);
 
@@ -189,7 +188,7 @@ public class Enemy_TestBoss : MonoBehaviour, IEnemy {
                     return turnQueue.Dequeue(); // Returns the 1st turn of the pattern which is also removed from turn queue
                 }
                 default: {
-                    Debug.LogError(this.gameObject.name + " pattern randomizer went out of bounds 0!");
+                    Debug.LogError(gameObject.name + " pattern randomizer went out of bounds 0!");
 
                     return null;
                 }
@@ -199,6 +198,6 @@ public class Enemy_TestBoss : MonoBehaviour, IEnemy {
 
     void Awake() {
         //! Sanity Checks
-        if (!entity) entity = this.GetComponent<Entity>();
+        if (!entity) entity = GetComponent<Entity>();
     }
 }
